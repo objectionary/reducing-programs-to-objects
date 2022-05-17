@@ -1,8 +1,8 @@
-<img src="https://rawgithub.com/yegor256/elegantobjects/master/cactus.svg" height="100px"/>
+<img src="https://www.objectionary.com/cactus.svg" height="100px"/>
 
-[![make](https://github.com/objectionary/eo/actions/workflows/latexmk.yml/badge.svg)](https://github.com/objectionary/eo/actions/workflows/latexmk.yml)
+[![make](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml/badge.svg)](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml)
 
-This is a more or less formal description of EOLANG and 𝜑-calculus.
+The paper is published [in arXiv](https://arxiv.org/abs/2112.11988).
 
 To build it, just run:
 
@@ -19,4 +19,4 @@ and
 [`texqc`](https://rubygems.org/gems/texqc)
 installed.
 
-Once compiled and packaged, upload zip archive to [arXiv](https://arxiv.org/abs/2111.13384).
+Once compiled and packaged, upload zip archive to [arXiv](https://arxiv.org/abs/2112.11988).
