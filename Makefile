@@ -33,6 +33,7 @@ zip: *.tex
 	cd package
 	cp ../paper.tex .
 	cp ../main.bib .
+	cp ../goto-pic.pdf .
 	for p in $(PACKAGES); do cp $(TLROOT)/tex/latex/$${p}/$${p}.sty .; done
 	version=$$(curl --silent -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/$(REPO)/releases/latest | jq -r '.tag_name')
 	echo "Version is: $${version}"

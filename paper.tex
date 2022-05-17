@@ -1,5 +1,10 @@
 \documentclass[sigplan,nonacm,11pt]{acmart}
 \usepackage[utf8]{inputenc}
+\ifnum\pdfshellescape=1
+  \usepackage[finalizecache]{minted}
+\else
+  \usepackage[frozencache]{minted}
+\fi
 \usepackage[nocn]{ffcode}
 \usepackage{tikz}
 \usepackage{to-be-determined}
