@@ -1,5 +1,6 @@
-\documentclass[sigplan,nonacm,11pt]{acmart}
-\usepackage[utf8]{inputenc}
+\documentclass[sigplan,11pt,nonacm,natbib=false]{acmart}
+\settopmatter{printfolios=false,printccs=false,printacmref=false}
+\usepackage[maxnames=1,minnames=1,maxbibnames=100,natbib=true,citestyle=authoryear,bibstyle=authoryear,doi=false,url=false,isbn=false,isbn=false,backend=biber]{biblatex}
 \ifnum\pdfshellescape=1
   \usepackage[finalizecache]{minted}
 \else
@@ -9,6 +10,8 @@
 \usepackage{tikz}
 \usepackage{to-be-determined}
 \setlength\footskip{16pt}
+
+\addbibresource{main.bib}
 
 \title{Reducing Programs to Objects}
 \subtitle{
@@ -32,7 +35,10 @@ C++, Java, C\#, Python, Ruby, JavaScript are the most powerful object-oriented p
 
 \section{Features}
 
-To answer our research question we selected most complex features and demonstrated how each of them may be represented in EO~\citep{bugayenko2021eolang} objects:
+To answer our research question we selected most complex features and demonstrated how each of them may be represented in EO~\citep{bugayenko2021eolang} objects\footnote{%
+\LaTeX{} sources of this paper are maintained in
+\href{https://github.com/REPOSITORY}{REPOSITORY} GitHub repository,
+the rendered version is \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{\ff{0.0.0}}.}:
 
 \begin{itemize}
     \item Non-conditional jumps
@@ -1044,7 +1050,6 @@ Here, synthetic \ff{source} attribute represents the location in the source code
 
 We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects. We used EO as a destination programming language because of its minimalistic semantics: it doesn't have any language features aside from objects and their composition and decoration mechanisms.
 
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{main}
+\printbibliography
 
 \end{document}
