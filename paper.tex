@@ -9,7 +9,7 @@
 \usepackage[nocn]{ffcode}
 \usepackage{tikz}
 \usepackage{to-be-determined}
-\setlength\footskip{16pt}
+\setlength\footskip{13pt}
 
 \addbibresource{main.bib}
 
@@ -22,7 +22,7 @@
   }{0.0.0}
 }
 \author{Yegor Bugayenko}
-\affiliation{Huawei\country{Russia}\city{Moscow}}
+\affiliation{\institution{Huawei}\country{Russia}\city{Moscow}}
 \email{yegor256@gmail.com}
 
 \begin{abstract}
@@ -30,6 +30,7 @@ C++, Java, C\#, Python, Ruby, JavaScript are the most powerful object-oriented p
 \end{abstract}
 
 \begin{document}
+\raggedbottom
 
 \maketitle
 
@@ -174,6 +175,7 @@ In order to translate this code to EO it has to be refactored as Fig.~\ref{fig:g
 \begin{figure}
 \includegraphics[width=0.9\columnwidth]{goto-pic}
 \caption{The function \ff{f} with a few \ff{goto} statements inside is translated to two functions, reducing the complexity of the code at the cost of introducing duplication.}
+\Description{Workflow of GOTO object}
 \label{fig:goto}
 \end{figure}
 
@@ -198,7 +200,7 @@ In more complex cases a program may first be restructured to replace \ff{goto} s
 
 \subsubsection{Multiple Returns}
 
-Some programming languages allow a function to exit at an arbitrary place, not only at the end, using \ff{return} statements, for example:
+Some structured programming languages allow a function to exit at an arbitrary place, not only at the end, using \ff{return} statements, for example:
 
 \begin{ffcode}
 void abs(int x) {
@@ -629,7 +631,7 @@ fibonacci
       sprintf "%d\n" n
 \end{ffcode}
 
-Here, the generator is turned into an object \ff{fibonacci} with an extra parameter \ff{f}, which is specified with an abstract object argument, which prints what's given as \ff{n}.
+Here, the generator is turned into an abstract object \ff{fibonacci} with an extra parameter \ff{f}, which is specified with an abstract object argument, which prints what's given as \ff{n}.
 
 \subsection{Types and Type Casting}
 \label{sec:types}
@@ -645,7 +647,7 @@ class Cart {
 }
 \end{ffcode}
 
-The restrictions enforced by Java type system through types \ff{Cart} and \ff{Book} may be represented in EO by means of decorators, for example:
+The restrictions enforced by Java type system in compile time through types \ff{Cart} and \ff{Book} may be represented in EO by means of decorators, for example:
 
 \begin{ffcode}
 [] > original-cart
@@ -802,7 +804,7 @@ Here, composition is used instead of inheritance.
 
 \subsubsection{Prototype-Based Inheritance}
 
-Prototype-based programming uses generalized objects, which can then be cloned and extended. For example, this JavaScript program defines two objects, where \ff{Item} is the parent object and \ff{Book} is the child that inherits the parent through its prototype:
+So called pro\-to\-type-based programming uses generalized objects, which can then be cloned and extended. For example, this JavaScript program defines two objects, where \ff{Item} is the parent object and \ff{Book} is the child that inherits the parent through its prototype:
 
 \begin{ffcode}
 function Item(p) { this.price = p; }
@@ -1051,5 +1053,7 @@ Here, synthetic \ff{source} attribute represents the location in the source code
 We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects. We used EO as a destination programming language because of its minimalistic semantics: it doesn't have any language features aside from objects and their composition and decoration mechanisms.
 
 \printbibliography
+
+\clearpage
 
 \end{document}
