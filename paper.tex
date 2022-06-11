@@ -102,7 +102,7 @@ It can be mapped to the following EO code:
 
 \begin{ffcode}
 [] > f
-  memory > i
+  memory 0 > i
   seq > @
     i.write 1
     Q.org.eolang.gray.goto
@@ -113,7 +113,7 @@ It can be mapped to the following EO code:
             i.less 10
             g.backward
             TRUE
-   Q.org.eolang.io.stdout "Finished!"
+   QQ.io.stdout "Finished!"
 \end{ffcode}
 
 Here, the one-argument abstract atom \ff{goto} is being copied with a one-argument abstract anonymous object, which is the sequence of objects doing the increment of \ff{i} and then the comparison of it with the number ten. If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{goto}.
@@ -136,7 +136,7 @@ It can be mapped to the following EO code:
 
 \begin{ffcode}
 [x] > f
-  memory > r
+  memory 0 > r
   seq > @
     r.write 0
     Q.org.eolang.gray.goto
@@ -295,7 +295,7 @@ This code can be mapped to the following EO code:
 [x y] > foo
   x.add y > @
 [] > f
-  Q.org.eolang.gray.cage > p
+  QQ.gray.cage 0 > p
   seq > @
     p.write
       [x y]
@@ -425,17 +425,14 @@ end
 It can be mapped to the following EO code, where a class becomes a factory of objects:
 
 \begin{ffcode}
-+import org.eolang.gray.cage
-+import org.eolang.txt.sprintf
-
 [] > book
   [i] > new
-    cage > id
+    QQ.gray.cage 0 > id
     seq > @
       id.write i
       []
         [] > path
-          sprintf > @
+          QQ.io.sprintf > @
             "/tmp/%s.txt"
             id
         [i] > move
@@ -470,15 +467,13 @@ int main() {
 It may be translated to EO as such:
 
 \begin{ffcode}
-+import org.eolang.io.stdout
-
 [] > Foo
   [] > new
     seq > @
-      stdout "Alive" > @
+      QQ.io.stdout "Alive" > @
       []
         [] > destructor
-          stdout "Dead" > @
+          QQ.io.stdout "Dead" > @
 [] > main
   seq > @
     Foo.new > f
@@ -522,12 +517,12 @@ This mechanism may be implemented in EO:
   Q.org.eolang.gray.try > @
     [t]
       seq > @
-        stdout "The price: "
-        stdout (price b t).as-string
+        QQ.io.stdout "The price: "
+        QQ.io.stdout (price b t).as-string
     [e]
       seq > @
-        stdout "Error: "
-        stdout e
+        QQ.io.stdout "Error: "
+        QQ.io.stdout e
     TRUE
 \end{ffcode}
 
@@ -569,10 +564,10 @@ try
       [io-throw]
         f 5 io-throw rt-throw > @
       [e1]
-        stdout e1.message > @
+        QQ.io.stdout e1.message > @
       TRUE
   [e2]
-    stdout e2.message > @
+    QQ.io.stdout e2.message > @
   TRUE
 \end{ffcode}
 
@@ -593,8 +588,6 @@ scan(array) { |x| puts x }
 This mechanism may be implemented in EO:
 
 \begin{ffcode}
-+import org.eolang.io.stdout
-
 [lines b] > scan
   lines.each > @
     [t]
@@ -605,7 +598,7 @@ This mechanism may be implemented in EO:
 scan
   array
   [x]
-    stdout x > @
+    QQ.io.stdout x > @
 \end{ffcode}
 
 Here, the anonymous function passed to the object \ff{scan} as an argument \ff{b}. The ``call'' of this function is the dataization of its copy, performed by the \ff{if} atom.
@@ -632,13 +625,10 @@ foreach (fibonacci(10) as $n) {
 This mechanism may be implemented in EO:
 
 \begin{ffcode}
-+import org.eolang.io.stdout
-+import org.eolang.txt.sprintf
-
 [limit f] > fibonacci
-  memory > a
-  memory > b
-  memory > i
+  memory 0 > a
+  memory 0 > b
+  memory 0 > i
   seq > @
     a.write 1
     b.write 1
@@ -653,8 +643,8 @@ This mechanism may be implemented in EO:
 fibonacci 
   10
   [n]
-    stdout > @
-      sprintf "%d\n" n
+    QQ.io.stdout > @
+      QQ.txt.sprintf "%d\n" n
 \end{ffcode}
 
 Here, the generator is turned into an abstract object \ff{fibonacci} with an extra parameter \ff{f}, which is specified with an abstract object argument, which prints what's given as \ff{n}.
@@ -677,7 +667,7 @@ The restrictions enforced by Java type system in compile time through types \ff{
 
 \begin{ffcode}
 [] > original-cart
-  memory > total
+  memory 0 > total
   [b] > add
     total.write (total.add b.price)
 [] > Cart
@@ -694,7 +684,7 @@ Here, it is expected that the parameter \ff{b} is defined in a ``class,'' which 
 
 \begin{ffcode}
 [] > original-book
-  memory > price
+  memory 0 > price
 [] > Book
   original-book > @
   [t] > subtype-of
@@ -750,13 +740,13 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
 
 \begin{ffcode}
 [] > app
-  Q.org.eolang.gray.cage > b
+  QQ.gray.cage 0 > b
   b' > copy
   seq > @
     b.write
       [] > Book
         [t] > new
-          memory > title
+          memory "" > title
           seq > @
             title.write t
             []
@@ -768,7 +758,7 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
             []
               copy > @
               [] > print
-                stdout (^.title)
+                QQ.io.stdout (^.title)
     b.print
 \end{ffcode}
 
@@ -817,7 +807,7 @@ It may be represented in EO like this:
 
 \begin{ffcode}
 [] > item
-  memory > p
+  memory 0 > p
   [] > price
     p > @
 [] > book
@@ -849,7 +839,7 @@ This mechanism of prototype-based inheritance may be translated to the following
 \begin{ffcode}
 [] > Item
   [p] > new
-    memory > price
+    memory 0 > price
     seq > @
       price.write p 
       []
@@ -861,7 +851,7 @@ This mechanism of prototype-based inheritance may be translated to the following
         mul. > @
           ^.price
           0.1
-stdout
+QQ.io.stdout
   as-string.
     tax.
       Book.new 42
@@ -893,8 +883,6 @@ class Jack: Dog, Friend {
 It may be represented in EO like this:
 
 \begin{ffcode}
-+import org.eolang.io.stdout
-
 [] > dog
   [] > bark
     stdout "Bark!" > @
@@ -904,7 +892,7 @@ It may be represented in EO like this:
   [] > listen
     seq > @
       d.bark
-      stdout "listen!"
+      QQ.io.stdout "listen!"
 \end{ffcode}
 
 Here, inherited methods are explicitly listen as attributes in the object \ff{jack}. This is very close to what would happen in the virtual table of a class \ff{Jack} in C++. The EO object \ff{jack} just makes it explicit.
@@ -952,7 +940,7 @@ It may be represented in EO like this:
 
 \begin{ffcode}
 [] > cart
-  memory > total
+  memory 0 > total
   [i] > add
     total.write > @
       total.add i.price
