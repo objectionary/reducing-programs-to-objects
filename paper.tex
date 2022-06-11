@@ -395,9 +395,11 @@ It may be mapped to a constant EO object:
 
 \begin{ffcode}
 memory 42 > a
-[a] > inc!
-  a.write > @
-    a.add 1
+[x] > inc!
+  seq > @
+  x.write
+    x.add 1
+  x
 inc
   inc a
 \end{ffcode}
