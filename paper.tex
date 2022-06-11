@@ -376,6 +376,32 @@ It can be mapped to the following EO code:
 
 This example also demonstrates how \ff{goto} object can be used to simulate the behavior of the \ff{return} statement from within the body of a method.
 
+\subsubsection{Impure Functions}
+
+A function is pure when, among other qualities, it doesn't have side effects:
+no mutation of local static variables, non-local variables, mutable reference arguments
+or input/output streams. This PHP function is impure:
+
+\begin{ffcode}
+$a = 42;
+function inc($a) {
+  $a = $a + 1;
+  return $a;
+}
+inc(inc($a)); // $a == 44
+\end{ffcode}
+
+It may be mapped to a constant EO object:
+
+\begin{ffcode}
+memory 42 > a
+[a] > inc!
+  a.write > @
+    a.add 1
+inc
+  inc a
+\end{ffcode}
+
 \subsection{Classes}
 \label{sec:classes}
 
