@@ -105,7 +105,7 @@ It can be mapped to the following EO code:
   memory 0 > i
   seq > @
     i.write 1
-    Q.org.eolang.gray.goto
+    goto
       [g]
         seq > @
           i.write (i.add 1)
@@ -139,7 +139,7 @@ It can be mapped to the following EO code:
   memory 0 > r
   seq > @
     r.write 0
-    Q.org.eolang.gray.goto
+    goto
       [g]
         seq > @
           if.
@@ -215,7 +215,7 @@ This can be mapped to the following EO code using \ff{goto} object:
 
 \begin{ffcode}
 [x] > abs
-  Q.org.eolang.gray.goto > @
+  goto > @
     [g]
       seq > @
         if.
@@ -260,7 +260,7 @@ This code can be mapped to the following EO code:
   ptr.block > price
     8
     [b] (b.as-int > @)
-Q.org.eolang.gray.heap.pointer > p1
+heap.pointer > p1
   0x1A76EC09 
   108
 [p] > f
@@ -295,7 +295,7 @@ This code can be mapped to the following EO code:
 [x y] > foo
   x.add y > @
 [] > f
-  QQ.gray.cage 0 > p
+  cage 0 > p
   seq > @
     p.write
       [x y]
@@ -336,7 +336,7 @@ This code can be mapped to the following EO code:
     [b] (b.as-int > @)
 [p] > f
   seq > @
-    Q.org.eolang.gray.heap.malloc 16 > stack
+    heap.malloc 16 > stack
     long64 (stack.pointer 0 8) > b
     b.write 7
     long64 (stack.pointer 8 8) > a
@@ -429,7 +429,7 @@ It can be mapped to the following EO code, where a class becomes a factory of ob
 \begin{ffcode}
 [] > book
   [i] > new
-    QQ.gray.cage 0 > id
+    cage 0 > id
     seq > @
       id.write i
       []
@@ -441,7 +441,7 @@ It can be mapped to the following EO code, where a class becomes a factory of ob
           id.write i > @
 \end{ffcode}
 
-Here, the constructor is represented by the object \ff{new}, which initializes the ``gray'' object \ff{cage} with the incoming parameter \ff{i} and then makes a new anonymous object with two attributes \ff{path} and \ff{move}. The making an ``instance'' of a book would look like this:
+Here, the constructor is represented by the object \ff{new}, which initializes the object \ff{cage} with the incoming parameter \ff{i} and then makes a new anonymous object with two attributes \ff{path} and \ff{move}. The making an ``instance'' of a book would look like this:
 
 \begin{ffcode}
 book.new 42 > b
@@ -516,7 +516,7 @@ This mechanism may be implemented in EO:
     throw "error!"
     (Book b).price.mul 1.1
 [b] > print
-  Q.org.eolang.gray.try > @
+  try > @
     [t]
       seq > @
         QQ.io.stdout "The price: "
@@ -698,8 +698,6 @@ Here, it is expected that the parameter \ff{b} is defined in a ``class,'' which 
 This decoration may be simplified through a ``fluent'' supplementary object:
 
 \begin{ffcode}
-+import org.eolang.gray.type
-
 type "Cart" > cart-type
 .super-types "Object" "Printable"
 .method "add" "Book"
@@ -742,7 +740,7 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
 
 \begin{ffcode}
 [] > app
-  QQ.gray.cage 0 > b
+  cage 0 > b
   b' > copy
   seq > @
     b.write
