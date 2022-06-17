@@ -108,7 +108,7 @@ It can be mapped to the following EO code:
     goto
       [g]
         seq > @
-          i.write (i.add 1)
+          i.write (i.plus 1)
           if.
             i.less 10
             g.backward
@@ -223,7 +223,7 @@ This can be mapped to the following EO code using \ff{goto} object:
           g.forward x
           TRUE
         g.forward
-          -1.mul x
+          -1.times x
 \end{ffcode}
 
 The dataization of \ff{g.forward} will exit the \ff{goto} object wrapping the entire code in the ``function'' \ff{abs}.
@@ -265,7 +265,7 @@ heap.pointer > p1
   108
 [p] > f
   seq > @
-    book (p.add 7) > b
+    book (p.plus 7) > b
     b.title.write "Object Thinking"
     b.price    
 \end{ffcode}
@@ -293,7 +293,7 @@ This code can be mapped to the following EO code:
 
 \begin{ffcode}
 [x y] > foo
-  x.add y > @
+  x.plus y > @
 [] > f
   cage 0 > p
   seq > @
@@ -398,7 +398,7 @@ memory 42 > a
 [x] > inc!
   seq > @
   x.write
-    x.add 1
+    x.plus 1
   x
 inc
   inc a
@@ -514,7 +514,7 @@ This mechanism may be implemented in EO:
   if. > @
     b.eq 0
     throw "error!"
-    (Book b).price.mul 1.1
+    (Book b).price.times 1.1
 [b] > print
   try > @
     [t]
@@ -636,11 +636,11 @@ This mechanism may be implemented in EO:
     b.write 1
     f 1
     while.
-      seq (i.write (i.add 1)) (i.less limit)
+      seq (i.write (i.plus 1)) (i.less limit)
       [idx]
         seq > @
-          b.write a.add b
-          f (b.sub a)
+          b.write (a.plus b)
+          f (b.minus a)
           a.write b
 fibonacci 
   10
@@ -671,7 +671,7 @@ The restrictions enforced by Java type system in compile time through types \ff{
 [] > original-cart
   memory 0 > total
   [b] > add
-    total.write (total.add b.price)
+    total.write (total.plus (b.price))
 [] > Cart
   original-cart > @
   [b] > add
@@ -813,7 +813,7 @@ It may be represented in EO like this:
 [] > book
   item > i
   [] > tax
-    i.price.mul 0.1  >@
+    i.price.times 0.1  >@
 \end{ffcode}
 
 Here, composition is used instead of inheritance.
@@ -848,7 +848,7 @@ This mechanism of prototype-based inheritance may be translated to the following
     []
       Item p > @
       [] > tax
-        mul. > @
+        times. > @
           ^.price
           0.1
 QQ.io.stdout
@@ -943,7 +943,7 @@ It may be represented in EO like this:
   memory 0 > total
   [i] > add
     total.write > @
-      total.add i.price
+      total.plus (i.price)
 \end{ffcode}
 
 As the example demonstrates, the presence of generics in class declaration may be ignored, since EO is a language without types and type checking.
