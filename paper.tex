@@ -427,6 +427,11 @@ end
 It can be mapped to the following EO code, where a class becomes a factory of objects:
 
 \begin{ffcode}
++alias org.eolang.cage
++alias org.eolang.txt.sprintf
++alias org.eolang.io.stdout
++alias org.eolang.hamcrest.assert-that
+
 [] > book
   [i] > new
     cage 0 > id
@@ -434,9 +439,10 @@ It can be mapped to the following EO code, where a class becomes a factory of ob
       id.write i
       []
         [] > path
-          QQ.io.sprintf > @
-            "/tmp/%s.txt"
-            id
+          stdout > @
+            sprintf
+              "/tmp/%s.txt"
+              id
         [i] > move
           id.write i > @
 \end{ffcode}
