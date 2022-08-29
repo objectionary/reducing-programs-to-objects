@@ -428,9 +428,6 @@ It can be mapped to the following EO code, where a class becomes a factory of ob
 
 \begin{ffcode}
 +alias org.eolang.cage
-+alias org.eolang.txt.sprintf
-+alias org.eolang.io.stdout
-+alias org.eolang.hamcrest.assert-that
 
 [] > book
   [i] > new
@@ -439,10 +436,9 @@ It can be mapped to the following EO code, where a class becomes a factory of ob
       id.write i
       []
         [] > path
-          stdout > @
-            sprintf
-              "/tmp/%s.txt"
-              id
+          QQ.txt.sprintf
+            "/tmp/%s.txt"
+            id
         [i] > move
           id.write i > @
 \end{ffcode}
