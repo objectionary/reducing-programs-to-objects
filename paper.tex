@@ -427,8 +427,6 @@ end
 It can be mapped to the following EO code, where a class becomes a factory of objects:
 
 \begin{ffcode}
-+alias org.eolang.cage
-
 [] > book
   [i] > new
     cage 0 > id
@@ -436,7 +434,7 @@ It can be mapped to the following EO code, where a class becomes a factory of ob
       id.write i
       []
         [] > path
-          QQ.txt.sprintf
+          QQ.txt.sprintf > @
             "/tmp/%s.txt"
             id
         [i] > move
