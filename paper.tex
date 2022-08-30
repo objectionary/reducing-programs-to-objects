@@ -634,15 +634,16 @@ This mechanism may be implemented in EO:
   seq > @
     a.write 1
     b.write 1
-    f 1
+    f 0
     while.
-      seq (i.write (i.plus 1)) (i.less limit)
+      seq (i.write (i.plus 1)) (i.lt limit)
       [idx]
         seq > @
           b.write (a.plus b)
+          a.write (b.minus a)
           f (b.minus a)
-          a.write b
-fibonacci 
+    TRUE
+fibonacci > @
   10
   [n]
     QQ.io.stdout > @
