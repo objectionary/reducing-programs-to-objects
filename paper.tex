@@ -966,7 +966,7 @@ It may be represented in EO like this:
 \begin{ffcode}
 [a b] > max
   if. > @
-    a.greater
+    a.gt b
     a
     b
 max 7 42 > x
@@ -1021,22 +1021,22 @@ class Cart {
 The code may be represented in EO using classes suggested in Sec.~\ref{sec:classes}:
 
 \begin{ffcode}
-[] > Book
-  Ship true > a1
+[] > book
+  ship TRUE > a1
   [] > new
     [] > @
-[] > Song
-  Ship false > a1
+[] > song
+  ship FALSE > a1
   [] > new
     [] > @
-[] > Cart
+[] > cart
   [i] > add
-    seq > @
-      "// Add the item to the cart"
-      if.
-        i.&.a1.value
-        "// Mark the cart shippable"
+    # Add the item to the cart
+    if. > @
+      i.a1.value
+        # Mark the cart shippable
         TRUE
+        FALSE
 \end{ffcode}
 
 Annotations become attributes of objects, which represent classes in EO, as explained in Sec.~\ref{sec:classes}: \ff{Book.a1} and \ff{Song.a1}.
