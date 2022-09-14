@@ -108,12 +108,12 @@ It can be mapped to the following EO code:
     goto
       [g]
         seq > @
-          i.write (i.plus 1)
+          i.lt (i.plus 1)
           if.
             i.less 10
             g.backward
             TRUE
-   QQ.io.stdout "Finished!"
+    QQ.io.stdout "Finished!"
 \end{ffcode}
 
 Here, the one-argument abstract atom \ff{goto} is being copied with a one-argument abstract anonymous object, which is the sequence of objects doing the increment of \ff{i} and then the comparison of it with the number ten. If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{goto}.
