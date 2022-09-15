@@ -370,7 +370,7 @@ It can be mapped to the following EO code:
     [g]
       seq > @
         if.
-          a.greater b
+          a.gt b
           g.forward a
           TRUE
         b
@@ -399,9 +399,8 @@ It may be mapped to a constant EO object:
 memory 42 > a
 [x] > inc!
   seq > @
-  x.write
-    x.plus 1
-  x
+    x.write
+      x.plus 1
 inc
   inc a
 \end{ffcode}
