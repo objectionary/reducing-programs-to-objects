@@ -254,19 +254,21 @@ This code can be mapped to the following EO code:
 
 \begin{ffcode}
 [ptr] > book
+  ptr > @
   ptr.block > title
     100
     [b] (b.as-string > @)
   ptr.block > price
     8
     [b] (b.as-int > @)
-heap.pointer > p1
-  0x1A76EC09 
+pointer. > p1
+  heap 1024
+  0
   108
 [p] > f
   seq > @
-    book (p.plus 7) > b
-    b.title.write "Object Thinking"
+    book (p.add 7) > b
+    b.title.write ("Object Thinking").as-bytes
     b.price    
 \end{ffcode}
 
@@ -300,7 +302,7 @@ This code can be mapped to the following EO code:
     p.write
       [x y]
         foo x y > @
-    p 7 42
+    p.@ 7 42
 \end{ffcode}
 
 Important to notice that the following code is not possible to represent in EO:
