@@ -470,16 +470,15 @@ int main() {
 It may be translated to EO as such:
 
 \begin{ffcode}
-[] > Foo
+[] > foo
   [] > new
     seq > @
-      QQ.io.stdout "Alive" > @
-      []
-        [] > destructor
-          QQ.io.stdout "Dead" > @
+      QQ.io.stdout "Alive"
+      [] > destructor
+        QQ.io.stdout "Dead" > @
 [] > main
   seq > @
-    Foo.new > f
+    foo.new > f
     f.destructor
 \end{ffcode}
 
