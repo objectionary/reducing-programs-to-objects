@@ -676,14 +676,14 @@ The restrictions enforced by Java type system in compile time through types \ff{
   memory 0 > total
   [b] > add
     total.write (total.plus (b.price))
-[] > Cart
+[] > cart
   original-cart > @
   [b] > add
     if.
-      b.&.subtype-of "Book"
+      b.subtype-of (QQ.txt.text "Book")
       @.add b
       []
-        msg > "Type mismatch, Book expected"
+        error "Type mismatch, Book expected" > @
 \end{ffcode}
 
 Here, it is expected that the parameter \ff{b} is defined in a ``class,'' which has \ff{subtype-of} attribute, which may also be provided by a decorator (a simplified example):
@@ -691,7 +691,7 @@ Here, it is expected that the parameter \ff{b} is defined in a ``class,'' which 
 \begin{ffcode}
 [] > original-book
   memory 0 > price
-[] > Book
+[] > book
   original-book > @
   [t] > subtype-of
     t.eq "Book" > @
