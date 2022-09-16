@@ -813,7 +813,7 @@ It may be represented in EO like this:
 [] > book
   item > i
   [] > tax
-    i.price.times 0.1  >@
+    (QQ.math.number (i.price)).as-float.times 0.1 > @
 \end{ffcode}
 
 Here, composition is used instead of inheritance.
@@ -837,22 +837,21 @@ console.log(t); // prints "4.2"
 This mechanism of prototype-based inheritance may be translated to the following EO code, using the mechanism of decoration:
 
 \begin{ffcode}
-[] > Item
+[p] > item
+  memory 0 > price
+  [] > new
+    price.write p > @
+[] > book
   [p] > new
-    memory 0 > price
-    seq > @
-      price.write p 
-      []
-[] > Book
-  [p] > new
-    []
-      Item p > @
-      [] > tax
-        times. > @
-          ^.price
-          0.1
+    item p > @
+    [] > tax
+      times. > @
+        as-float.
+          QQ.math.number (^.price)
+        0.1
 QQ.io.stdout
-  as-string.
+  QQ.txt.sprintf
+    "%f"
     tax.
       Book.new 42
 \end{ffcode}
@@ -885,7 +884,9 @@ It may be represented in EO like this:
 \begin{ffcode}
 [] > dog
   [] > bark
-    stdout "Bark!" > @
+    QQ.io.stdout "Bark!" > @
+[] > friend
+  [] > listen
 [] > jack
   dog > d
   friend > f
