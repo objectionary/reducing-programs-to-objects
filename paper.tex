@@ -110,10 +110,10 @@ It can be mapped to the following EO code:
         seq > @
           i.write (i.plus 1)
           if.
-            i.less 10
+            i.lt 10
             g.backward
             TRUE
-   QQ.io.stdout "Finished!"
+    QQ.io.stdout "Finished!"
 \end{ffcode}
 
 Here, the one-argument abstract atom \ff{goto} is being copied with a one-argument abstract anonymous object, which is the sequence of objects doing the increment of \ff{i} and then the comparison of it with the number ten. If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{goto}.
@@ -144,7 +144,7 @@ It can be mapped to the following EO code:
         seq > @
           if.
             x.eq 0
-            g.forward
+            g.forward TRUE
             TRUE
           r.write (42.div x)
     r
@@ -219,7 +219,7 @@ This can be mapped to the following EO code using \ff{goto} object:
     [g]
       seq > @
         if.
-          x.greater 0
+          x.gt 0
           g.forward x
           TRUE
         g.forward
@@ -254,19 +254,22 @@ This code can be mapped to the following EO code:
 
 \begin{ffcode}
 [ptr] > book
+  ptr > @
   ptr.block > title
     100
     [b] (b.as-string > @)
   ptr.block > price
     8
     [b] (b.as-int > @)
-heap.pointer > p1
-  0x1A76EC09 
+pointer. > p1
+  heap 1024
+  0
   108
 [p] > f
   seq > @
-    book (p.plus 7) > b
-    b.title.write "Object Thinking"
+    book (p.add 7) > b
+    b.title.write
+      ("Object Thinking").as-bytes
     b.price    
 \end{ffcode}
 
@@ -300,7 +303,7 @@ This code can be mapped to the following EO code:
     p.write
       [x y]
         foo x y > @
-    p 7 42
+    p.@ 7 42
 \end{ffcode}
 
 Important to notice that the following code is not possible to represent in EO:
@@ -368,7 +371,7 @@ It can be mapped to the following EO code:
     [g]
       seq > @
         if.
-          a.greater b
+          a.gt b
           g.forward a
           TRUE
         b
@@ -397,9 +400,8 @@ It may be mapped to a constant EO object:
 memory 42 > a
 [x] > inc!
   seq > @
-  x.write
-    x.plus 1
-  x
+    x.write
+      x.plus 1
 inc
   inc a
 \end{ffcode}
@@ -469,17 +471,16 @@ int main() {
 It may be translated to EO as such:
 
 \begin{ffcode}
-[] > Foo
+[] > foo
   [] > new
     seq > @
-      QQ.io.stdout "Alive" > @
+      QQ.io.stdout "Alive"
       []
         [] > destructor
           QQ.io.stdout "Dead" > @
 [] > main
-  seq > @
-    Foo.new > f
-    f.destructor
+  foo.new > f
+  f.destructor > @
 \end{ffcode}
 
 There is no garbage collection in EO, that's why a destructor must be explicitly ``called'' when an object passes out of scope or is deleted.
