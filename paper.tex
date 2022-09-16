@@ -108,9 +108,9 @@ It can be mapped to the following EO code:
     goto
       [g]
         seq > @
-          i.lt (i.plus 1)
+          i.write (i.plus 1)
           if.
-            i.less 10
+            i.lt 10
             g.backward
             TRUE
     QQ.io.stdout "Finished!"
@@ -268,7 +268,8 @@ pointer. > p1
 [p] > f
   seq > @
     book (p.add 7) > b
-    b.title.write ("Object Thinking").as-bytes
+    b.title.write
+      ("Object Thinking").as-bytes
     b.price    
 \end{ffcode}
 
