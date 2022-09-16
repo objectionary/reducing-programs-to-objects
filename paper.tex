@@ -913,9 +913,9 @@ It may be represented in EO like this:
 
 \begin{ffcode}
 [args...] > foo
-  (args.get 0) > a0
+  (args.at 0) > a0
   if.
-    a0.&.subtype-of "Int"
+    a0.subtype-of "Int"
     first-foo a0
     second-foo a0
 foo 42
