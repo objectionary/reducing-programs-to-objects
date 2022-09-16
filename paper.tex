@@ -510,27 +510,30 @@ This mechanism may be implemented in EO:
 \begin{ffcode}
 [] > Book
   [] > price /int
-[b throw] > price
+[b] > price
   if. > @
     b.eq 0
-    throw "error!"
-    (Book b).price.times 1.1
+    error "NPE!"
+    b.price.times 1.1
 [b] > print
   try > @
-    [t]
-      seq > @
-        QQ.io.stdout "The price: "
-        QQ.io.stdout (price b t).as-string
+    []
+      QQ.io.stdout > @
+        QQ.txt.sprintf
+        "The price: %d"
+        price b
     [e]
-      seq > @
-        QQ.io.stdout "Error: "
-        QQ.io.stdout e
-    TRUE
+      QQ.io.stdout > @
+        QQ.txt.sprintf
+        "Error: %s"
+        e
+    []
+      nop > @
 \end{ffcode}
 
 Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, and 2)~an abstract object to be copied with one argument, in case dataization fails, and 3)~an object to be dataized anyway (similar to Java \ff{finaly} block). 
 
-The object \ff{ff} expects two arguments instead of one, as in C++ example. The second argument is the object \ff{throw}, which if copied and dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}. The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
+In the object \ff{price} we get the object \ff{error}, which if dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}. The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
 
 \subsubsection{Many Exception Types}
 
@@ -548,29 +551,29 @@ void f(int x) throws IOException {
 This would be represented in EO as such:
 
 \begin{ffcode}
-[x io-throw rt-throw] > f
-  seq > @
-    if.
-      x.eq 0
-      io-throw
-      TRUE
-    rt-throw
+[x] > f
+  if. > @
+    x.eq 0
+    error "IOException"
+    error "RuntimeException"
 \end{ffcode}
 
 To catch both exceptions the object \ff{f} would be used like this:
 
 \begin{ffcode}
 try
-  [rt-throw]
+  []
     try > @
-      [io-throw]
-        f 5 io-throw rt-throw > @
+      []
+        f 5 > @
       [e1]
-        QQ.io.stdout e1.message > @
-      TRUE
+        QQ.io.stdout e1 > @
+      []
+        nop > @
   [e2]
-    QQ.io.stdout e2.message > @
-  TRUE
+    QQ.io.stdout e2 > @
+  []
+    nop > @
 \end{ffcode}
 
 \subsection{Anonymous Functions}
