@@ -475,12 +475,12 @@ It may be translated to EO as such:
   [] > new
     seq > @
       QQ.io.stdout "Alive"
-      [] > destructor
-        QQ.io.stdout "Dead" > @
+      []
+        [] > destructor
+          QQ.io.stdout "Dead" > @
 [] > main
-  seq > @
-    foo.new > f
-    f.destructor
+  foo.new > f
+  f.destructor > @
 \end{ffcode}
 
 There is no garbage collection in EO, that's why a destructor must be explicitly ``called'' when an object passes out of scope or is deleted.
