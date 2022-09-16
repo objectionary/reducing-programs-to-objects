@@ -756,9 +756,11 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
     b.write
       [] > book
         [t] > new
-          copy > @
-            [] > print
-              QQ.io.stdout (^.title)
+          seq > @
+            []
+              copy > @
+              [] > print
+                QQ.io.stdout (^.title)
     b.print
 \end{ffcode}
 
