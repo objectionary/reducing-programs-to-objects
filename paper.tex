@@ -748,21 +748,17 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
   b' > copy
   seq > @
     b.write
-      [] > Book
+      [] > book
         [t] > new
           memory "" > title
-          seq > @
-            title.write t
-            []
+          title.write t > @
     copy.<
     b.write
-      [] > Book
+      [] > book
         [t] > new
-          seq > @
-            []
-              copy > @
-              [] > print
-                QQ.io.stdout (^.title)
+          copy > @
+            [] > print
+              QQ.io.stdout (^.title)
     b.print
 \end{ffcode}
 
