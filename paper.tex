@@ -508,7 +508,7 @@ void print(Book* b) {
 This mechanism may be implemented in EO:
 
 \begin{ffcode}
-[] > Book
+[] > book
   [] > price /int
 [b] > price
   if. > @
@@ -531,7 +531,7 @@ This mechanism may be implemented in EO:
       nop > @
 \end{ffcode}
 
-Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, and 2)~an abstract object to be copied with one argument, in case dataization fails, and 3)~an object to be dataized anyway (similar to Java \ff{finaly} block). 
+Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, and 2)~an abstract object to be copied with one argument, in case dataization return encapsulated object, and 3)~an object to be dataized anyway (similar to Java \ff{finaly} block).
 
 In the object \ff{price} we get the object \ff{error}, which if dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}. The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
 
