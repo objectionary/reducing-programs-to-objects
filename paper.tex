@@ -509,29 +509,32 @@ void print(Book* b) {
 This mechanism may be implemented in EO:
 
 \begin{ffcode}
-[] > Book
+[] > book
   [] > price /int
-[b throw] > price
+[b] > price
   if. > @
     b.eq 0
-    throw "error!"
-    (Book b).price.times 1.1
+    error "NPE!"
+    b.price.times 1.1
 [b] > print
   try > @
-    [t]
-      seq > @
-        QQ.io.stdout "The price: "
-        QQ.io.stdout (price b t).as-string
+    []
+      QQ.io.stdout > @
+        QQ.txt.sprintf
+        "The price: %d"
+        price b
     [e]
-      seq > @
-        QQ.io.stdout "Error: "
-        QQ.io.stdout e
-    TRUE
+      QQ.io.stdout > @
+        QQ.txt.sprintf
+        "Error: %s"
+        e
+    []
+      nop > @
 \end{ffcode}
 
-Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, and 2)~an abstract object to be copied with one argument, in case dataization fails, and 3)~an object to be dataized anyway (similar to Java \ff{finaly} block). 
+Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, and 2)~an abstract object to be copied with one argument, in case dataization returns encapsulated object, and 3)~an object to be dataized anyway (similar to Java \ff{finaly} block).
 
-The object \ff{ff} expects two arguments instead of one, as in C++ example. The second argument is the object \ff{throw}, which if copied and dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}. The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
+In the object \ff{price} we get the object \ff{error}, which if dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}. The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
 
 \subsubsection{Many Exception Types}
 
@@ -549,29 +552,29 @@ void f(int x) throws IOException {
 This would be represented in EO as such:
 
 \begin{ffcode}
-[x io-throw rt-throw] > f
-  seq > @
-    if.
-      x.eq 0
-      io-throw
-      TRUE
-    rt-throw
+[x] > f
+  if. > @
+    x.eq 0
+    error "IOException"
+    error "RuntimeException"
 \end{ffcode}
 
 To catch both exceptions the object \ff{f} would be used like this:
 
 \begin{ffcode}
 try
-  [rt-throw]
+  []
     try > @
-      [io-throw]
-        f 5 io-throw rt-throw > @
+      []
+        f 5 > @
       [e1]
-        QQ.io.stdout e1.message > @
-      TRUE
+        QQ.io.stdout e1 > @
+      []
+        nop > @
   [e2]
-    QQ.io.stdout e2.message > @
-  TRUE
+    QQ.io.stdout e2 > @
+  []
+    nop > @
 \end{ffcode}
 
 \subsection{Anonymous Functions}
@@ -595,7 +598,7 @@ This mechanism may be implemented in EO:
   lines.each > @
     [t]
       if. > @
-        t.starts '#'
+        t.starts-with "#"
         b t
         TRUE
 scan
@@ -674,14 +677,14 @@ The restrictions enforced by Java type system in compile time through types \ff{
   memory 0 > total
   [b] > add
     total.write (total.plus (b.price))
-[] > Cart
+[] > cart
   original-cart > @
   [b] > add
     if.
-      b.&.subtype-of "Book"
+      b.subtype-of (QQ.txt.text "Book")
       @.add b
       []
-        msg > "Type mismatch, Book expected"
+        error "Type mismatch, Book expected" > @
 \end{ffcode}
 
 Here, it is expected that the parameter \ff{b} is defined in a ``class,'' which has \ff{subtype-of} attribute, which may also be provided by a decorator (a simplified example):
@@ -689,7 +692,7 @@ Here, it is expected that the parameter \ff{b} is defined in a ``class,'' which 
 \begin{ffcode}
 [] > original-book
   memory 0 > price
-[] > Book
+[] > book
   original-book > @
   [t] > subtype-of
     t.eq "Book" > @
@@ -746,15 +749,13 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
   b' > copy
   seq > @
     b.write
-      [] > Book
+      [] > book
         [t] > new
           memory "" > title
-          seq > @
-            title.write t
-            []
+          title.write t > @
     copy.<
     b.write
-      [] > Book
+      [] > book
         [t] > new
           seq > @
             []
@@ -764,7 +765,7 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
     b.print
 \end{ffcode}
 
-Here, the modification to the object \ff{Book} is happening through making a copy of it, creating a decorator, and then storing it to where the original object was located.
+Here, the modification to the object \ff{book} is happening through making a copy of it, creating a decorator, and then storing it to where the original object was located.
 
 \subsection{Static Methods}
 \label{sec:static}
@@ -783,9 +784,9 @@ class Utils {
 It may be converted to the following EO code, since a static method is nothing else but a ``global'' function:
 
 \begin{ffcode}
-[a b] > Utils-max
+[a b] > utils-max
   if. > @
-    a.greater b
+    a.gt b
     a
     b
 \end{ffcode}
@@ -815,7 +816,7 @@ It may be represented in EO like this:
 [] > book
   item > i
   [] > tax
-    i.price.times 0.1  >@
+    (QQ.math.number (i.price)).as-float.times 0.1 > @
 \end{ffcode}
 
 Here, composition is used instead of inheritance.
@@ -839,24 +840,23 @@ console.log(t); // prints "4.2"
 This mechanism of prototype-based inheritance may be translated to the following EO code, using the mechanism of decoration:
 
 \begin{ffcode}
-[] > Item
+[p] > item
+  memory 0 > price
+  [] > new
+    price.write p > @
+[] > book
   [p] > new
-    memory 0 > price
-    seq > @
-      price.write p 
-      []
-[] > Book
-  [p] > new
-    []
-      Item p > @
-      [] > tax
-        times. > @
-          ^.price
-          0.1
+    item p > @
+    [] > tax
+      times. > @
+        as-float.
+          QQ.math.number (^.price)
+        0.1
 QQ.io.stdout
-  as-string.
+  QQ.txt.sprintf
+    "%f"
     tax.
-      Book.new 42
+      book.new 42
 \end{ffcode}
 
 \subsubsection{Multiple Inheritance}
@@ -887,7 +887,9 @@ It may be represented in EO like this:
 \begin{ffcode}
 [] > dog
   [] > bark
-    stdout "Bark!" > @
+    QQ.io.stdout "Bark!" > @
+[] > friend
+  [] > listen
 [] > jack
   dog > d
   friend > f
@@ -914,9 +916,9 @@ It may be represented in EO like this:
 
 \begin{ffcode}
 [args...] > foo
-  (args.get 0) > a0
+  (args.at 0) > a0
   if.
-    a0.&.subtype-of "Int"
+    a0.subtype-of "Int"
     first-foo a0
     second-foo a0
 foo 42
@@ -1040,7 +1042,7 @@ The code may be represented in EO using classes suggested in Sec.~\ref{sec:class
         FALSE
 \end{ffcode}
 
-Annotations become attributes of objects, which represent classes in EO, as explained in Sec.~\ref{sec:classes}: \ff{Book.a1} and \ff{Song.a1}.
+Annotations become attributes of objects, which represent classes in EO, as explained in Sec.~\ref{sec:classes}: \ff{book.a1} and \ff{song.a1}.
 
 \section{Traceability}
 
