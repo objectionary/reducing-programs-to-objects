@@ -337,13 +337,15 @@ This code can be mapped to the following EO code:
   p.block > @
     8
     [b] (b.as-int > @)
-[p] > f
+[] > f
   seq > @
-    heap.malloc 16 > stack
-    long64 (stack.pointer 0 8) > b
-    b.write 7
-    long64 (stack.pointer 8 8) > a
-    a.write 42
+    malloc. > stack
+      heap 32 > h
+      16
+    long64 stack > b
+    b.write (7.as-bytes)
+    long64 stack > a
+    a.write (42.as-bytes)
     long64 (a.p.sub 1) > ret!
     h.free stack
     ret
