@@ -431,24 +431,24 @@ end
 It can be mapped to the following EO code, where a class becomes a factory of objects:
 
 \begin{ffcode}
-[] > book
-  [i] > new
-    cage 0 > id
-    seq > @
-      id.write i
-      []
-        [] > path
-          QQ.txt.sprintf > @
-            "/tmp/%s.txt"
-            id
-        [i] > move
-          id.write i > @
+[i] > book
+  cage i > id
+  [] > ruby-init
+    QQ.txt.sprintf > @
+      "New book!"
+  [] > path
+    QQ.txt.sprintf > @
+      "/tmp/%s.txt"
+      id
+  [i] > move
+    id.write i > @
 \end{ffcode}
 
-Here, the constructor is represented by the object \ff{new}, which initializes the object \ff{cage} with the incoming parameter \ff{i} and then makes a new anonymous object with two attributes \ff{path} and \ff{move}. The making an ``instance'' of a book would look like this:
+Here, the constructor is represented by the object \ff{ruby-init}, which initializes finishes the initization of the object. The making an ``instance'' of a book would look like this:
 
 \begin{ffcode}
-book.new 42 > b
+book 42 > b
+b.ruby-init
 b.move 7
 b.path
 \end{ffcode}
@@ -474,15 +474,15 @@ It may be translated to EO as such:
 
 \begin{ffcode}
 [] > foo
-  [] > new
-    seq > @
-      QQ.io.stdout "Alive"
-      []
-        [] > destructor
-          QQ.io.stdout "Dead" > @
+  [] > constructor
+    QQ.io.stdout "Alive" > @
+  [] > destructor
+    QQ.io.stdout "Dead" > @
 [] > main
-  foo.new > f
-  f.destructor > @
+  foo > f
+  seq > @
+    f.constructor
+    f.destructor
 \end{ffcode}
 
 There is no garbage collection in EO, that's why a destructor must be explicitly ``called'' when an object passes out of scope or is deleted.
