@@ -80,8 +80,8 @@ Other features are more trivial, that's why they are not presented in this paper
 
 \subsection{Goto}
 \label{sec:goto}
- 
-Goto is a one-way imperative transfer of control to another line of code. There are only two possible cases of goto jumps: forward and backward. 
+
+Goto is a one-way imperative transfer of control to another line of code. There are only two possible cases of goto jumps: forward and backward.
 
 \subsubsection{Backward Jump}
 
@@ -239,9 +239,9 @@ This is an example of C code, where the pointer \ff{p} is first incremented by s
 
 \begin{ffcode}
 #include "string.h"
-struct book { 
-  char title[100]; 
-  long long price; 
+struct book {
+  char title[100];
+  long long price;
 };
 int f(struct book* p) {
   struct book b = *(p + 7);
@@ -270,7 +270,7 @@ pointer. > p1
     book (p.add 7) > b
     b.title.write
       ("Object Thinking").as-bytes
-    b.price    
+    b.price
 \end{ffcode}
 
 Here, \ff{p1} is an object that can be used as an argument of \ff{f}. It is a copy of an abstract object \ff{heap.pointer}, which expects two: 1)~an absolute address in memory, and 2)~the size of the memory block it points to, in bytes. Its attribute \ff{block} expects two attributes: 1) the number of bytes in the heap, and 2)~an abstract object that can encapsulate \ff{bytes} which were just read from memory.
@@ -775,12 +775,12 @@ Here, the modification to the object \ff{book} is happening through making a cop
 A static method (or static function) is a method defined as a member of an object but is accessible directly from an API object's constructor, rather than from an object instance created via the constructor. For example, this C\# class consists of a single static method:
 
 \begin{ffcode}
-class Utils {  
+class Utils {
   public static int max(int a, int b) {
     if (a > b) return a;
     return b;
   }
-}  
+}
 \end{ffcode}
 
 It may be converted to the following EO code, since a static method is nothing else but a ``global'' function:
@@ -829,7 +829,7 @@ So called pro\-to\-type-based programming uses generalized objects, which can th
 
 \begin{ffcode}
 function Item(p) { this.price = p; }
-function Book(p) { 
+function Book(p) {
   Item.call(this, p);
   this.tax = function () {
     return this.price * 0.1;
@@ -863,23 +863,23 @@ QQ.io.stdout
 
 \subsubsection{Multiple Inheritance}
 
-Multiple inheritance is a feature of some object-oriented computer programming languages in which an object or class can inherit features from more than one parent object or parent class. In this C++ example, 
+Multiple inheritance is a feature of some object-oriented computer programming languages in which an object or class can inherit features from more than one parent object or parent class. In this C++ example,
 the class \ff{Jack} has both \ff{bark} and \ff{listen} methods, inherited from \ff{Dog} and \ff{Friend} respectively:
 
 \begin{ffcode}
 #include <iostream>
 class Dog {
-  virtual void bark() { 
-    std::cout << "Bark!"; 
+  virtual void bark() {
+    std::cout << "Bark!";
   }
 };
 class Friend {
   virtual void listen();
 };
 class Jack: Dog, Friend {
-  void listen() override { 
+  void listen() override {
     Dog::bark();
-    std::cout << "Listen!"; 
+    std::cout << "Listen!";
   }
 };
 \end{ffcode}
@@ -931,7 +931,7 @@ This code expects arguments of \ff{foo} to be equipped with the type system sugg
 \subsection{Java Generics}
 \label{sec:generics}
 
-Generics extend Java's type system to allow a type or method to operate on objects of various types while providing compile-time type safety. For example, this Java class expects another class to be specified as \ff{T} before usage: 
+Generics extend Java's type system to allow a type or method to operate on objects of various types while providing compile-time type safety. For example, this Java class expects another class to be specified as \ff{T} before usage:
 
 \begin{ffcode}
 class Cart<T extends Item> {
@@ -939,7 +939,7 @@ class Cart<T extends Item> {
   void add(T i) {
     total += i.price();
   }
-} 
+}
 \end{ffcode}
 
 It may be represented in EO like this:
@@ -960,8 +960,8 @@ As the example demonstrates, the presence of generics in class declaration may b
 Templates are a feature of the C++ programming language that allows functions and classes to operate with generic types, allowing a function or class to work on many different data types without being rewritten for each one.
 
 \begin{ffcode}
-template<typename T> T max(T a, T b) { 
-  return a > b ? a : b; 
+template<typename T> T max(T a, T b) {
+  return a > b ? a : b;
 }
 int x = max(7, 42);
 \end{ffcode}
@@ -1048,7 +1048,7 @@ Annotations become attributes of objects, which represent classes in EO, as expl
 
 \section{Traceability}
 
-Certain amount of semantic information may be lost during the translation from a more powerful programming language to EO objects, such as, for example, namings, line numbers, comments, etc. Moreover, it may be useful to have an ability to trace EO objects back to original language constructs, which they were motivated by. For example, a simple C function: 
+Certain amount of semantic information may be lost during the translation from a more powerful programming language to EO objects, such as, for example, namings, line numbers, comments, etc. Moreover, it may be useful to have an ability to trace EO objects back to original language constructs, which they were motivated by. For example, a simple C function:
 
 \begin{ffcode}
 int f(int x) {
