@@ -2,7 +2,7 @@
 
 [![make](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml/badge.svg)](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml)
 
-The paper is published [in arXiv](https://arxiv.org/abs/2112.11988).
+The paper is published [in arXiv](https://arxiv.org/abs/2112.11988) (draft is [here](https://github.com/objectionary/reducing-programs-to-objects/blob/gh-pages/paper.pdf)).
 
 To build it, just run:
 
