@@ -25,7 +25,7 @@
 
 TLROOT=$$(kpsewhich -var-value TEXMFDIST)
 PACKAGES=ffcode to-be-determined href-ul
-REPO=yegor256/reducing-programs-to-objects
+REPO=objectionary/reducing-programs-to-objects
 
 zip: *.tex
 	rm -rf package
@@ -39,10 +39,10 @@ zip: *.tex
 	echo "Version is: $${version}"
 	gsed -i "s|0\.0\.0|$${version}|" paper.tex
 	gsed -i "s|REPOSITORY|$(REPO)|" paper.tex
-	pdflatex -shell-escape -halt-on-error paper.tex > /dev/null
+	pdflatex -shell-escape -halt-on-error paper.tex
 	biber paper
-	pdflatex -halt-on-error paper.tex > /dev/null
-	pdflatex -halt-on-error paper.tex > /dev/null
+	pdflatex -halt-on-error paper.tex
+	pdflatex -halt-on-error paper.tex
 	rm -rf *.aux *.bcf *.blg *.fdb_latexmk *.fls *.log *.run.xml *.out *.exc
 	zip -x paper.pdf -r paper-$${version}.zip *
 	mv paper-$${version}.zip ..
