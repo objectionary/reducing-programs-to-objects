@@ -32,6 +32,7 @@ zip: *.tex
 	mkdir package
 	cd package
 	cp ../paper.tex .
+	cp ../acmart.cls .
 	cp ../main.bib .
 	cp ../goto-pic.pdf .
 	for p in $(PACKAGES); do cp $(TLROOT)/tex/latex/$${p}/$${p}.sty .; done
