@@ -51,4 +51,3 @@ zip: *.tex
 
 clean:
 	git clean -dfX
-

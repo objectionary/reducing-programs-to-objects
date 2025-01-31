@@ -3,7 +3,7 @@ architect:
 docker:
   image: yegor256/rultor-image:1.23.1
 install: |
-  sudo apt-get install -y python3-pygments
+  sudo apt-get install --yes python3-pygments
   sudo pip3 install pygments
   pdd --file=/dev/null
   sudo tlmgr option repository ctan
