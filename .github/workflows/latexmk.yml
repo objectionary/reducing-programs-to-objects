@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: yegor256/latexmk-action@0.15.0
+      - uses: yegor256/latexmk-action@0.16.1
         with:
           opts: -pdf
           depends: DEPENDS.txt
