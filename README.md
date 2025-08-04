@@ -3,7 +3,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2112.11988-green.svg)](https://arxiv.org/abs/2112.11988)
 [![make](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml/badge.svg)](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml)
 
-The paper is published in [arXiv] (draft is in this [PDF]).
+The paper is published in [arXiv] (the draft is in this [PDF]).
 
 To build it, just run:
 
