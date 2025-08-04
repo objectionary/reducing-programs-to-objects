@@ -9,6 +9,7 @@ hard cancel
 hard catchfile
 hard cjk
 hard cm-super
+hard cmap
 hard comment
 hard currfile
 hard cyrillic
