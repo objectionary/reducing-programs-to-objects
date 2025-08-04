@@ -11,6 +11,8 @@
 \usepackage{to-be-determined}
 \setlength\footskip{13pt}
 
+\newcommand\broken{\tbd{This section is not valid, must be rewritten!}}
+
 \title{Reducing Programs to Objects}
 \subtitle{
   Ver:
@@ -238,6 +240,8 @@ The dataization of \ff{g.forward} will exit the \ff{go.to} object wrapping the e
 \subsection{Pointers}
 \label{sec:pointers}
 
+\broken
+
 A pointer is an object in many programming languages that stores a memory address.
 Pointers may point to data memory or program memory.
 
@@ -390,7 +394,9 @@ It can be mapped to the following \eolang{} code:
 
 This example also demonstrates how \ff{go.to} object can be used to simulate the behavior of the \ff{return} statement from within the body of a method.
 
-\subsubsection{Impure Functions}
+\subsection{Impure Functions}
+
+\broken
 
 A function is pure when, among other qualities, it does not have side effects:
 no mutation of local static variables, non-local variables, mutable reference arguments,
@@ -419,6 +425,8 @@ inc
 
 \subsection{Classes}
 \label{sec:classes}
+
+\broken
 
 A class is an extensible program code template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods). The following program contains a Ruby class with a single constructor, two methods, and one mutable member variable:
 
@@ -464,6 +472,8 @@ b.path
 
 \subsection{Destructors}
 \label{sec:destructors}
+
+\broken
 
 In C++ and some other languages, a destructor is a method that is called for a class object when that object passes out of scope or is explicitly deleted. The following code will print both \ff{Alive} and \ff{Dead} texts:
 
@@ -521,7 +531,7 @@ This mechanism may be implemented in \eolang{}:
 
 \begin{ffcode}
 [] > book
-  [] > price /int
+  [] > price ?
 [b] > price
   if. > @
     b.eq 0
@@ -529,18 +539,17 @@ This mechanism may be implemented in \eolang{}:
     b.price.times 1.1
 [b] > print
   try > @
-    []
+    [] >>
       QQ.io.stdout > @
-        QQ.txt.sprintf
-        "The price: %d"
-        price b
-    [e]
+        QQ.txt.sprintf *1
+          "The price: %d"
+          price b
+    [e] >>
       QQ.io.stdout > @
-        QQ.txt.sprintf
-        "Error: %s"
-        e
-    []
-      nop > @
+        QQ.txt.sprintf *1
+          "Error: %s"
+          e
+    true
 \end{ffcode}
 
 Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, 2)~an abstract object to be copied with one argument, in case dataization returns an encapsulated object, and 3)~an object to be dataized anyway (similar to Java \ff{finally} block).
@@ -548,6 +557,8 @@ Here, the object \ff{try} expects three arguments: 1)~an abstract object to be d
 In the object \ff{price}, we get the object \ff{error}, which, if dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}. The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
 
 \subsubsection{Many Exception Types}
+
+\broken
 
 A Java method may throw a number of either checked or unchecked exceptions, for example:
 
@@ -607,14 +618,14 @@ This mechanism may be implemented in \eolang{}:
 \begin{ffcode}
 [lines b] > scan
   lines.each > @
-    [t]
+    [t] >>
       if. > @
         t.starts-with "#"
         b t
         true
 scan
   array
-  [x]
+  [x] >>
     QQ.io.stdout x > @
 \end{ffcode}
 
@@ -622,6 +633,8 @@ Here, the anonymous function is passed to the object \ff{scan} as an argument \f
 
 \subsection{Generators}
 \label{sec:generators}
+
+\broken
 
 A generator is a routine that can be used to control the iteration behavior of a loop.
 For example, this PHP program will print the first ten Fibonacci numbers:
@@ -671,7 +684,11 @@ Here, the generator is turned into an abstract object \ff{fibonacci} with an ext
 \subsection{Types and Type Casting}
 \label{sec:types}
 
-A type system is a logical system comprising a set of rules that assign a property called a type to various constructs of a computer program, such as variables, expressions, functions, or modules. The main purpose of a type system is to reduce possibilities for bugs in computer programs by defining interfaces between different parts of a computer program, and then checking that the parts have been connected in a consistent way. In this example, a Java method \ff{add} expects an argument of type \ff{Book} and compilation would fail if another type is provided:
+\broken
+
+A type system is a logical system comprising a set of rules that assign a property called a type to various constructs of a computer program, such as variables, expressions, functions, or modules.
+The main purpose of a type system is to reduce possibilities for bugs in computer programs by defining interfaces between different parts of a computer program, and then checking that the parts have been connected in a consistent way.
+In this example, a Java method \ff{add} expects an argument of type \ff{Book} and compilation would fail if another type is provided:
 
 \begin{ffcode}
 class Cart {
@@ -728,6 +745,8 @@ Type casting, which is a mechanism for changing an expression from one data type
 \subsection{Reflection}
 \label{sec:reflection}
 
+\broken
+
 Reflection is the ability of a process to examine, introspect, and modify its own structure and behavior.
 In the following Python example, the method \ff{hello} of an instance of class \ff{Foo} is not called directly on the object but is first retrieved through reflection functions \ff{globals} and \ff{getattr}, and then executed:
 
@@ -742,6 +761,8 @@ getattr(obj, "hello")("Jeff")
 It may be implemented in \eolang{} by encapsulating additional meta information in classes explained in \cref{sec:classes}.
 
 \subsubsection{Monkey Patching}
+
+\broken
 
 Monkey patching is making changes to a module or class while the program is running.
 This JavaScript program adds a new method \ff{print} to the object \ff{b} after the object has already been instantiated:
@@ -808,6 +829,8 @@ It may be converted to the following \eolang{} code, since a static method is no
 \subsection{Inheritance}
 \label{sec:inheritance}
 
+\broken
+
 Inheritance is the mechanism of basing a class upon another class while retaining similar implementation. In this Java code class \ff{Book} inherits all methods and non-private attributes from class \ff{Item}:
 
 \begin{ffcode}
@@ -836,6 +859,8 @@ It may be represented in \eolang{} like this:
 Here, composition is used instead of inheritance.
 
 \subsubsection{Prototype-Based Inheritance}
+
+\broken
 
 So-called prototype-based programming uses generalized objects, which can then be cloned and extended. For example, this JavaScript program defines two objects, where \ff{Item} is the parent object and \ff{Book} is the child that inherits the parent through its prototype:
 
@@ -874,6 +899,8 @@ QQ.io.stdout
 \end{ffcode}
 
 \subsubsection{Multiple Inheritance}
+
+\broken
 
 Multiple inheritance is a feature of some object-oriented computer programming languages in which an object or class can inherit features from more than one parent object or parent class. In this C++ example,
 the class \ff{Jack} has both \ff{bark} and \ff{listen} methods, inherited from \ff{Dog} and \ff{Friend} respectively:
@@ -918,6 +945,8 @@ Here, inherited methods are explicitly listed as attributes in the object \ff{ja
 \subsection{Method Overloading}
 \label{sec:overloading}
 
+\broken
+
 Method overloading is the ability to create multiple functions with the same name but different implementations. Calls to an overloaded function will run a specific implementation of that function appropriate to the context of the call, allowing one function call to perform different tasks depending on context. In this Kotlin program two functions are defined with the same name, while only one of them is called with an integer argument:
 
 \begin{ffcode}
@@ -943,7 +972,10 @@ This code expects arguments of \ff{foo} to be equipped with the type system sugg
 \subsection{Java Generics}
 \label{sec:generics}
 
-Generics extend Java's type system to allow a type or method to operate on objects of various types while providing compile-time type safety. For example, this Java class expects another class to be specified as \ff{T} before use:
+\broken
+
+Generics extend Java's type system to allow a type or method to operate on objects of various types while providing compile-time type safety.
+For example, this Java class expects another class to be specified as \ff{T} before use:
 
 \begin{ffcode}
 class Cart<T extends Item> {
@@ -968,6 +1000,8 @@ As the example demonstrates, the presence of generics in class declarations may 
 
 \subsection{C++ Templates}
 \label{sec:templates}
+
+\broken
 
 Templates are a feature of the C++ programming language that allows functions and classes to operate with generic types, allowing a function or class to work with many different data types without being rewritten for each one.
 
@@ -994,6 +1028,8 @@ As the example demonstrates, the presence of templates may be ignored since \eol
 \subsection{Mixins}
 \label{sec:mixins}
 
+\broken
+
 A mixin is a class that contains methods for use by other classes without having to be the parent class of those other classes. The following code demonstrates how a Ruby module is included in a class:
 
 \begin{ffcode}
@@ -1016,6 +1052,8 @@ This code may be represented in \eolang{} by just copying the method \ff{recent?
 
 \subsection{Annotations}
 \label{sec:annotations}
+
+\broken
 
 In Java, an annotation is a form of syntactic metadata that can be added to source code; classes, methods, variables, parameters, and Java packages may be annotated. Later, annotations may be retrieved through the Reflection API. For example, this program analyzes the annotation attached to the class of the provided object and changes the behavior depending on one of its attributes:
 
@@ -1059,6 +1097,8 @@ The code may be represented in \eolang{} using classes suggested in \cref{sec:cl
 Annotations become attributes of objects, which represent classes in \eolang{}, as explained in \cref{sec:classes}: \ff{book.a1} and \ff{song.a1}.
 
 \section{Traceability}
+
+\broken
 
 A certain amount of semantic information may be lost during the translation from a more powerful programming language to \eolang{} objects, such as, for example, names, line numbers, comments, etc. Moreover, it may be useful to have the ability to trace \eolang{} objects back to the original language constructs from which they were derived. For example, a simple C function:
 
