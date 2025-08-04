@@ -1,4 +1,4 @@
-# LaTeX Sources of the "Reducing Programs to Objects" Paper
+# The "Reducing Programs to Objects" Paper in LaTeX
 
 [![arXiv](https://img.shields.io/badge/arXiv-2112.11988-green.svg)](https://arxiv.org/abs/2112.11988)
 [![make](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml/badge.svg)](https://github.com/yegor256/reducing-programs-to-objects/actions/workflows/latexmk.yml)
