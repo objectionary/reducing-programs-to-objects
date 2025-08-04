@@ -1,15 +1,13 @@
 % SPDX-FileCopyrightText: Copyright (c) 2024-2025 Yegor Bugayenko
 % SPDX-License-Identifier: MIT
 
-\documentclass[sigplan,11pt,nonacm,natbib=false]{acmart}
+\documentclass[sigplan,nonacm]{acmart}
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
-\usepackage[maxnames=1,minnames=1,maxbibnames=100,natbib=true,citestyle=authoryear,bibstyle=authoryear,doi=false,url=false,isbn=false,isbn=false,backend=biber]{biblatex}
 \usepackage[nocn]{ffcode}
+\usepackage{natbib}
 \usepackage{tikz}
 \usepackage{to-be-determined}
 \setlength\footskip{13pt}
-
-\addbibresource{main.bib}
 
 \title{Reducing Programs to Objects}
 \subtitle{
@@ -1070,7 +1068,9 @@ Here, synthetic \ff{source} attribute represents the location in the source code
 
 We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects. We used EO as a destination programming language because of its minimalistic semantics: it doesn't have any language features aside from objects and their composition and decoration mechanisms.
 
-\printbibliography
+\raggedright
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliography/main}
 
 \clearpage
 
