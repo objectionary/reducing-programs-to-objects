@@ -118,7 +118,8 @@ It can be mapped to the following \eolang{} code:
         QQ.io.stdout "Finished!"
 \end{ffcode}
 
-Here, the one-argument abstract atom \ff{goto} is being copied with a one-argument abstract anonymous object, which is a sequence of objects incrementing \ff{i} and then comparing it with the number ten. If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{goto}.
+Here, the one-argument abstract atom \ff{go.to} is being copied with a one-argument abstract anonymous object, which is a sequence of objects incrementing \ff{i} and then comparing it with the number ten.
+If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{go.to}.
 
 \subsubsection{Forward Jump}
 
@@ -154,10 +155,10 @@ It can be mapped to the following \eolang{} code:
         r
 \end{ffcode}
 
-Here, the same abstract atom \ff{goto} is copied with an abstract one-argument object that is a sequence of objects.
+Here, the same abstract atom \ff{go.to} is copied with an abstract one-argument object that is a sequence of objects.
 When the condition is true, a forward jump is performed by \ff{g.forward} atom.
 
-Similarly, the atom \ff{goto} may be used to simulate other conditional jump statements, like \ff{break}, \ff{continue}, or \ff{return} in the middle of a function body (see \cref{sec:procedures}).
+Similarly, the atom \ff{go.to} may be used to simulate other conditional jump statements, like \ff{break}, \ff{continue}, or \ff{return} in the middle of a function body (see \cref{sec:procedures}).
 
 \subsubsection{Complex Case}
 
@@ -232,7 +233,7 @@ This can be mapped to the following \eolang{} code using \ff{go.to} object:
           -1.times x
 \end{ffcode}
 
-The dataization of \ff{g.forward} will exit the \ff{goto} object wrapping the entire code in the ``function'' \ff{abs}.
+The dataization of \ff{g.forward} will exit the \ff{go.to} object wrapping the entire code in the ``function'' \ff{abs}.
 
 \subsection{Pointers}
 \label{sec:pointers}
@@ -387,7 +388,7 @@ It can be mapped to the following \eolang{} code:
         b
 \end{ffcode}
 
-This example also demonstrates how \ff{goto} object can be used to simulate the behavior of the \ff{return} statement from within the body of a method.
+This example also demonstrates how \ff{go.to} object can be used to simulate the behavior of the \ff{return} statement from within the body of a method.
 
 \subsubsection{Impure Functions}
 
