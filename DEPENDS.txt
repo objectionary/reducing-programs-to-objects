@@ -20,6 +20,7 @@ hard environ
 hard eolang
 hard fdsymbol
 hard ffcode
+hard float
 hard fmtcount
 hard footmisc
 hard framed
