@@ -14,6 +14,7 @@ hard cyrillic
 hard datetime
 hard enumitem
 hard environ
+hard eolang
 hard fdsymbol
 hard ffcode
 hard fmtcount

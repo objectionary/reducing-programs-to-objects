@@ -1,6 +1,3 @@
-_minted-*
-.DS_Store
-.idea/
 *.aux
 *.bbl
 *.bcf
@@ -13,6 +10,11 @@ _minted-*
 *.run.xml
 *.synctex.gz
 *.zip
+.DS_Store
+.idea/
+_eolang/
+_minted-*
+iexec.ret
 node_modules/
 package/
 paper.pdf

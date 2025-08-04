@@ -10,6 +10,8 @@ path = [
     ".gitmodules",
     ".latexmkrc",
     ".texsc",
+    "_eolang/**",
+    "iexec.ret",
     "**.jpg",
     "**.json",
     "**.md",

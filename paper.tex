@@ -3,9 +3,11 @@
 
 \documentclass[sigplan,nonacm]{acmart}
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
-\usepackage[nocn]{ffcode}
+\usepackage[nocn,noframes]{ffcode}
 \usepackage{natbib}
 \usepackage{tikz}
+\usepackage{cleveref}
+\usepackage{eolang}
 \usepackage{to-be-determined}
 \setlength\footskip{13pt}
 
@@ -22,7 +24,9 @@
 \email{yegor256@gmail.com}
 
 \begin{abstract}
-C++, Java, C\#, Python, Ruby, JavaScript are the most powerful object-oriented programming languages, if language power would be defined as the number of \emph{features} available for a programmer. EO, on the other hand, is an object-oriented programming language with a reduced set of features: it has nothing by objects and mechanisms of their composition and decoration. We are trying to answer the following research question: ``Which known features are possible to implement using only objects?''
+C++, Java, C\#, Python, Ruby, JavaScript are the most powerful object-oriented programming languages, if language power is defined as the number of \emph{features} available to a programmer.
+\eolang{}, on the other hand, is an object-oriented programming language with a reduced set of features: it has nothing but objects and mechanisms of their composition and decoration.
+We are trying to answer the following research question: ``Which known features are possible to implement using only objects?''
 \end{abstract}
 
 \begin{document}
@@ -32,47 +36,47 @@ C++, Java, C\#, Python, Ruby, JavaScript are the most powerful object-oriented p
 
 \section{Features}
 
-To answer our research question we selected most complex features and demonstrated how each of them may be represented in EO~\citep{bugayenko2021eolang} objects\footnote{%
+To answer our research question we selected the most complex features and demonstrated how each of them may be represented in \eolang{}~\citep{bugayenko2021eolang} objects\footnote{%
 \LaTeX{} sources of this paper are maintained in
 \href{https://github.com/REPOSITORY}{REPOSITORY} GitHub repository,
 the rendered version is \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{\ff{0.0.0}}.}:
 
 \begin{itemize}
     \item Non-conditional jumps
-      (Sec.~\ref{sec:goto}),
+      (\cref{sec:goto}),
     \item Data and code pointers
-      (Sec.~\ref{sec:pointers}),
+      (\cref{sec:pointers}),
     \item Procedures
-      (Sec.~\ref{sec:procedures}),
+      (\cref{sec:procedures}),
     \item Classes
-        (Sec.~\ref{sec:classes}),
+        (\cref{sec:classes}),
     \item Exceptions
-        (Sec.~\ref{sec:exceptions}),
+        (\cref{sec:exceptions}),
     \item Anonymous functions
-        (Sec.~\ref{sec:blocks}),
+        (\cref{sec:blocks}),
     \item Generators
-        (Sec.~\ref{sec:generators}),
+        (\cref{sec:generators}),
     \item Types and casting
-        (Sec.~\ref{sec:types}),
+        (\cref{sec:types}),
     \item Reflection
-        (Sec.~\ref{sec:reflection}),
+        (\cref{sec:reflection}),
     \item Static methods
-        (Sec.~\ref{sec:static}),
+        (\cref{sec:static}),
     \item Inheritance
-        (Sec.~\ref{sec:inheritance}),
+        (\cref{sec:inheritance}),
     \item Method overloading
-        (Sec.~\ref{sec:overloading}),
+        (\cref{sec:overloading}),
     \item Java generics
-        (Sec.~\ref{sec:generics}),
+        (\cref{sec:generics}),
     \item C++ templates
-        (Sec.~\ref{sec:templates}),
+        (\cref{sec:templates}),
     \item Mixins
-        (Sec.~\ref{sec:mixins}),
+        (\cref{sec:mixins}),
     \item Java annotations
-        (Sec.~\ref{sec:annotations}).
+        (\cref{sec:annotations}).
 \end{itemize}
 
-Other features are more trivial, that's why they are not presented in this paper, such as operators, loops, variables, code blocks, constants, branching, and so on.
+Other features are more trivial, which is why they are not presented in this paper, such as operators, loops, variables, code blocks, constants, branching, and so on.
 
 \subsection{Goto}
 \label{sec:goto}
@@ -94,7 +98,7 @@ void f() {
 }
 \end{ffcode}
 
-It can be mapped to the following EO code:
+It can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [] > f
@@ -112,7 +116,7 @@ It can be mapped to the following EO code:
     QQ.io.stdout "Finished!"
 \end{ffcode}
 
-Here, the one-argument abstract atom \ff{goto} is being copied with a one-argument abstract anonymous object, which is the sequence of objects doing the increment of \ff{i} and then the comparison of it with the number ten. If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{goto}.
+Here, the one-argument abstract atom \ff{goto} is being copied with a one-argument abstract anonymous object, which is the sequence of objects incrementing \ff{i} and then comparing it with the number ten. If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{goto}.
 
 \subsubsection{Forward Jump}
 
@@ -128,7 +132,7 @@ int f(int x) {
 }
 \end{ffcode}
 
-It can be mapped to the following EO code:
+It can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [x] > f
@@ -148,7 +152,7 @@ It can be mapped to the following EO code:
 
 Here, the same abstract atom \ff{goto} is copied with an abstract one-argument object, which is a sequence of objects. When the condition is true, a forward jump is performed by \ff{g.forward} atom.
 
-Similar way, the atom \ff{goto} may be used to simulate other conditional jump statements, like \ff{break}, \ff{continue}, or \ff{return} in the middle of a function body (see Sec.~\ref{sec:procedures}).
+Similarly, the atom \ff{goto} may be used to simulate other conditional jump statements, like \ff{break}, \ff{continue}, or \ff{return} in the middle of a function body (see \cref{sec:procedures}).
 
 \subsubsection{Complex Case}
 
@@ -166,7 +170,7 @@ start:
 }
 \end{ffcode}
 
-In order to translate this code to EO it has to be refactored as Fig.~\ref{fig:goto} demonstrates. The function \ff{f()} is copied twice and each copy has its own execution flow implemented.
+In order to translate this code to \eolang{}, it has to be refactored as \cref{fig:goto} demonstrates. The function \ff{f()} is copied twice and each copy has its own execution flow implemented.
 
 \begin{figure}
 \includegraphics[width=0.9\columnwidth]{goto-pic}
@@ -190,9 +194,9 @@ back:
 }
 \end{ffcode}
 
-Then, the translation to EO is trivial, with the use of the \ff{goto} object.
+Then, the translation to \eolang{} is trivial, with the use of the \ff{goto} object.
 
-In more complex cases a program may first be restructured to replace \ff{goto} statements with loops and branching, as suggested by~\citet{williams1985restructuring,pan1996formal,erosa1994taming,ceccato2008goto}.
+In more complex cases, a program may first be restructured to replace \ff{goto} statements with loops and branching, as suggested by~\citet{williams1985restructuring,pan1996formal,erosa1994taming,ceccato2008goto}.
 
 \subsubsection{Multiple Returns}
 
@@ -207,7 +211,7 @@ void abs(int x) {
 }
 \end{ffcode}
 
-This can be mapped to the following EO code using \ff{goto} object:
+This can be mapped to the following \eolang{} code using \ff{goto} object:
 
 \begin{ffcode}
 [x] > abs
@@ -227,7 +231,7 @@ The dataization of \ff{g.forward} will exit the \ff{goto} object wrapping the en
 \subsection{Pointers}
 \label{sec:pointers}
 
-A pointer is an object in many programming languages that stores a memory address. Pointers may point to data memory and to program memory.
+A pointer is an object in many programming languages that stores a memory address. Pointers may point to data memory or program memory.
 
 \subsubsection{Pointers to Data}
 
@@ -246,7 +250,7 @@ int f(struct book* p) {
 }
 \end{ffcode}
 
-This code can be mapped to the following EO code:
+This code can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [ptr] > book
@@ -269,13 +273,13 @@ pointer. > p1
     b.price
 \end{ffcode}
 
-Here, \ff{p1} is an object that can be used as an argument of \ff{f}. It is a copy of an abstract object \ff{heap.pointer}, which expects two: 1)~an absolute address in memory, and 2)~the size of the memory block it points to, in bytes. Its attribute \ff{block} expects two attributes: 1) the number of bytes in the heap, and 2)~an abstract object that can encapsulate \ff{bytes} which were just read from memory.
+Here, \ff{p1} is an object that can be used as an argument of \ff{f}. It is a copy of an abstract object \ff{heap.pointer}, which expects two parameters: 1)~an absolute address in memory, and 2)~the size of the memory block it points to, in bytes. Its attribute \ff{block} expects two attributes: 1) the number of bytes in the heap, and 2)~an abstract object that can encapsulate \ff{bytes} which were just read from memory.
 
 The object \ff{heap} is an abstraction of a random access memory.
 
 \subsubsection{Pointers to Code}
 
-A pointer may not only refer to data in the heap, but also to executable code in memory (there is no difference between ``program'' and ``data'' memories both in x86 and ARM architectures). This is an example of C program, which calls a function referenced by a function pointer, providing two integer arguments to it:
+A pointer may not only refer to data in the heap but also to executable code in memory (there is no difference between ``program'' and ``data'' memories in both x86 and ARM architectures). This is an example of C program, which calls a function referenced by a function pointer, providing two integer arguments to it:
 
 \begin{ffcode}
 int foo(int x, int y) {
@@ -288,7 +292,7 @@ int f() {
 }
 \end{ffcode}
 
-This code can be mapped to the following EO code:
+This code can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [x y] > foo
@@ -302,7 +306,7 @@ This code can be mapped to the following EO code:
     p.@ 7 42
 \end{ffcode}
 
-Important to notice that the following code is not possible to represent in EO:
+It is important to notice that the following code is not possible to represent in \eolang{}:
 
 \begin{ffcode}
 int f() {
@@ -326,7 +330,7 @@ int f() {
 }
 \end{ffcode}
 
-This code can be mapped to the following EO code:
+This code can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [p] > long64
@@ -347,7 +351,7 @@ This code can be mapped to the following EO code:
     ret
 \end{ffcode}
 
-Here, the atom \ff{malloc} allocates a segment of bytes in the \ff{heap}. Later, the atom \ff{free} releases it. The attribute \ff{ret} is made constant in order to avoid its recalculation after it's ``returned'' (this mechanism is explained in Sec.~\ref{sec:destructors} where destructors are discussed).
+Here, the atom \ff{malloc} allocates a segment of bytes in the \ff{heap}. Later, the atom \ff{free} releases it. The attribute \ff{ret} is made constant in order to avoid its recalculation after it's ``returned'' (this mechanism is explained in \cref{sec:destructors} where destructors are discussed).
 
 \subsection{Procedures}
 \label{sec:procedures}
@@ -361,7 +365,7 @@ function max($a, $b) {
 }
 \end{ffcode}
 
-It can be mapped to the following EO code:
+It can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [a b] > max
@@ -380,7 +384,7 @@ This example also demonstrates how \ff{goto} object can be used to simulate the 
 \subsubsection{Impure Functions}
 
 A function is pure when, among other qualities, it doesn't have side effects:
-no mutation of local static variables, non-local variables, mutable reference arguments
+no mutation of local static variables, non-local variables, mutable reference arguments,
 or input/output streams. This PHP function is impure:
 
 \begin{ffcode}
@@ -392,7 +396,7 @@ function inc($a) {
 inc(inc($a)); // $a == 44
 \end{ffcode}
 
-It may be mapped to a constant EO object:
+It may be mapped to a constant \eolang{} object:
 
 \begin{ffcode}
 memory 42 > a
@@ -424,7 +428,7 @@ class Book
 end
 \end{ffcode}
 
-It can be mapped to the following EO code, where a class becomes a factory of objects:
+It can be mapped to the following \eolang{} code, where a class becomes a factory of objects:
 
 \begin{ffcode}
 [i] > book
@@ -440,7 +444,7 @@ It can be mapped to the following EO code, where a class becomes a factory of ob
     id.write i > @
 \end{ffcode}
 
-Here, the constructor is represented by the object \ff{ruby-init}, which initializes finishes the initization of the object. The making an ``instance'' of a book would look like this:
+Here, the constructor is represented by the object \ff{ruby-init}, which finishes the initialization of the object. Making an ``instance'' of a book would look like this:
 
 \begin{ffcode}
 book 42 > b
@@ -466,7 +470,7 @@ int main() {
 }
 \end{ffcode}
 
-It may be translated to EO as such:
+It may be translated to \eolang{} as such:
 
 \begin{ffcode}
 [] > foo
@@ -481,12 +485,12 @@ It may be translated to EO as such:
     f.destructor
 \end{ffcode}
 
-There is no garbage collection in EO, that's why a destructor must be explicitly ``called'' when an object passes out of scope or is deleted.
+There is no garbage collection in \eolang{}, which is why a destructor must be explicitly ``called'' when an object passes out of scope or is deleted.
 
 \subsection{Exceptions}
 \label{sec:exceptions}
 
-Exception handling is the process of responding to the occurrence of exceptions---anomalous or exceptional conditions requiring special processing---during the execution of a program provided. This C++ program utilizes exception handling to avoid segmentation fault due to null pointer de-referencing:
+Exception handling is the process of responding to the occurrence of exceptions---anomalous or exceptional conditions requiring special processing---during the execution of a program. This C++ program utilizes exception handling to avoid segmentation fault due to null pointer de-referencing:
 
 \begin{ffcode}
 #include <iostream>
@@ -504,7 +508,7 @@ void print(Book* b) {
 }
 \end{ffcode}
 
-This mechanism may be implemented in EO:
+This mechanism may be implemented in \eolang{}:
 
 \begin{ffcode}
 [] > book
@@ -530,7 +534,7 @@ This mechanism may be implemented in EO:
       nop > @
 \end{ffcode}
 
-Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, and 2)~an abstract object to be copied with one argument, in case dataization returns encapsulated object, and 3)~an object to be dataized anyway (similar to Java \ff{finaly} block).
+Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, 2)~an abstract object to be copied with one argument, in case dataization returns an encapsulated object, and 3)~an object to be dataized anyway (similar to Java \ff{finally} block).
 
 In the object \ff{price} we get the object \ff{error}, which if dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}. The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
 
@@ -547,7 +551,7 @@ void f(int x) throws IOException {
 }
 \end{ffcode}
 
-This would be represented in EO as such:
+This would be represented in \eolang{} as such:
 
 \begin{ffcode}
 [x] > f
@@ -578,7 +582,7 @@ try
 \subsection{Anonymous Functions}
 \label{sec:blocks}
 
-Anonymous functions that can be passed into methods as arguments. For example, in this Ruby code a ``block'' (a name Ruby uses for anonymous functions) is passed:
+Anonymous functions can be passed into methods as arguments. For example, in this Ruby code a ``block'' (a name Ruby uses for anonymous functions) is passed:
 
 \begin{ffcode}
 def scan(lines)
@@ -589,7 +593,7 @@ end
 scan(array) { |x| puts x }
 \end{ffcode}
 
-This mechanism may be implemented in EO:
+This mechanism may be implemented in \eolang{}:
 
 \begin{ffcode}
 [lines b] > scan
@@ -605,12 +609,12 @@ scan
     QQ.io.stdout x > @
 \end{ffcode}
 
-Here, the anonymous function passed to the object \ff{scan} as an argument \ff{b}. The ``call'' of this function is the dataization of its copy, performed by the \ff{if} atom.
+Here, the anonymous function is passed to the object \ff{scan} as an argument \ff{b}. The ``call'' of this function is the dataization of its copy, performed by the \ff{if} atom.
 
 \subsection{Generators}
 \label{sec:generators}
 
-A generator is a routine that can be used to control the iteration behaviour of a loop. For example, this PHP program will print first ten Fibonacci numbers:
+A generator is a routine that can be used to control the iteration behavior of a loop. For example, this PHP program will print first ten Fibonacci numbers:
 
 \begin{ffcode}
 function fibonacci(int $limit):generator {
@@ -626,7 +630,7 @@ foreach (fibonacci(10) as $n) {
 }
 \end{ffcode}
 
-This mechanism may be implemented in EO:
+This mechanism may be implemented in \eolang{}:
 
 \begin{ffcode}
 [limit f] > fibonacci
@@ -657,7 +661,7 @@ Here, the generator is turned into an abstract object \ff{fibonacci} with an ext
 \subsection{Types and Type Casting}
 \label{sec:types}
 
-A type system is a logical system comprising a set of rules that assigns a property called a type to the various constructs of a computer program, such as variables, expressions, functions or modules. The main purpose of a type system is to reduce possibilities for bugs in computer programs by defining interfaces between different parts of a computer program, and then checking that the parts have been connected in a consistent way. In this example, a Java method \ff{add} expects an argument of type \ff{Book} and compilation would fail if another type is provided:
+A type system is a logical system comprising a set of rules that assigns a property called a type to the various constructs of a computer program, such as variables, expressions, functions, or modules. The main purpose of a type system is to reduce possibilities for bugs in computer programs by defining interfaces between different parts of a computer program, and then checking that the parts have been connected in a consistent way. In this example, a Java method \ff{add} expects an argument of type \ff{Book} and compilation would fail if another type is provided:
 
 \begin{ffcode}
 class Cart {
@@ -668,7 +672,7 @@ class Cart {
 }
 \end{ffcode}
 
-The restrictions enforced by Java type system in compile time through types \ff{Cart} and \ff{Book} may be represented in EO by means of decorators, for example:
+The restrictions enforced by the Java type system at compile time through types \ff{Cart} and \ff{Book} may be represented in \eolang{} by means of decorators, for example:
 
 \begin{ffcode}
 [] > original-cart
@@ -707,9 +711,9 @@ type "Cart" > cart-type
 cart-type original-cart > cart
 \end{ffcode}
 
-Here, the \ff{type} object implements all necessary restrictions Java type system may provide for the type \ff{Cart} and its methods.
+Here, the \ff{type} object implements all necessary restrictions the Java type system may provide for the type \ff{Cart} and its methods.
 
-Type casting, which is a mechanism of changing an expression from one data type to another, may also be implemented through same decorators.
+Type casting, which is a mechanism of changing an expression from one data type to another, may also be implemented through the same decorators.
 
 \subsection{Reflection}
 \label{sec:reflection}
@@ -724,7 +728,7 @@ obj = globals()["Foo"]()
 getattr(obj, "hello")("Jeff")
 \end{ffcode}
 
-It may be implemented in EO just by encapsulating additional meta information in classes explained in Sec.~\ref{sec:classes}.
+It may be implemented in \eolang{} by encapsulating additional meta information in classes explained in \cref{sec:classes}.
 
 \subsubsection{Monkey Patching}
 
@@ -739,7 +743,7 @@ b.print = function() {
 b.print();
 \end{ffcode}
 
-This program may be translated to EO, assuming that \ff{b} is being held by an attribute of a larger object, for example \ff{app}:
+This program may be translated to \eolang{}, assuming that \ff{b} is being held by an attribute of a larger object, for example \ff{app}:
 
 \begin{ffcode}
 [] > app
@@ -763,7 +767,7 @@ This program may be translated to EO, assuming that \ff{b} is being held by an a
     b.print
 \end{ffcode}
 
-Here, the modification to the object \ff{book} is happening through making a copy of it, creating a decorator, and then storing it to where the original object was located.
+Here, the modification to the object \ff{book} happens by making a copy of it, creating a decorator, and then storing it where the original object was located.
 
 \subsection{Static Methods}
 \label{sec:static}
@@ -779,7 +783,7 @@ class Utils {
 }
 \end{ffcode}
 
-It may be converted to the following EO code, since a static method is nothing else but a ``global'' function:
+It may be converted to the following \eolang{} code, since a static method is nothing else but a ``global'' function:
 
 \begin{ffcode}
 [a b] > utils-max
@@ -804,7 +808,7 @@ class Book extends Item {
 }
 \end{ffcode}
 
-It may be represented in EO like this:
+It may be represented in \eolang{} like this:
 
 \begin{ffcode}
 [] > item
@@ -821,7 +825,7 @@ Here, composition is used instead of inheritance.
 
 \subsubsection{Prototype-Based Inheritance}
 
-So called pro\-to\-type-based programming uses generalized objects, which can then be cloned and extended. For example, this JavaScript program defines two objects, where \ff{Item} is the parent object and \ff{Book} is the child that inherits the parent through its prototype:
+So-called pro\-to\-type-based programming uses generalized objects, which can then be cloned and extended. For example, this JavaScript program defines two objects, where \ff{Item} is the parent object and \ff{Book} is the child that inherits the parent through its prototype:
 
 \begin{ffcode}
 function Item(p) { this.price = p; }
@@ -835,7 +839,7 @@ var t = new Book(42).tax();
 console.log(t); // prints "4.2"
 \end{ffcode}
 
-This mechanism of prototype-based inheritance may be translated to the following EO code, using the mechanism of decoration:
+This mechanism of prototype-based inheritance may be translated to the following \eolang{} code, using the mechanism of decoration:
 
 \begin{ffcode}
 [p] > item
@@ -880,7 +884,7 @@ class Jack: Dog, Friend {
 };
 \end{ffcode}
 
-It may be represented in EO like this:
+It may be represented in \eolang{} like this:
 
 \begin{ffcode}
 [] > dog
@@ -897,7 +901,7 @@ It may be represented in EO like this:
       QQ.io.stdout "listen!"
 \end{ffcode}
 
-Here, inherited methods are explicitly listen as attributes in the object \ff{jack}. This is very close to what would happen in the virtual table of a class \ff{Jack} in C++. The EO object \ff{jack} just makes it explicit.
+Here, inherited methods are explicitly listed as attributes in the object \ff{jack}. This is very close to what would happen in the virtual table of a class \ff{Jack} in C++. The \eolang{} object \ff{jack} just makes it explicit.
 
 \subsection{Method Overloading}
 \label{sec:overloading}
@@ -910,7 +914,7 @@ fun foo(a: Double) {}
 foo(42)
 \end{ffcode}
 
-It may be represented in EO like this:
+It may be represented in \eolang{} like this:
 
 \begin{ffcode}
 [args...] > foo
@@ -922,7 +926,7 @@ It may be represented in EO like this:
 foo 42
 \end{ffcode}
 
-This code expects arguments of \ff{foo} to be equipped with the type system suggested in Sec.~\ref{sec:types}. The attribute \ff{subtype-of} will help dispatching the call to the right objects.
+This code expects arguments of \ff{foo} to be equipped with the type system suggested in \cref{sec:types}. The attribute \ff{subtype-of} will help dispatch the call to the right objects.
 
 \subsection{Java Generics}
 \label{sec:generics}
@@ -938,7 +942,7 @@ class Cart<T extends Item> {
 }
 \end{ffcode}
 
-It may be represented in EO like this:
+It may be represented in \eolang{} like this:
 
 \begin{ffcode}
 [] > cart
@@ -948,7 +952,7 @@ It may be represented in EO like this:
       total.plus (i.price)
 \end{ffcode}
 
-As the example demonstrates, the presence of generics in class declaration may be ignored, since EO is a language without types and type checking.
+As the example demonstrates, the presence of generics in class declaration may be ignored, since \eolang{} is a language without types and type checking.
 
 \subsection{C++ Templates}
 \label{sec:templates}
@@ -962,7 +966,7 @@ template<typename T> T max(T a, T b) {
 int x = max(7, 42);
 \end{ffcode}
 
-It may be represented in EO like this:
+It may be represented in \eolang{} like this:
 
 \begin{ffcode}
 [a b] > max
@@ -973,7 +977,7 @@ It may be represented in EO like this:
 max 7 42 > x
 \end{ffcode}
 
-As the example demonstrates, the presence of templates may be ignored, since EO is a language without types and type checking.
+As the example demonstrates, the presence of templates may be ignored, since \eolang{} is a language without types and type checking.
 
 \subsection{Mixins}
 \label{sec:mixins}
@@ -996,12 +1000,12 @@ n = News.new(Time.now)
 n.recent?
 \end{ffcode}
 
-This code may be represented in EO by just copying the method \ff{recent?} to the object \ff{News} as if it was defined there.
+This code may be represented in \eolang{} by just copying the method \ff{recent?} to the object \ff{News} as if it was defined there.
 
 \subsection{Annotations}
 \label{sec:annotations}
 
-In Java, an annotation is a form of syntactic metadata that can be added to source code; classes, methods, variables, parameters and Java packages may be annotated. Later, annotations may be retrieved through Reflection API. For example, this program analyzes the annotation attached to the class of the provided object and changes the behavior depending on one of its attributes:
+In Java, an annotation is a form of syntactic metadata that can be added to source code; classes, methods, variables, parameters and Java packages may be annotated. Later, annotations may be retrieved through the Reflection API. For example, this program analyzes the annotation attached to the class of the provided object and changes the behavior depending on one of its attributes:
 
 \begin{ffcode}
 interface Item {}
@@ -1019,7 +1023,7 @@ class Cart {
 }
 \end{ffcode}
 
-The code may be represented in EO using classes suggested in Sec.~\ref{sec:classes}:
+The code may be represented in \eolang{} using classes suggested in \cref{sec:classes}:
 
 \begin{ffcode}
 [] > book
@@ -1040,11 +1044,11 @@ The code may be represented in EO using classes suggested in Sec.~\ref{sec:class
         FALSE
 \end{ffcode}
 
-Annotations become attributes of objects, which represent classes in EO, as explained in Sec.~\ref{sec:classes}: \ff{book.a1} and \ff{song.a1}.
+Annotations become attributes of objects, which represent classes in \eolang{}, as explained in \cref{sec:classes}: \ff{book.a1} and \ff{song.a1}.
 
 \section{Traceability}
 
-Certain amount of semantic information may be lost during the translation from a more powerful programming language to EO objects, such as, for example, namings, line numbers, comments, etc. Moreover, it may be useful to have an ability to trace EO objects back to original language constructs, which they were motivated by. For example, a simple C function:
+A certain amount of semantic information may be lost during the translation from a more powerful programming language to \eolang{} objects, such as, for example, names, line numbers, comments, etc. Moreover, it may be useful to have the ability to trace \eolang{} objects back to the original language constructs from which they were derived. For example, a simple C function:
 
 \begin{ffcode}
 int f(int x) {
@@ -1052,7 +1056,7 @@ int f(int x) {
 }
 \end{ffcode}
 
-It may be mapped to the following EO object:
+It may be mapped to the following \eolang{} object:
 
 \begin{ffcode}
 [x] > f
@@ -1062,16 +1066,14 @@ It may be mapped to the following EO object:
   "src/main.c:0-2" > source
 \end{ffcode}
 
-Here, synthetic \ff{source} attribute represents the location in the source code file with the original C code. It's important to make sure during translation that the name \ff{source} doesn't conflict with a possibly similar name in the object.
+Here, the synthetic \ff{source} attribute represents the location in the source code file with the original C code. It's important to make sure during translation that the name \ff{source} doesn't conflict with a possibly similar name in the object.
 
 \section{Conclusion}
 
-We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects. We used EO as a destination programming language because of its minimalistic semantics: it doesn't have any language features aside from objects and their composition and decoration mechanisms.
+We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects. We used \eolang{} as a destination programming language because of its minimalistic semantics: it doesn't have any language features aside from objects and their composition and decoration mechanisms.
 
 \raggedright
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{bibliography/main}
-
-\clearpage
 
 \end{document}
