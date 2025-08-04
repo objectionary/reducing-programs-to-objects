@@ -102,18 +102,20 @@ It can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [] > f
-  memory 0 > i
-  seq > @
-    i.write 1
-    goto
-      [g]
-        seq > @
-          i.write (i.plus 1)
-          if.
-            i.lt 10
-            g.backward
-            TRUE
-    QQ.io.stdout "Finished!"
+  malloc.of > @
+    0
+    [i] >>
+      seq * > @
+        i.write 1
+        go.to
+          [g] >>
+            seq * > @
+              i.write (i.plus 1)
+              if.
+                i.lt 10
+                g.backward
+                true
+        QQ.io.stdout "Finished!"
 \end{ffcode}
 
 Here, the one-argument abstract atom \ff{goto} is being copied with a one-argument abstract anonymous object, which is the sequence of objects incrementing \ff{i} and then comparing it with the number ten. If the condition is true, \ff{g.backward} is called, which leads to a backward jump and re-iteration of \ff{goto}.
@@ -136,21 +138,24 @@ It can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [x] > f
-  memory 0 > r
-  seq > @
-    r.write 0
-    goto
-      [g]
-        seq > @
-          if.
-            x.eq 0
-            g.forward TRUE
-            TRUE
-          r.write (42.div x)
-    r
+  malloc.of > @
+    0
+    [r] >>
+      seq * > @
+        r.write 0
+        go.to
+          [g] >>
+            seq * > @
+              if.
+                x.eq 0
+                g.forward true
+                true
+              r.write (42.div x)
+        r
 \end{ffcode}
 
-Here, the same abstract atom \ff{goto} is copied with an abstract one-argument object, which is a sequence of objects. When the condition is true, a forward jump is performed by \ff{g.forward} atom.
+Here, the same abstract atom \ff{goto} is copied with an abstract one-argument object, which is a sequence of objects.
+When the condition is true, a forward jump is performed by \ff{g.forward} atom.
 
 Similarly, the atom \ff{goto} may be used to simulate other conditional jump statements, like \ff{break}, \ff{continue}, or \ff{return} in the middle of a function body (see \cref{sec:procedures}).
 
@@ -170,7 +175,8 @@ start:
 }
 \end{ffcode}
 
-In order to translate this code to \eolang{}, it has to be refactored as \cref{fig:goto} demonstrates. The function \ff{f()} is copied twice and each copy has its own execution flow implemented.
+In order to translate this code to \eolang{}, it has to be refactored as \cref{fig:goto} demonstrates.
+The function \ff{f()} is copied twice and each copy has its own execution flow implemented.
 
 \begin{figure}
 \includegraphics[width=0.9\columnwidth]{goto-pic}
@@ -194,7 +200,7 @@ back:
 }
 \end{ffcode}
 
-Then, the translation to \eolang{} is trivial, with the use of the \ff{goto} object.
+Then, the translation to \eolang{} is trivial, with the use of the \ff{go.to} object.
 
 In more complex cases, a program may first be restructured to replace \ff{goto} statements with loops and branching, as suggested by~\citet{williams1985restructuring,pan1996formal,erosa1994taming,ceccato2008goto}.
 
@@ -211,17 +217,17 @@ void abs(int x) {
 }
 \end{ffcode}
 
-This can be mapped to the following \eolang{} code using \ff{goto} object:
+This can be mapped to the following \eolang{} code using \ff{go.to} object:
 
 \begin{ffcode}
 [x] > abs
-  goto > @
-    [g]
-      seq > @
+  go.to > @
+    [g] >>
+      seq * > @
         if.
           x.gt 0
           g.forward x
-          TRUE
+          true
         g.forward
           -1.times x
 \end{ffcode}
@@ -231,11 +237,13 @@ The dataization of \ff{g.forward} will exit the \ff{goto} object wrapping the en
 \subsection{Pointers}
 \label{sec:pointers}
 
-A pointer is an object in many programming languages that stores a memory address. Pointers may point to data memory or program memory.
+A pointer is an object in many programming languages that stores a memory address.
+Pointers may point to data memory or program memory.
 
 \subsubsection{Pointers to Data}
 
-This is an example of C code, where the pointer \ff{p} is first incremented by seven times \ff{sizeof(book)} (which is equal to 108) and then de-referenced to become a struct \ff{book} mapped to memory. Then, the \ff{title} part of the struct is filled with a string and the \ff{price} part is returned as a result of the function \ff{f}:
+This is an example of C code, where the pointer \ff{p} is first incremented by seven times \ff{sizeof(book)} (which is equal to 108) and then de-referenced to become a struct \ff{book} mapped to memory.
+Then, the \ff{title} part of the struct is filled with a string and the \ff{price} part is returned as a result of the function \ff{f}:
 
 \begin{ffcode}
 #include "string.h"
@@ -266,7 +274,7 @@ pointer. > p1
   0
   108
 [p] > f
-  seq > @
+  seq * > @
     book (p.add 7) > b
     b.title.write
       ("Object Thinking").as-bytes
@@ -299,7 +307,7 @@ This code can be mapped to the following \eolang{} code:
   x.plus y > @
 [] > f
   cage 0 > p
-  seq > @
+  seq * > @
     p.write
       [x y]
         foo x y > @
@@ -338,7 +346,7 @@ This code can be mapped to the following \eolang{} code:
     8
     [b] (b.as-int > @)
 [] > f
-  seq > @
+  seq * > @
     malloc. > stack
       heap 32 > h
       16
@@ -369,13 +377,13 @@ It can be mapped to the following \eolang{} code:
 
 \begin{ffcode}
 [a b] > max
-  goto > @
-    [g]
-      seq > @
+  go.to > @
+    [g] >>
+      seq * > @
         if.
           a.gt b
           g.forward a
-          TRUE
+          true
         b
 \end{ffcode}
 
@@ -401,7 +409,7 @@ It may be mapped to a constant \eolang{} object:
 \begin{ffcode}
 memory 42 > a
 [x] > inc!
-  seq > @
+  seq * > @
     x.write
       x.plus 1
 inc
@@ -480,7 +488,7 @@ It may be translated to \eolang{} as such:
     QQ.io.stdout "Dead" > @
 [] > main
   foo > f
-  seq > @
+  seq * > @
     f.constructor
     f.destructor
 \end{ffcode}
@@ -602,7 +610,7 @@ This mechanism may be implemented in \eolang{}:
       if. > @
         t.starts-with "#"
         b t
-        TRUE
+        true
 scan
   array
   [x]
@@ -614,7 +622,8 @@ Here, the anonymous function is passed to the object \ff{scan} as an argument \f
 \subsection{Generators}
 \label{sec:generators}
 
-A generator is a routine that can be used to control the iteration behavior of a loop. For example, this PHP program will print first ten Fibonacci numbers:
+A generator is a routine that can be used to control the iteration behavior of a loop.
+For example, this PHP program will print first ten Fibonacci numbers:
 
 \begin{ffcode}
 function fibonacci(int $limit):generator {
@@ -637,18 +646,18 @@ This mechanism may be implemented in \eolang{}:
   memory 0 > a
   memory 0 > b
   memory 0 > i
-  seq > @
+  seq * > @
     a.write 1
     b.write 1
     f 0
     while.
       seq (i.write (i.plus 1)) (i.lt limit)
       [idx]
-        seq > @
+        seq * > @
           b.write (a.plus b)
           a.write (b.minus a)
           f (b.minus a)
-    TRUE
+    true
 fibonacci > @
   10
   [n]
@@ -718,7 +727,8 @@ Type casting, which is a mechanism of changing an expression from one data type 
 \subsection{Reflection}
 \label{sec:reflection}
 
-Reflection is the ability of a process to examine, introspect, and modify its own structure and behavior. In the following Python example the method \ff{hello} of an instance of class \ff{Foo} is not called directly on the object, but is first retrieved through reflection functions \ff{globals} and \ff{getattr}, and then executed:
+Reflection is the ability of a process to examine, introspect, and modify its own structure and behavior.
+In the following Python example the method \ff{hello} of an instance of class \ff{Foo} is not called directly on the object, but is first retrieved through reflection functions \ff{globals} and \ff{getattr}, and then executed:
 
 \begin{ffcode}
 def Foo():
@@ -732,7 +742,8 @@ It may be implemented in \eolang{} by encapsulating additional meta information 
 
 \subsubsection{Monkey Patching}
 
-Monkey patching is making changes to a module or a class while the program is running. This JavaScript program adds a new method \ff{print} to the object \ff{b} after the object has already been instantiated:
+Monkey patching is making changes to a module or a class while the program is running.
+This JavaScript program adds a new method \ff{print} to the object \ff{b} after the object has already been instantiated:
 
 \begin{ffcode}
 function Book(t) { this.title = t; }
@@ -749,7 +760,7 @@ This program may be translated to \eolang{}, assuming that \ff{b} is being held 
 [] > app
   cage 0 > b
   b' > copy
-  seq > @
+  seq * > @
     b.write
       [] > book
         [t] > new
@@ -759,7 +770,7 @@ This program may be translated to \eolang{}, assuming that \ff{b} is being held 
     b.write
       [] > book
         [t] > new
-          seq > @
+          seq * > @
             []
               copy > @
               [] > print
@@ -896,7 +907,7 @@ It may be represented in \eolang{} like this:
   dog > d
   friend > f
   [] > listen
-    seq > @
+    seq * > @
       d.bark
       QQ.io.stdout "listen!"
 \end{ffcode}
@@ -1027,7 +1038,7 @@ The code may be represented in \eolang{} using classes suggested in \cref{sec:cl
 
 \begin{ffcode}
 [] > book
-  ship TRUE > a1
+  ship true > a1
   [] > new
     [] > @
 [] > song
@@ -1040,7 +1051,7 @@ The code may be represented in \eolang{} using classes suggested in \cref{sec:cl
     if. > @
       i.a1.value
         # Mark the cart shippable
-        TRUE
+        true
         FALSE
 \end{ffcode}
 
@@ -1070,7 +1081,8 @@ Here, the synthetic \ff{source} attribute represents the location in the source 
 
 \section{Conclusion}
 
-We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects. We used \eolang{} as a destination programming language because of its minimalistic semantics: it doesn't have any language features aside from objects and their composition and decoration mechanisms.
+We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects.
+We used \eolang{} as a destination programming language because of its minimalistic semantics: it doesn't have any language features aside from objects and their composition and decoration mechanisms.
 
 \raggedright
 \bibliographystyle{ACM-Reference-Format}
