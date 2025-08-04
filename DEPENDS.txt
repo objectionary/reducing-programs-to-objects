@@ -6,6 +6,7 @@ hard babel-russian
 hard biblatex
 hard booktabs
 hard cancel
+hard caption
 hard catchfile
 hard cjk
 hard cm-super
