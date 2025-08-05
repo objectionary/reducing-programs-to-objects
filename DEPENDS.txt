@@ -9,6 +9,7 @@ hard cancel
 hard caption
 hard catchfile
 hard cjk
+hard cleveref
 hard cm-super
 hard cmap
 hard comment
