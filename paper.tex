@@ -4,7 +4,7 @@
 \documentclass[acmsmall,nonacm,11pt]{acmart}
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
 \makeatletter\let\@authorsaddresses\@empty\makeatother
-\usepackage[noframes,nonumbers]{ffcode}
+\usepackage[noframes,nonumbers,samepage]{ffcode}
 % listings emits \vspace around each display, which acmart warns about;
 % restore the original \vspace while a listing is typeset
 \makeatletter
@@ -104,13 +104,13 @@ the rendered version is \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{
 
 Other features are more trivial, which is why they are not presented in this paper, such as operators, loops, variables, code blocks, constants, branching, and so on.
 
-\subsection{Goto}
+\section{Goto}
 \label{sec:goto}
 
 Goto is a one-way imperative transfer of control to another line of code.
 There are only two possible cases of goto jumps: forward and backward.
 
-\subsubsection{Backward Jump}
+\subsection{Backward Jump}
 
 This is a ``backward'' jump example in C language:
 
@@ -148,7 +148,7 @@ It can be mapped to the following \eolang{} code:
 Here, the one-argument abstract atom \ff{go.to} is being copied with a one-argument abstract anonymous object, which is a sequence of objects incrementing \ff{i} and then comparing it with the number ten.
 If the condition is true, \ff{backward} is called, which leads to a backward jump and re-iteration of \ff{go.to}.
 
-\subsubsection{Forward Jump}
+\subsection{Forward Jump}
 
 This is an example of a ``forward'' jump in C language:
 
@@ -187,7 +187,7 @@ When the condition is true, a forward jump is performed by \ff{forward} atom.
 
 Similarly, the atom \ff{go.to} may be used to simulate other conditional jump statements, like \ff{break}, \ff{continue}, or \ff{return} in the middle of a function body (see \cref{sec:procedures}).
 
-\subsubsection{Complex Case}
+\subsection{Complex Case}
 
 This is a more complex case of using \ff{goto} in C:
 
@@ -232,7 +232,7 @@ Then, the translation to \eolang{} is trivial using the \ff{go.to} object.
 
 In more complex cases, a program may first be restructured to replace \ff{goto} statements with loops and branching, as suggested by \citet{williams1985restructuring,pan1996formal,erosa1994taming,ceccato2008goto}.
 
-\subsubsection{Multiple Returns}
+\subsection{Multiple Returns}
 
 Some structured programming languages allow a function to exit at an arbitrary place, not only at the end, using \ff{return} statements, for example:
 
@@ -262,7 +262,7 @@ This can be mapped to the following \eolang{} code using \ff{go.to} object:
 
 The dataization of \ff{forward} will exit the \ff{go.to} object wrapping the entire code in the ``function'' \ff{abs}.
 
-\subsection{Pointers}
+\section{Pointers}
 \label{sec:pointers}
 
 \broken
@@ -270,7 +270,7 @@ The dataization of \ff{forward} will exit the \ff{go.to} object wrapping the ent
 A pointer is an object in many programming languages that stores a memory address.
 Pointers may point to data memory or program memory.
 
-\subsubsection{Pointers to Data}
+\subsection{Pointers to Data}
 
 This is an example of C code, where the pointer \ff{p} is first incremented by seven times \ff{sizeof(book)} (which is equal to 108) and then de-referenced to become a struct \ff{book} mapped to memory.
 Then, the \ff{title} part of the struct is filled with a string and the \ff{price} part is returned as a result of the function \ff{f}:
@@ -320,7 +320,7 @@ Its attribute \ff{block} expects two attributes: 1)~the number of bytes in the h
 
 The object \ff{heap} is an abstraction of a random access memory.
 
-\subsubsection{Pointers to Code}
+\subsection{Pointers to Code}
 
 A pointer may not only refer to data in the heap but also to executable code in memory (there is no difference between ``program'' and ``data'' memory in both x86 and ARM architectures).
 This is an example of a C program that calls a function referenced by a function pointer, providing two integer arguments to it:
@@ -362,7 +362,7 @@ int f() {
 
 Here, the pointer refers to an arbitrary address in program memory, where some executable code is supposed to be located.
 
-\subsubsection{Variables in Stack}
+\subsection{Variables in Stack}
 
 This C function, which returns seven (tested with GCC), assumes that variables are placed in the stack sequentially and uses pointer de-referencing to access them:
 
@@ -398,7 +398,7 @@ This code can be mapped to the following \eolang{} code:
 Here, the atom \ff{malloc} allocates a segment of bytes in the \ff{heap}. Later, the atom \ff{free} releases it.
 The attribute \ff{ret} is made constant to avoid its recalculation after it is ``returned'' (this mechanism is explained in \cref{sec:destructors} where destructors are discussed).
 
-\subsection{Procedures}
+\section{Procedures}
 \label{sec:procedures}
 
 A subroutine is a sequence of program instructions that performs a specific task, packaged as a unit.
@@ -428,7 +428,7 @@ It can be mapped to the following \eolang{} code:
 
 This example also demonstrates how \ff{go.to} object can be used to simulate the behavior of the \ff{return} statement from within the body of a method.
 
-\subsection{Impure Functions}
+\section{Impure Functions}
 
 \broken
 
@@ -456,7 +456,7 @@ inc
   inc a
 \end{ffcode}
 
-\subsection{Classes}
+\section{Classes}
 \label{sec:classes}
 
 \broken
@@ -505,7 +505,7 @@ b.move 7
 b.path
 \end{ffcode}
 
-\subsection{Destructors}
+\section{Destructors}
 \label{sec:destructors}
 
 \broken
@@ -542,7 +542,7 @@ It may be translated to \eolang{} as such:
 
 There is no garbage collection in \eolang{}, so a destructor must be explicitly ``called'' when an object passes out of scope or is deleted.
 
-\subsection{Exceptions}
+\section{Exceptions}
 \label{sec:exceptions}
 
 Exception handling is the process of responding to the occurrence of exceptions—anomalous or exceptional conditions requiring special processing—during the execution of a program.
@@ -594,7 +594,7 @@ Here, the object \ff{try} expects three arguments: 1)~an abstract object to be d
 In the object \ff{price}, we get the object \ff{error}, which, if dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}.
 The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
 
-\subsubsection{Many Exception Types}
+\subsection{Many Exception Types}
 
 \broken
 
@@ -637,7 +637,7 @@ try
     nop > @
 \end{ffcode}
 
-\subsection{Anonymous Functions}
+\section{Anonymous Functions}
 \label{sec:blocks}
 
 Anonymous functions can be passed into methods as arguments. For example, in this Ruby code a ``block'' (a name Ruby uses for anonymous functions) is passed:
@@ -669,7 +669,7 @@ scan
 
 Here, the anonymous function is passed to the object \ff{scan} as an argument \ff{b}. The ``call'' of this function is the dataization of its copy, performed by the \ff{if} atom.
 
-\subsection{Generators}
+\section{Generators}
 \label{sec:generators}
 
 \broken
@@ -719,7 +719,7 @@ fibonacci > @
 
 Here, the generator is turned into an abstract object \ff{fibonacci} with an extra parameter \ff{f}, which is specified with an abstract object argument that prints what is given as \ff{n}.
 
-\subsection{Types and Type Casting}
+\section{Types and Type Casting}
 \label{sec:types}
 
 \broken
@@ -780,7 +780,7 @@ Here, the \ff{type} object implements all necessary restrictions that the Java t
 
 Type casting, which is a mechanism for changing an expression from one data type to another, may also be implemented through the same decorators.
 
-\subsection{Reflection}
+\section{Reflection}
 \label{sec:reflection}
 
 \broken
@@ -798,7 +798,7 @@ getattr(obj, "hello")("Jeff")
 
 It may be implemented in \eolang{} by encapsulating additional meta information in classes explained in \cref{sec:classes}.
 
-\subsubsection{Monkey Patching}
+\subsection{Monkey Patching}
 
 \broken
 
@@ -840,7 +840,7 @@ This program may be translated to \eolang{}, assuming that \ff{b} is being held 
 
 Here, the modification to the object \ff{book} happens by making a copy of it, creating a decorator, and then storing it where the original object was located.
 
-\subsection{Static Methods}
+\section{Static Methods}
 \label{sec:static}
 
 A static method (or static function) is a method defined as a member of an object but accessible directly from an API object's constructor, rather than from an object instance created via the constructor. For example, this C\# class consists of a single static method:
@@ -864,7 +864,7 @@ It may be converted to the following \eolang{} code, since a static method is no
     b
 \end{ffcode}
 
-\subsection{Inheritance}
+\section{Inheritance}
 \label{sec:inheritance}
 
 \broken
@@ -896,7 +896,7 @@ It may be represented in \eolang{} like this:
 
 Here, composition is used instead of inheritance.
 
-\subsubsection{Prototype-Based Inheritance}
+\subsection{Prototype-Based Inheritance}
 
 \broken
 
@@ -936,7 +936,7 @@ io.stdout
       book.new 42
 \end{ffcode}
 
-\subsubsection{Multiple Inheritance}
+\subsection{Multiple Inheritance}
 
 \broken
 
@@ -980,7 +980,7 @@ It may be represented in \eolang{} like this:
 
 Here, inherited methods are explicitly listed as attributes in the object \ff{jack}. This is very close to what would happen in the virtual table of a class \ff{Jack} in C++. The \eolang{} object \ff{jack} just makes it explicit.
 
-\subsection{Method Overloading}
+\section{Method Overloading}
 \label{sec:overloading}
 
 \broken
@@ -1007,7 +1007,7 @@ foo 42
 
 This code expects arguments of \ff{foo} to be equipped with the type system suggested in \cref{sec:types}. The attribute \ff{subtype-of} will help dispatch the call to the right objects.
 
-\subsection{Java Generics}
+\section{Java Generics}
 \label{sec:generics}
 
 \broken
@@ -1036,7 +1036,7 @@ It may be represented in \eolang{} like this:
 
 As the example demonstrates, the presence of generics in class declarations may be ignored, since \eolang{} is a language without types and type checking.
 
-\subsection{C++ Templates}
+\section{C++ Templates}
 \label{sec:templates}
 
 \broken
@@ -1063,7 +1063,7 @@ max 7 42 > x
 
 As the example demonstrates, the presence of templates may be ignored since \eolang{} is a language without types and type checking.
 
-\subsection{Mixins}
+\section{Mixins}
 \label{sec:mixins}
 
 \broken
@@ -1088,7 +1088,7 @@ n.recent?
 
 This code may be represented in \eolang{} by just copying the method \ff{recent?} to the object \ff{News} as if it was defined there.
 
-\subsection{Annotations}
+\section{Annotations}
 \label{sec:annotations}
 
 \broken
