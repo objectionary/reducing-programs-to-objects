@@ -125,28 +125,24 @@ void f() {
 }
 \end{ffcode}
 
-It can be mapped to the following \eolang{} code:
+It can be mapped to the following \eolang{} recursion:
 
 \begin{ffcode}
 [] > f
-  malloc.of > @
-    0
-    [i] >>
+  malloc.empty > @
+    [i]
       seq * > @
-        i.write 1
-        go.to
-          [g] >>
-            seq * > @
-              i.write (i.plus 1)
-              if.
-                i.lt 10
-                g.backward
-                true
+        i.put 1
+        again i
         io.stdout "Finished!"
+      [ii] > again
+        seq * > @
+          ii.put (ii.as-number.plus 1)
+          if.
+            ii.as-number.lt 10
+            again ii
+            true
 \end{ffcode}
-
-Here, the one-argument abstract atom \ff{go.to} is being copied with a one-argument abstract anonymous object, which is a sequence of objects incrementing \ff{i} and then comparing it with the number ten.
-If the condition is true, \ff{backward} is called, which leads to a backward jump and re-iteration of \ff{go.to}.
 
 \subsection{Forward Jump}
 
