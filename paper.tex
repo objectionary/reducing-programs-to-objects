@@ -1,15 +1,39 @@
 % SPDX-FileCopyrightText: Copyright (c) 2020-2026 Yegor Bugayenko
 % SPDX-License-Identifier: MIT
 
-\documentclass[sigplan,nonacm]{acmart}
+\documentclass[acmsmall,nonacm,11pt]{acmart}
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
-\usepackage[nocn,noframes]{ffcode}
+\makeatletter\let\@authorsaddresses\@empty\makeatother
+\usepackage[noframes,nonumbers]{ffcode}
+% listings emits \vspace around each display, which acmart warns about;
+% restore the original \vspace while a listing is typeset
+\makeatletter
+\lst@AddToHook{DisplayStyle}{\let\@vspace\@vspace@orig\let\@vspacer\@vspacer@orig}
+\makeatother
 \usepackage{natbib}
-\usepackage{tikz}
-\usepackage[capitalize]{cleveref}
+\usepackage{doi}
 \usepackage{eolang}
+\usepackage{href-ul}
+\normalem
+\usepackage[capitalize]{cleveref}
 \usepackage{to-be-determined}
-\setlength\footskip{13pt}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A,T1]{fontenc}
+\usepackage[russian,english]{babel}
+  \DeclareFontFamilySubstitution{T2A}{LinuxBiolinumT-TLF}{LibertinusSans-TLF}
+  \renewcommand\ttdefault{cmtt}
+% stmaryrd (loaded by eolang) lacks a 5.5pt design size for scriptscript math
+\DeclareFontFamily{U}{stmry}{}
+\DeclareFontShape{U}{stmry}{m}{n}{%
+  <5><6><7><8><9><10>gen*stmary%
+  <5.5>stmary5%
+  <10.95><12><14.4><17.28><20.74><24.88>stmary10%
+}{}
+\usepackage{csquotes}
+% see https://tex.stackexchange.com/a/256190/1449
+\usepackage{url}
+  \def\UrlBreaks{\do\/\do-}
+\setlength{\footskip}{13.0pt}
 
 \newcommand\broken{\tbd{This section is not valid, must be rewritten!}}
 
@@ -118,7 +142,7 @@ It can be mapped to the following \eolang{} code:
                 i.lt 10
                 g.backward
                 true
-        QQ.io.stdout "Finished!"
+        io.stdout "Finished!"
 \end{ffcode}
 
 Here, the one-argument abstract atom \ff{go.to} is being copied with a one-argument abstract anonymous object, which is a sequence of objects incrementing \ff{i} and then comparing it with the number ten.
@@ -461,10 +485,10 @@ It can be mapped to the following \eolang{} code, where a class becomes an objec
 [i] > book
   cage i > id
   [] > ruby-init
-    QQ.txt.sprintf > @
+    tt.sprintf > @
       "New book!"
   [] > path
-    QQ.txt.sprintf > @
+    tt.sprintf > @
       "/tmp/%s.txt"
       id
   [i] > move
@@ -506,9 +530,9 @@ It may be translated to \eolang{} as such:
 \begin{ffcode}
 [] > foo
   [] > constructor
-    QQ.io.stdout "Alive" > @
+    io.stdout "Alive" > @
   [] > destructor
-    QQ.io.stdout "Dead" > @
+    io.stdout "Dead" > @
 [] > main
   foo > f
   seq * > @
@@ -553,13 +577,13 @@ This mechanism may be implemented in \eolang{}:
 [b] > print
   try > @
     [] >>
-      QQ.io.stdout > @
-        QQ.txt.sprintf *1
+      io.stdout > @
+        tt.sprintf *1
           "The price: %d"
           price b
     [e] >>
-      QQ.io.stdout > @
-        QQ.txt.sprintf *1
+      io.stdout > @
+        tt.sprintf *1
           "Error: %s"
           e
     true
@@ -604,11 +628,11 @@ try
       []
         f 5 > @
       [e1]
-        QQ.io.stdout e1 > @
+        io.stdout e1 > @
       []
         nop > @
   [e2]
-    QQ.io.stdout e2 > @
+    io.stdout e2 > @
   []
     nop > @
 \end{ffcode}
@@ -640,7 +664,7 @@ This mechanism may be implemented in \eolang{}:
 scan
   array
   [x] >>
-    QQ.io.stdout x > @
+    io.stdout x > @
 \end{ffcode}
 
 Here, the anonymous function is passed to the object \ff{scan} as an argument \ff{b}. The ``call'' of this function is the dataization of its copy, performed by the \ff{if} atom.
@@ -689,8 +713,8 @@ This mechanism may be implemented in \eolang{}:
 fibonacci > @
   10
   [n]
-    QQ.io.stdout > @
-      QQ.txt.sprintf "%d\n" n
+    io.stdout > @
+      tt.sprintf "%d\n" n
 \end{ffcode}
 
 Here, the generator is turned into an abstract object \ff{fibonacci} with an extra parameter \ff{f}, which is specified with an abstract object argument that prints what is given as \ff{n}.
@@ -724,7 +748,7 @@ The restrictions enforced by the Java type system at compile time through types 
   original-cart > @
   [b] > add
     if.
-      b.subtype-of (QQ.txt.text "Book")
+      b.subtype-of (tt.text "Book")
       @.add b
       []
         error "Type mismatch, Book expected" > @
@@ -810,7 +834,7 @@ This program may be translated to \eolang{}, assuming that \ff{b} is being held 
             []
               copy > @
               [] > print
-                QQ.io.stdout (^.title)
+                io.stdout (^.title)
     b.print
 \end{ffcode}
 
@@ -867,7 +891,7 @@ It may be represented in \eolang{} like this:
 [] > book
   item > i
   [] > tax
-    (QQ.math.number (i.price)).as-float.times 0.1 > @
+    (ms.number (i.price)).as-float.times 0.1 > @
 \end{ffcode}
 
 Here, composition is used instead of inheritance.
@@ -903,10 +927,10 @@ This mechanism of prototype-based inheritance may be translated to the following
     [] > tax
       times. > @
         as-float.
-          QQ.math.number (^.price)
+          ms.number (^.price)
         0.1
-QQ.io.stdout
-  QQ.txt.sprintf
+io.stdout
+  tt.sprintf
     "%f"
     tax.
       book.new 42
@@ -942,7 +966,7 @@ It may be represented in \eolang{} like this:
 \begin{ffcode}
 [] > dog
   [] > bark
-    QQ.io.stdout "Bark!" > @
+    io.stdout "Bark!" > @
 [] > friend
   [] > listen
 [] > jack
@@ -951,7 +975,7 @@ It may be represented in \eolang{} like this:
   [] > listen
     seq * > @
       d.bark
-      QQ.io.stdout "listen!"
+      io.stdout "listen!"
 \end{ffcode}
 
 Here, inherited methods are explicitly listed as attributes in the object \ff{jack}. This is very close to what would happen in the virtual table of a class \ff{Jack} in C++. The \eolang{} object \ff{jack} just makes it explicit.
