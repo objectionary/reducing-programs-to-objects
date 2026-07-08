@@ -14,3 +14,5 @@
 --ignore=textcolor:pp
 --ignore=newmdenv:op
 --ignore=f,code,nospell,citet,citep
+--ignore=deff:p,adeff:p,aff:p,eohex:p,ff:p
+--ignore=DeclareFontFamily:ppp,DeclareFontFamilySubstitution:ppp,DeclareFontShape:pppppp
