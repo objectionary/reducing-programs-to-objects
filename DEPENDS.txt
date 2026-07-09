@@ -13,6 +13,7 @@ hard cleveref
 hard cm-super
 hard cmap
 hard comment
+hard csquotes
 hard currfile
 hard cyrillic
 hard datetime
