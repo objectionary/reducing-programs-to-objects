@@ -4,7 +4,7 @@
 \documentclass[acmsmall,nonacm,11pt]{acmart}
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
 \makeatletter\let\@authorsaddresses\@empty\makeatother
-\usepackage[noframes,nonumbers,samepage]{ffcode}
+\usepackage[noframes,nonumbers,nobars,samepage]{ffcode}
 % listings emits \vspace around each display, which acmart warns about;
 % restore the original \vspace while a listing is typeset
 \makeatletter
@@ -12,6 +12,7 @@
 \makeatother
 \usepackage{natbib}
 \usepackage{doi}
+\usepackage{multicol}
 \usepackage{eolang}
 \usepackage{href-ul}
 \normalem
@@ -34,6 +35,18 @@
 \usepackage{url}
   \def\UrlBreaks{\do\/\do-}
 \setlength{\footskip}{13.0pt}
+
+\newsavebox\ffboxa
+\newsavebox\ffboxb
+\newdimen\ffmaxd
+\newcommand\ffsep{%
+  \hspace{0.4em}\textcolor{gray}{\vrule width 0.3pt depth \ffmaxd}\hspace{0.4em}}
+\newcommand\twoffinputs[3]{%
+  \sbox\ffboxa{\parbox[t]{#1\linewidth}{\vspace{0pt}\ffinput{#2}}}%
+  \sbox\ffboxb{\parbox[t]{\linewidth - #1\linewidth - 1em}{\vspace{0pt}\ffinput{#3}}}%
+  \ffmaxd=\dp\ffboxa
+  \ifdim\dp\ffboxb>\ffmaxd \ffmaxd=\dp\ffboxb \fi
+  \usebox\ffboxa\ffsep\usebox\ffboxb}
 
 \newcommand\broken{\tbd{This section is not valid, must be rewritten!}}
 
@@ -91,9 +104,9 @@ There are only two possible cases of goto jumps: forward and backward.
 
 \subsection{Backward Jump}
 
-This is a ``backward'' jump example in C language:
+A ``backward'' jump in C language can be mapped to \eolang{} recursion:
 
-\begin{ffcode}
+\begin{ffsave}[goto-backward.c]
 #include "stdio.h"
 void f() {
   int i = 1;
@@ -102,26 +115,22 @@ void f() {
   if (i < 10) goto again;
   printf("Finished!");
 }
-\end{ffcode}
-
-It can be mapped to the following \eolang{} recursion:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[goto-backward.eo]
 [] > f
   malloc.empty > @
-    [i]
-      seq * > @
-        i.put 1
-        again i
-        io.stdout "Finished!"
-      [ii] > again
-        seq * > @
-          ii.put (ii.as-number.plus 1)
-          if.
-            ii.as-number.lt 10
-            again ii
-            true
-\end{ffcode}
+    seq * > [i]
+      i.put 1
+      again i
+      io.stdout "Finished!"
+    seq * > [ii] > again
+      ii.put (ii.as-number.plus 1)
+      if.
+        ii.as-number.lt 10
+        again ii
+        true
+\end{ffsave}
+\twoffinputs{0.4}{goto-backward.c}{goto-backward.eo}
 
 \subsection{Forward Jump}
 
