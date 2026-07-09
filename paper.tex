@@ -723,9 +723,9 @@ max 7 42 > x
 \section{Mixins}
 \label{sec:mixins}
 
-\broken
-
-A mixin is a class that contains methods for use by other classes without having to be the parent class of those other classes. The following code demonstrates how a Ruby module is included in a class:
+A mixin is a class that contains methods for use by other classes
+  without having to be the parent class of those other classes.
+The following code demonstrates how a Ruby module is included in a class:
 
 \begin{ffcode}
 module Timing
@@ -743,53 +743,49 @@ n = News.new(Time.now)
 n.recent?
 \end{ffcode}
 
-This code may be represented in \eolang{} by just copying the method \ff{recent?} to the object \ff{News} as if it was defined there.
+This code may be represented in \eolang{} by just copying
+  the method \ff{recent?} to the object \ff{News} as if it was defined there.
 
 \section{Annotations}
 \label{sec:annotations}
 
-\broken
+In Java, an annotation is a form of syntactic metadata
+  that can be added to source code; classes, methods, variables, parameters,
+  and Java packages may be annotated.
+Later, annotations may be retrieved through the Reflection API.
+For example, this program analyzes the annotation attached to the class
+  of the provided object and changes the behavior depending
+  on one of its attributes.
 
-In Java, an annotation is a form of syntactic metadata that can be added to source code; classes, methods, variables, parameters, and Java packages may be annotated. Later, annotations may be retrieved through the Reflection API. For example, this program analyzes the annotation attached to the class of the provided object and changes the behavior depending on one of its attributes:
-
-\begin{ffcode}
+\begin{ffsave}[annotations.java]
 interface Item {}
-@Ship(true) class Book { /*..*/ }
-@Ship(false) class Song { /*..*/ }
+@Ship(true)
+class Book implements Item {}
+@Ship(false)
+class Song implements Item {}
 class Cart {
   void add(Item i) {
     /* add the item to the cart */
     if (i.getClass()
       .getAnnotation(Ship.class)
       .value()) {
-      /* mark the cart as shippable */
+      /* mark cart as shippable */
     }
   }
 }
-\end{ffcode}
-
-The code may be represented in \eolang{} using classes suggested in \cref{sec:classes}:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[annotations.eo]
 [] > book
   ship true > a1
-  [] > new
-    [] > @
 [] > song
-  ship FALSE > a1
-  [] > new
-    [] > @
+  ship false > a1
 [] > cart
-  [i] > add
-    # Add the item to the cart
-    if. > @
-      i.a1.value
-        # Mark the cart shippable
-        true
-        FALSE
-\end{ffcode}
-
-Annotations become attributes of objects, which represent classes in \eolang{}, as explained in \cref{sec:classes}: \ff{book.a1} and \ff{song.a1}.
+  if. > [i] > add
+    i.a1.value
+      true
+      false
+\end{ffsave}
+\twoffinputs{0.5}{annotations.java}{annotations.eo}
 
 \section{Traceability}
 
