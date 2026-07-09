@@ -447,63 +447,25 @@ if. > [x] > f
 \section{Types and Type Casting}
 \label{sec:types}
 
-\broken
-
-A type system is a logical system comprising a set of rules that assign a property called a type to various constructs of a computer program, such as variables, expressions, functions, or modules.
-The main purpose of a type system is to reduce possibilities for bugs in computer programs by defining interfaces between different parts of a computer program, and then checking that the parts have been connected in a consistent way.
-In this example, a Java method \ff{add} expects an argument of type \ff{Book} and compilation would fail if another type is provided:
+A type system is a logical system comprising a set of rules
+  that assign a property called a type to various constructs
+  of a computer program, such as variables, expressions, functions, or modules.
+The main purpose of a type system is to reduce possibilities
+  for bugs in computer programs by defining interfaces
+  between different parts of a computer program, and then checking
+  that the parts have been connected in a consistent way.
+In this example, a Java method \ff{cost} expects an argument
+  of type \ff{Book} and compilation would fail if another type is provided.
 
 \begin{ffcode}
-class Cart {
-  private int total;
-  void add(Book b) {
-    this.total += b.price();
-  }
+int cost(Book b) {
+  return 42 + b.price();
 }
 \end{ffcode}
 
-The restrictions enforced by the Java type system at compile time through types \ff{Cart} and \ff{Book} may be represented in \eolang{} using decorators, for example:
-
-\begin{ffcode}
-[] > original-cart
-  memory 0 > total
-  [b] > add
-    total.write (total.plus (b.price))
-[] > cart
-  original-cart > @
-  [b] > add
-    if.
-      b.subtype-of (tt.text "Book")
-      @.add b
-      []
-        error "Type mismatch, Book expected" > @
-\end{ffcode}
-
-Here, it is expected that the parameter \ff{b} is defined in a ``class'' that has a \ff{subtype-of} attribute, which may also be provided by a decorator (a simplified example):
-
-\begin{ffcode}
-[] > original-book
-  memory 0 > price
-[] > book
-  original-book > @
-  [t] > subtype-of
-    t.eq "Book" > @
-  [] > price
-    @.price > @
-\end{ffcode}
-
-This decoration may be simplified through a ``fluent'' supplementary object:
-
-\begin{ffcode}
-type "Cart" > cart-type
-.super-types "Object" "Printable"
-.method "add" "Book"
-cart-type original-cart > cart
-\end{ffcode}
-
-Here, the \ff{type} object implements all necessary restrictions that the Java type system may provide for the type \ff{Cart} and its methods.
-
-Type casting, which is a mechanism for changing an expression from one data type to another, may also be implemented through the same decorators.
+The restrictions enforced by the Java type system at compile time
+  through the \ff{Book} type are enforced in \eolang{}
+  by automatic type inference.
 
 \section{Reflection}
 \label{sec:reflection}
