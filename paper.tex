@@ -167,13 +167,6 @@ Relying on this fact, we may conclude that any C code that uses \ff{GOTO}
 \section{Pointers}
 \label{sec:pointers}
 
-\broken
-
-A pointer is an object in many programming languages that stores a memory address.
-Pointers may point to data memory or program memory.
-
-\subsection{Pointers to Data}
-
 This is an example of C code, where the pointer \ff{p} is first incremented
   by seven times \ff{sizeof(book)} (which is equal to 108)
   and then de-referenced to become a struct \ff{book} mapped to memory.
@@ -209,8 +202,6 @@ int f(struct book* p) {
 \end{ffsave}
 \twoffinputs{0.4}{pointer-data.c}{pointer-data.eo}
 
-\subsection{Pointers to Code}
-
 A pointer may not only refer to data in the heap but also
   to executable code in memory (there is no difference between
   ``program'' and ``data'' memory in both x86 and ARM architectures).
@@ -226,6 +217,7 @@ int f(foo *p) {
 \end{ffsave}
 \begin{ffsave}[pointer-fn.eo]
 [x y] > foo
+
 [foo] > f
   foo 7 42
 \end{ffsave}
@@ -245,41 +237,26 @@ int f() {
 Here, the pointer refers to an arbitrary address in program memory,
   where some executable code is supposed to be located.
 
-\subsection{Variables in Stack}
+This C function, which returns seven (tested with GCC),
+  assumes that variables are placed in the stack sequentially
+  and uses pointer de-referencing to access them.
 
-This C function, which returns seven (tested with GCC), assumes that variables are placed in the stack sequentially and uses pointer de-referencing to access them:
-
-\begin{ffcode}
-int f() {
-  long long a = 42;
-  long long b = 7;
+\begin{ffsave}[pointer-stack.c]
+long f() {
+  long a = 42;
+  long b = 7;
   return *(&a - 1);
 }
-\end{ffcode}
-
-This code can be mapped to the following \eolang{} code:
-
-\begin{ffcode}
-[p] > long64
-  p.block > @
-    8
-    [b] (b.as-int > @)
-[] > f
-  seq * > @
-    malloc. > stack
-      heap 32 > h
-      16
-    long64 stack > b
-    b.write (7.as-bytes)
-    long64 stack > a
-    a.write (42.as-bytes)
-    long64 (a.p.sub 1) > ret!
-    h.free stack
-    ret
-\end{ffcode}
-
-Here, the atom \ff{malloc} allocates a segment of bytes in the \ff{heap}. Later, the atom \ff{free} releases it.
-The attribute \ff{ret} is made constant to avoid its recalculation after it is ``returned'' (this mechanism is explained in \cref{sec:destructors} where destructors are discussed).
+\end{ffsave}
+\begin{ffsave}[pointer-stack.eo]
+malloc.empty > [] > f
+  seq * > [m]
+    m.write 0 7
+    m.write 8 42
+    number
+      m.read (8.minus 8) 8
+\end{ffsave}
+\twoffinputs{0.4}{pointer-stack.c}{pointer-stack.eo}
 
 \section{Procedures}
 \label{sec:procedures}
