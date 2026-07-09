@@ -785,31 +785,36 @@ class Cart {
       true
       false
 \end{ffsave}
-\twoffinputs{0.5}{annotations.java}{annotations.eo}
+\twoffinputs{0.6}{annotations.java}{annotations.eo}
 
 \section{Traceability}
 
-\broken
+A certain amount of semantic information may be lost during the translation
+  from a more powerful programming language to \eolang{} objects, such as,
+  for example, names, line numbers, comments, etc.
+Moreover, it may be useful to have the ability to trace \eolang{} objects
+  back to the original language constructs from which they were derived.
+For example, a simple C function can be mapped
+  to the following \eolang{} object.
 
-A certain amount of semantic information may be lost during the translation from a more powerful programming language to \eolang{} objects, such as, for example, names, line numbers, comments, etc. Moreover, it may be useful to have the ability to trace \eolang{} objects back to the original language constructs from which they were derived. For example, a simple C function:
-
-\begin{ffcode}
+\begin{ffsave}[traces.c]
 int f(int x) {
   return 42 / x;
 }
-\end{ffcode}
-
-It may be mapped to the following \eolang{} object:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[traces.eo]
 [x] > f
   [] > @
     "src/main.c:1-1" > source
     42.div x > @
   "src/main.c:0-2" > source
-\end{ffcode}
+\end{ffsave}
+\twoffinputs{0.6}{traces.c}{traces.eo}
 
-Here, the synthetic \ff{source} attribute represents the location in the source code file with the original C code. It is important to ensure during translation that the name \ff{source} does not conflict with a possibly similar name in the object.
+Here, the synthetic \ff{source} attribute represents the location
+  in the source code file with the original C code.
+It is important to ensure during translation that the name \ff{source}
+  does not conflict with a possibly similar name in the object.
 
 \section{Conclusion}
 
