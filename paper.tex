@@ -73,6 +73,10 @@
 C++, Java, C\#, Python, Ruby, and JavaScript are the most
   powerful object-oriented programming languages if language power
   is defined as the number of \emph{features} available to a programmer.
+This abundance of features makes their programs hard to reason about,
+  to optimize, and to debug, and---unlike functional programming with
+  its \(\lambda\)-calculus---object-oriented programming has no minimal
+  foundation to which its programs can be lowered.
 \eolang{}, on the other hand, is an object-oriented programming language
   with a reduced set of features: it has nothing but objects
   and mechanisms of their composition and decoration.
@@ -86,6 +90,24 @@ This paper asks the following research question: ``Which known features
 \maketitle
 
 \section{Introduction}
+
+Modern object-oriented languages are large and still growing.
+C++, Java, C\#, Python, Ruby, and JavaScript each offer hundreds of
+  features, and every new release adds more.
+The more features a language has, the harder its programs are to reason
+  about, to optimize, and to search for bugs, because every feature may
+  interact with every other one.
+Functional programming rests on a small and well-understood foundation,
+  the \(\lambda\)-calculus, into which its many features can be lowered
+  and then analyzed uniformly.
+Object-oriented programming has no such foundation in common use: we know
+  of no minimal object model to which an arbitrary object-oriented program
+  can be lowered.
+\eolang{} was earlier proposed as exactly such a
+  foundation~\citep{bugayenko2021eolang}, yet it was never demonstrated
+  how programs written in Java, C++, or other mainstream languages map
+  onto it.
+This paper fills that gap.
 
 We selected the most complex features of the most popular
   object-oriented programming languages---C++, Java, C\#, Python, Ruby,
