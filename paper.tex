@@ -103,6 +103,34 @@ Other features are more trivial, which is why they are not presented
 The work of \citet{bugayenko2022origins} explains the design of \eolang{}
   standard library of objects, which are used below.
 
+\section{Static Methods}
+\label{sec:static}
+
+A static method (or static function) is a method defined as a member
+  of an object but accessible directly from an API object's constructor,
+  rather than from an object instance created via the constructor.
+For example, this C\# class consists of a single static method.
+It may be converted to the following \eolang{} code,
+  since a static method is nothing more than a ``global'' function.
+
+\begin{ffsave}[static.cs]
+class Utils {
+  public static int max(int a, int b) {
+    if (a > b) return a;
+    return b;
+  }
+}
+\end{ffsave}
+\begin{ffsave}[static.eo]
+if. > [a b] > max
+  a.gt b
+  a
+  b
+\end{ffsave}
+\twoffinputs{0.6}{static.cs}{static.eo}
+\begin{ffcode}
+\end{ffcode}
+
 \section{Goto}
 \label{sec:goto}
 
@@ -496,10 +524,10 @@ Also, all objects may be equipped with a mechanism of registration in
 
 \subsection{Monkey Patching}
 
-\broken
-
-Monkey patching is making changes to a module or class while the program is running.
-This JavaScript program adds a new method \ff{print} to the object \ff{b} after the object has already been instantiated:
+Monkey patching is making changes to a module or class
+  while the program is running.
+This JavaScript program adds a new method \ff{print} to the object \ff{b}
+  after the object has already been instantiated:
 
 \begin{ffcode}
 function Book(t) { this.title = t; }
@@ -510,59 +538,8 @@ b.print = function() {
 b.print();
 \end{ffcode}
 
-This program may be translated to \eolang{}, assuming that \ff{b} is being held by an attribute of a larger object, for example \ff{app}:
-
-\begin{ffcode}
-[] > app
-  cage 0 > b
-  b' > copy
-  seq * > @
-    b.write
-      [] > book
-        [t] > new
-          memory "" > title
-          title.write t > @
-    copy.<
-    b.write
-      [] > book
-        [t] > new
-          seq * > @
-            []
-              copy > @
-              [] > print
-                io.stdout (^.title)
-    b.print
-\end{ffcode}
-
-Here, the modification to the object \ff{book} happens by making a copy of it, creating a decorator, and then storing it where the original object was located.
-
-\section{Static Methods}
-\label{sec:static}
-
-A static method (or static function) is a method defined as a member
-  of an object but accessible directly from an API object's constructor,
-  rather than from an object instance created via the constructor.
-For example, this C\# class consists of a single static method.
-It may be converted to the following \eolang{} code,
-  since a static method is nothing more than a ``global'' function.
-
-\begin{ffsave}[static.cs]
-class Utils {
-  public static int max(int a, int b) {
-    if (a > b) return a;
-    return b;
-  }
-}
-\end{ffsave}
-\begin{ffsave}[static.eo]
-if. > [a b] > max
-  a.gt b
-  a
-  b
-\end{ffsave}
-\twoffinputs{0.6}{static.cs}{static.eo}
-\begin{ffcode}
-\end{ffcode}
+This program may be translated to \eolang{} by introducing
+  a different \ff{Book1} class with the \ff{print} defined differently.
 
 \section{Inheritance}
 \label{sec:inheritance}
