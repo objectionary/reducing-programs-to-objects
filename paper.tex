@@ -87,14 +87,17 @@ This paper asks the following research question: ``Which known features
 
 \section{Introduction}
 
-We selected the most complex features and demonstrated how each
-  of them may be represented in \eolang{}~\citep{bugayenko2021eolang}
-  objects%
+We selected the most complex features of the most popular
+  object-oriented programming languages---C++, Java, C\#, Python, Ruby,
+  and JavaScript---and demonstrated how each of them may be represented
+  in \eolang{}~\citep{bugayenko2021eolang} objects%
     \footnote{%
     \LaTeX{} sources of this paper are maintained in
     \href{https://github.com/REPOSITORY}{REPOSITORY} GitHub repository,
   the rendered version is
     \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{\ff{0.0.0}}.}.
+Where a feature is best illustrated by another language, such as C,
+  Kotlin, or PHP, we use that language instead.
 
 Other features---such as operators, loops, generators, procedures,
   variables, code blocks, constants, and selection---are more trivial,
@@ -375,6 +378,42 @@ malloc.empty
       b.path
 \end{ffcode}
 
+\section{Encapsulation}
+\label{sec:encapsulation}
+
+Encapsulation hides the internal state and helper behavior of an object
+  behind a public interface.
+In this Java class, the field \ff{rate} and the method \ff{tax} are private,
+  while only \ff{total} is exposed to callers.
+
+\begin{ffsave}[encapsulation.java]
+class Cart {
+  private int rate = 10;
+  private int tax(int p) {
+    return p / rate;
+  }
+  int total(int p) {
+    return p + tax(p);
+  }
+}
+\end{ffsave}
+\begin{ffsave}[encapsulation.eo]
+[] > cart
+  p.plus (p.div 10) > [p] > total
+\end{ffsave}
+\twoffinputs{0.45}{encapsulation.java}{encapsulation.eo}
+
+\eolang{} has no \ff{private} or \ff{protected} modifiers: an object either
+  names an attribute or it does not.
+Here, both \ff{rate} and \ff{tax} dissolve into the anonymous sub-expression
+  \ff{p.div 10}, which, having no name, cannot be reached from outside,
+  so their hiding is total.
+Data hiding is thus achieved by anonymity: whatever is not named cannot
+  be addressed.
+When a private member must keep a name, such as a mutable field shared
+  between methods, its privacy reduces to a naming convention, since
+  objects carry no notion of visibility.
+
 \section{Destructors}
 \label{sec:destructors}
 
@@ -415,7 +454,7 @@ int main() {
 
 Exception handling is the process of responding to the occurrence
   of exceptions: anomalous or exceptional conditions requiring special
-  processing—during the execution of a program.
+  processing---during the execution of a program.
 This C++ program utilizes exception handling
   to avoid segmentation fault due to null pointer de-referencing.
 
@@ -641,6 +680,87 @@ Here, inherited methods are explicitly listed as attributes
 This is very close to what would happen in the virtual table of
   a class \ff{Jack} in C++.
 The \eolang{} object \ff{jack} just makes it explicit.
+
+\section{Polymorphism}
+\label{sec:polymorphism}
+
+Subtype polymorphism lets a single call site invoke different
+  implementations depending on the runtime type of the receiver,
+  a mechanism known as dynamic dispatch.
+In this Java program, \ff{speak} accepts any \ff{Animal}, yet the sound
+  it prints is chosen by the concrete object passed to it.
+
+\begin{ffsave}[polymorphism.java]
+class Animal {
+  String sound() {
+    return "?";
+  }
+}
+class Dog extends Animal {
+  String sound() {
+    return "Bark";
+  }
+}
+void speak(Animal a) {
+  print(a.sound());
+}
+speak(new Dog());
+\end{ffsave}
+\begin{ffsave}[polymorphism.eo]
+[] > animal
+  "?" > [] > sound
+[] > dog
+  animal > @
+  "Bark" > [] > sound
+[a] > speak
+  io.stdout a.sound
+speak dog
+\end{ffsave}
+\twoffinputs{0.5}{polymorphism.java}{polymorphism.eo}
+
+In \eolang{}, a method call is nothing but attribute resolution on the
+  receiver, so dispatch needs no special mechanism: \ff{a.sound} always
+  finds the \ff{sound} of the object bound to \ff{a}.
+The object \ff{dog} decorates \ff{animal} through \ff{@}, yet defines its
+  own \ff{sound}, which shadows the inherited one.
+No virtual table is needed, because each object carries its own behavior.
+
+\section{Abstract Classes and Interfaces}
+\label{sec:abstract}
+
+An interface, or an abstract class, declares methods without implementing
+  them, leaving the implementation to conforming types.
+In this Java example, \ff{Shape} declares \ff{area} and \ff{Square}
+  implements it.
+
+\begin{ffsave}[interface.java]
+interface Shape {
+  int area();
+}
+class Square implements Shape {
+  int side;
+  public int area() {
+    return side * side;
+  }
+}
+\end{ffsave}
+\begin{ffsave}[interface.eo]
+[] > shape
+  [] > area
+[side] > square
+  side.times side > [] > area
+\end{ffsave}
+\twoffinputs{0.5}{interface.java}{interface.eo}
+
+In \eolang{}, the interface \ff{shape} is an abstract object whose \ff{area}
+  attribute has no body; such an object is incomplete and serves purely
+  as a contract.
+\ff{square} completes the contract by binding \ff{area}.
+No \ff{implements} keyword is required: any object that provides the named
+  attributes satisfies the interface, and wherever a \ff{shape} is expected,
+  type inference verifies that \ff{area} is bound.
+An abstract class is the same idea, with some attributes already
+  implemented and others left void.
 
 \section{Method Overloading}
 \label{sec:overloading}
