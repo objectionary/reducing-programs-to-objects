@@ -96,19 +96,19 @@ We selected the most complex features and demonstrated how each
   the rendered version is
     \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{\ff{0.0.0}}.}.
 
-Other features are more trivial, which is why they are not presented
-  in this paper, such as operators, loops, generators, procedures,
-  variables, code blocks, constants, and selection.
+Other features---such as operators, loops, generators, procedures,
+  variables, code blocks, constants, and selection---are more trivial,
+  which is why they are not presented in this paper.
 
-The work of \citet{bugayenko2022origins} explains the design of \eolang{}
+The work of \citet{bugayenko2022origins} explains the design of the \eolang{}
   standard library of objects, which are used below.
 
 \section{Static Methods}
 \label{sec:static}
 
 A static method (or static function) is a method defined as a member
-  of an object but accessible directly from an API object's constructor,
-  rather than from an object instance created via the constructor.
+  of a class but accessible directly through the class itself,
+  rather than through an instance created by its constructor.
 For example, this C\# class consists of a single static method.
 It may be converted to the following \eolang{} code,
   since a static method is nothing more than a ``global'' function.
@@ -128,13 +128,11 @@ if. > [a b] > max
   b
 \end{ffsave}
 \twoffinputs{0.6}{static.cs}{static.eo}
-\begin{ffcode}
-\end{ffcode}
 
 \section{Goto}
 \label{sec:goto}
 
-A ``backward'' jump in C language can be mapped to \eolang{} recursion:
+A ``backward'' jump in the C language can be mapped to \eolang{} recursion:
 
 \begin{ffsave}[goto-backward.c]
 #include "stdio.h"
@@ -162,7 +160,7 @@ malloc.empty > [] > f
 \end{ffsave}
 \twoffinputs{0.4}{goto-backward.c}{goto-backward.eo}
 
-A ``forward'' jump in C language can be mapped to \eolang{}:
+A ``forward'' jump in the C language can be mapped to \eolang{}:
 
 \begin{ffsave}[goto-forward.c]
 int f(int x) {
@@ -186,6 +184,9 @@ malloc.empty > [x] > f
 \end{ffsave}
 \twoffinputs{0.4}{goto-forward.c}{goto-forward.eo}
 
+Here, the jump to the \ff{exit} label becomes a conditional that skips
+  the division when \ff{x} is zero, so \ff{r} keeps its initial value.
+
 According to the B\"{o}hm–Jacopini theorem~\citep{bohm1966flow},
   any use of the \ff{GOTO} operator may be replaced
   by a combination of
@@ -200,11 +201,11 @@ Relying on this fact, we may conclude that any C code that uses \ff{GOTO}
 \label{sec:pointers}
 
 This is an example of C code, where the pointer \ff{p} is first incremented
-  by seven times \ff{sizeof(book)} (which is equal to 108)
+  by seven times \ff{sizeof(book)} (which is equal to 104)
   and then de-referenced to become a struct \ff{book} mapped to memory.
 Then, the \ff{title} part of the struct is filled with a string
   and the \ff{price} part is returned as a result of the function \ff{f}.
-The algorithm can be represented in \eolang{} on top of the \adeff{malloc}.
+The algorithm can be represented in \eolang{} on top of the \adeff{malloc} object.
 
 \begin{ffsave}[pointer-data.c]
 #include "string.h"
@@ -222,7 +223,7 @@ int f(struct book* p) {
 [mem offset] > book
   book > [i] > plus
     mem
-    offset.plus (i.times 108)
+    offset.plus (i.times 104)
   as-i32. > get-price
     mem.read (offset.plus 100) 4
   mem.write offset s > [s] > set-title
@@ -239,7 +240,7 @@ A pointer may not only refer to data in the heap but also
   ``program'' and ``data'' memory in both x86 and ARM architectures).
 This is an example of a C program that calls a function referenced
   by a function pointer, providing two integer arguments to it.
-It can easily be mapped to \eolang{}, via its partial application:
+It can easily be mapped to \eolang{} via its partial application:
 
 \begin{ffsave}[pointer-fn.c]
 typedef int foo(int, int);
@@ -314,7 +315,7 @@ inc(inc($a)); // $a == 44
 \end{ffsave}
 \twoffinputs{0.5}{impure.php}{impure.eo}
 
-Here, \ff{a} is an abstract of a memory block.
+Here, \ff{a} is an abstraction of a memory block.
 It must be passed as an argument to the \ff{inc} object.
 In PHP, and many other languages, the heap is available in global state,
   while in \eolang{} it must be passed explicitly as an argument.
@@ -360,8 +361,9 @@ end
 \end{ffsave}
 \twoffinputs{0.5}{class.rb}{class.eo}
 
-Here, the constructor is represented by the constant object \ff{initialize},
-  which finishes the initialization of the object.
+Here, the constructor is represented by the object \ff{initialize},
+  whose \ff{!} suffix makes it a constant, so it runs only once
+  no matter how many methods call it.
 Making an ``instance'' of a book would look like this:
 
 \begin{ffcode}
@@ -405,8 +407,6 @@ int main() {
     f.dtor
 \end{ffsave}
 \twoffinputs{0.5}{destructor.cpp}{destructor.eo}
-\begin{ffcode}
-\end{ffcode}
 
 \section{Exceptions}
 \label{sec:exceptions}
@@ -482,8 +482,8 @@ if. > [x] > f
 A type system is a logical system comprising a set of rules
   that assign a property called a type to various constructs
   of a computer program, such as variables, expressions, functions, or modules.
-The main purpose of a type system is to reduce possibilities
-  for bugs in computer programs by defining interfaces
+The main purpose of a type system is to reduce the possibility
+  of bugs in computer programs by defining interfaces
   between different parts of a computer program, and then checking
   that the parts have been connected in a consistent way.
 In this example, a Java method \ff{cost} expects an argument
@@ -518,7 +518,7 @@ getattr(obj, "hello")("Jeff")
 \end{ffcode}
 
 It may be implemented in \eolang{} by creating a global dictionary of
-  classes and their methods and filling it up in compile time.
+  classes and their methods and filling it up at compile time.
 Also, all objects may be equipped with a mechanism of registration in
   the dictionary, which will make them discoverable by reflection.
 
@@ -539,7 +539,7 @@ b.print();
 \end{ffcode}
 
 This program may be translated to \eolang{} by introducing
-  a new \ff{Book1} class with the \ff{print} defined differently.
+  a new \ff{Book1} class with the \ff{print} method defined differently.
 
 \section{Inheritance}
 \label{sec:inheritance}
@@ -568,8 +568,6 @@ class Book extends Item {
   item.price.times 0.1 > [] > tax
 \end{ffsave}
 \twoffinputs{0.5}{inheritance.java}{inheritance.eo}
-\begin{ffcode}
-\end{ffcode}
 
 So-called prototype-based programming uses generalized objects,
   which can then be cloned and extended.
@@ -634,7 +632,7 @@ class Jack: Dog, Friend {
   friend > f
   seq * > [] > listen
     d.bark
-    io.stdout "listen!"
+    io.stdout "Listen!"
 \end{ffsave}
 \twoffinputs{0.5}{multiple.cpp}{multiple.eo}
 
@@ -652,8 +650,8 @@ Method overloading is the ability to create multiple functions with
 Calls to an overloaded function will run a specific implementation
   of that function appropriate to the context of the call,
   allowing one function call to perform different tasks depending on context.
-In this Kotlin program two functions are defined with the same name,
-  while only one of them is called with an integer argument.
+In this Kotlin program, two functions share the same name,
+  and the call \ff{foo(42)} resolves to the one that takes an integer.
 
 \begin{ffsave}[overloading.kt]
 fun foo(a: Int) {}
@@ -666,6 +664,10 @@ foo(42)
 foo-with-int 42
 \end{ffsave}
 \twoffinputs{0.5}{overloading.kt}{overloading.eo}
+
+\eolang{} has no overloading, so each variant becomes a distinct object
+  with a unique name, and the call selects the one whose name matches
+  the argument type.
 
 \section{Java Generics}
 \label{sec:generics}
@@ -691,16 +693,20 @@ class Cart<T extends Item> {
     t.plus i.price
 \end{ffsave}
 \twoffinputs{0.5}{generics.java}{generics.eo}
-\begin{ffcode}
-\end{ffcode}
+
+The type parameter \ff{T} disappears: \ff{cart} accepts any object that
+  understands \ff{price}, while type inference recovers the compile-time
+  safety that Java enforced through \ff{T}.
 
 \section{C++ Templates}
 \label{sec:templates}
 
 Templates are a feature of the C++ programming language
-  that allows functions and classes to operate with generic types,
-  allowing a function or class to work with many different data types
-  without being rewritten for each one.
+  that lets functions and classes operate with generic types,
+  working with many different data types without being rewritten
+  for each one.
+For example, this function returns the larger of two arguments
+  of any comparable type \ff{T}:
 
 \begin{ffsave}[templates.cpp]
 template<typename T> T max(T a, T b) {
@@ -717,8 +723,9 @@ int x = max(7, 42);
 max 7 42 > x
 \end{ffsave}
 \twoffinputs{0.6}{templates.cpp}{templates.eo}
-\begin{ffcode}
-\end{ffcode}
+
+The \eolang{} \ff{max} needs no type parameter: the same object works
+  for any argument that understands \ff{gt}.
 
 \section{Mixins}
 \label{sec:mixins}
@@ -744,7 +751,7 @@ n.recent?
 \end{ffcode}
 
 This code may be represented in \eolang{} by just copying
-  the method \ff{recent?} to the object \ff{News} as if it was defined there.
+  the method \ff{recent?} to the object \ff{News} as if it were defined there.
 
 \section{Annotations}
 \label{sec:annotations}
@@ -754,8 +761,8 @@ In Java, an annotation is a form of syntactic metadata
   and Java packages may be annotated.
 Later, annotations may be retrieved through the Reflection API.
 For example, this program analyzes the annotation attached to the class
-  of the provided object and changes the behavior depending
-  on one of its attributes.
+  of the provided object and changes its behavior depending
+  on one of the annotation's attributes.
 
 \begin{ffsave}[annotations.java]
 interface Item {}
@@ -786,6 +793,10 @@ class Cart {
       false
 \end{ffsave}
 \twoffinputs{0.6}{annotations.java}{annotations.eo}
+
+Here, each annotation becomes an attribute of the object: \ff{a1} holds
+  the \ff{ship} object, and \ff{cart} reads \ff{i.a1.value} to choose
+  its behavior, just as the Java code reads it through reflection.
 
 \section{Traceability}
 
@@ -818,8 +829,12 @@ It is important to ensure during translation that the name \ff{source}
 
 \section{Conclusion}
 
-We demonstrated how some language features often present in high-level object-oriented languages, such as Java or C++, may be expressed using objects.
-We used \eolang{} as a destination programming language because of its minimalistic semantics: it has no language features aside from objects and their composition and decoration mechanisms.
+We demonstrated how some language features often present in high-level
+  object-oriented languages, such as Java or C++, may be expressed
+  using objects.
+We used \eolang{} as a destination programming language because of its
+  minimalistic semantics: it has no language features aside from objects
+  and their composition and decoration mechanisms.
 
 \raggedright
 \bibliographystyle{ACM-Reference-Format}
