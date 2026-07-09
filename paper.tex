@@ -106,7 +106,9 @@ Other features---such as operators, loops, generators, procedures,
 The work of \citet{bugayenko2022origins} explains the design of the \eolang{}
   standard library of objects, which are used below.
 
-\section{Static Methods}
+\section{Features}
+
+\subsection{Static Methods}
 \label{sec:static}
 
 A static method (or static function) is a method defined as a member
@@ -132,7 +134,7 @@ if. > [a b] > max
 \end{ffsave}
 \twoffinputs{0.6}{static.cs}{static.eo}
 
-\section{Goto}
+\subsection{Goto}
 \label{sec:goto}
 
 A ``backward'' jump in the C language can be mapped to \eolang{} recursion:
@@ -200,7 +202,7 @@ According to the B\"{o}hm–Jacopini theorem~\citep{bohm1966flow},
 Relying on this fact, we may conclude that any C code that uses \ff{GOTO}
   may be represented in \eolang{}.
 
-\section{Pointers}
+\subsection{Pointers}
 \label{sec:pointers}
 
 This is an example of C code, where the pointer \ff{p} is first incremented
@@ -294,7 +296,7 @@ malloc.empty > [] > f
 \end{ffsave}
 \twoffinputs{0.5}{pointer-stack.c}{pointer-stack.eo}
 
-\section{Impure Functions}
+\subsection{Impure Functions}
 
 A function is pure when, among other qualities,
   it does not have side effects: no mutation of local static variables,
@@ -323,7 +325,50 @@ It must be passed as an argument to the \ff{inc} object.
 In PHP, and many other languages, the heap is available in global state,
   while in \eolang{} it must be passed explicitly as an argument.
 
-\section{Classes}
+\subsection{Closures}
+\label{sec:closures}
+
+A closure is a function bundled with the variables it captured
+  from its defining scope.
+This JavaScript function returns a counter that increments
+  a captured variable on each call.
+
+\begin{ffsave}[closure.js]
+function counter() {
+  let c = 0;
+  return () => ++c;
+}
+var next = counter();
+next(); // 1
+next(); // 2
+\end{ffsave}
+\begin{ffsave}[closure.eo]
+[c] > counter
+  seq * > [] > next
+    c.put (c.as-number.plus 1)
+    c.as-number
+malloc.empty > [] > app
+  [c]
+    counter c > cnt
+    seq * > @
+      c.put 0
+      cnt.next
+      cnt.next
+\end{ffsave}
+\twoffinputs{0.4}{closure.js}{closure.eo}
+
+In \eolang{}, a closure is just an object, and the captured variable,
+  being mutable, is a \adeff{malloc} block.
+The only open question is ownership.
+The block cannot belong to the closure \ff{next} itself, nor to the
+  \ff{counter} that builds it, because \eolang{} memory is scoped and would
+  be released once the maker returns.
+It must be owned by an object that outlives the closure---here the \ff{app}
+  object---which allocates the block and passes it in.
+As with impure functions, \eolang{} grants no implicit access to captured
+  state: it must be threaded through explicitly.
+
+\subsection{Classes}
 \label{sec:classes}
 
 A class is an extensible program code template for creating objects,
@@ -378,7 +423,7 @@ malloc.empty
       b.path
 \end{ffcode}
 
-\section{Encapsulation}
+\subsection{Encapsulation}
 \label{sec:encapsulation}
 
 Encapsulation hides the internal state and helper behavior of an object
@@ -390,16 +435,14 @@ In this Java class, the field \ff{rate} and the method \ff{tax} are private,
 class Cart {
   private int rate = 10;
   private int tax(int p) {
-    return p / rate;
-  }
+    return p / rate; }
   int total(int p) {
-    return p + tax(p);
-  }
-}
+    return p + tax(p); } }
 \end{ffsave}
 \begin{ffsave}[encapsulation.eo]
 [] > cart
-  p.plus (p.div 10) > [p] > total
+  p.plus > [p] > total
+    p.div 10
 \end{ffsave}
 \twoffinputs{0.45}{encapsulation.java}{encapsulation.eo}
 
@@ -414,7 +457,44 @@ When a private member must keep a name, such as a mutable field shared
   between methods, its privacy reduces to a naming convention, since
   objects carry no notion of visibility.
 
-\section{Destructors}
+\subsection{Static Fields}
+\label{sec:staticfields}
+
+A static field is mutable state shared by every instance of a class.
+In this Java class, the counter \ff{count} is incremented by the constructor,
+  so it holds the number of books ever created.
+
+\begin{ffsave}[static-field.java]
+class Book {
+  static int count = 0;
+  Book() {
+    count += 1;
+  }
+}
+\end{ffsave}
+\begin{ffsave}[static-field.eo]
+[count] > book
+  count.put > [] > make
+    count.as-number.plus 1
+malloc.empty > [] > app
+  [count]
+    seq * > @
+      count.put 0
+      (book count).make
+      (book count).make
+      count.as-number
+\end{ffsave}
+\twoffinputs{0.5}{static-field.java}{static-field.eo}
+
+\eolang{} has no class to hold shared state, so the \ff{count} block must be
+  owned by an object that outlives every instance: the application object
+  \ff{app} itself.
+Each \ff{book} receives the same block, and an increment made through one
+  instance is visible through all of them.
+What other languages hide behind the word \ff{static} becomes explicit---the
+  owner of class-level state is simply the top-level object of the program.
+
+\subsection{Destructors}
 \label{sec:destructors}
 
 In C++ and some other languages, a destructor is a method
@@ -447,7 +527,7 @@ int main() {
 \end{ffsave}
 \twoffinputs{0.5}{destructor.cpp}{destructor.eo}
 
-\section{Exceptions}
+\subsection{Exceptions}
 \label{sec:exceptions}
 
 \broken
@@ -515,7 +595,7 @@ if. > [x] > f
 \begin{ffcode}
 \end{ffcode}
 
-\section{Types and Type Casting}
+\subsection{Types and Type Casting}
 \label{sec:types}
 
 A type system is a logical system comprising a set of rules
@@ -538,7 +618,7 @@ The restrictions enforced by the Java type system at compile time
   through the \ff{Book} type are enforced in \eolang{}
   by automatic type inference.
 
-\section{Reflection}
+\subsection{Reflection}
 \label{sec:reflection}
 
 Reflection is the ability of a process to examine, introspect,
@@ -580,7 +660,7 @@ b.print();
 This program may be translated to \eolang{} by introducing
   a new \ff{Book1} class with the \ff{print} method defined differently.
 
-\section{Inheritance}
+\subsection{Inheritance}
 \label{sec:inheritance}
 
 Inheritance is the mechanism of basing a class upon another class
@@ -681,7 +761,7 @@ This is very close to what would happen in the virtual table of
   a class \ff{Jack} in C++.
 The \eolang{} object \ff{jack} just makes it explicit.
 
-\section{Polymorphism}
+\subsection{Polymorphism}
 \label{sec:polymorphism}
 
 Subtype polymorphism lets a single call site invoke different
@@ -725,7 +805,7 @@ The object \ff{dog} decorates \ff{animal} through \ff{@}, yet defines its
   own \ff{sound}, which shadows the inherited one.
 No virtual table is needed, because each object carries its own behavior.
 
-\section{Abstract Classes and Interfaces}
+\subsection{Abstract Classes and Interfaces}
 \label{sec:abstract}
 
 An interface, or an abstract class, declares methods without implementing
@@ -762,7 +842,7 @@ No \ff{implements} keyword is required: any object that provides the named
 An abstract class is the same idea, with some attributes already
   implemented and others left void.
 
-\section{Method Overloading}
+\subsection{Method Overloading}
 \label{sec:overloading}
 
 Method overloading is the ability to create multiple functions with
@@ -789,7 +869,7 @@ foo-with-int 42
   with a unique name, and the call selects the one whose name matches
   the argument type.
 
-\section{Java Generics}
+\subsection{Java Generics}
 \label{sec:generics}
 
 Generics extend Java's type system to allow a type or method
@@ -818,7 +898,7 @@ The type parameter \ff{T} disappears: \ff{cart} accepts any object that
   understands \ff{price}, while type inference recovers the compile-time
   safety that Java enforced through \ff{T}.
 
-\section{C++ Templates}
+\subsection{C++ Templates}
 \label{sec:templates}
 
 Templates are a feature of the C++ programming language
@@ -847,7 +927,7 @@ max 7 42 > x
 The \eolang{} \ff{max} needs no type parameter: the same object works
   for any argument that understands \ff{gt}.
 
-\section{Mixins}
+\subsection{Mixins}
 \label{sec:mixins}
 
 A mixin is a class that contains methods for use by other classes
@@ -873,7 +953,7 @@ n.recent?
 This code may be represented in \eolang{} by just copying
   the method \ff{recent?} to the object \ff{News} as if it were defined there.
 
-\section{Annotations}
+\subsection{Annotations}
 \label{sec:annotations}
 
 In Java, an annotation is a form of syntactic metadata
@@ -918,7 +998,32 @@ Here, each annotation becomes an attribute of the object: \ff{a1} holds
   the \ff{ship} object, and \ff{cart} reads \ff{i.a1.value} to choose
   its behavior, just as the Java code reads it through reflection.
 
-\section{Traceability}
+\subsection{Concurrency}
+\label{sec:concurrency}
+
+\broken
+
+Concurrency lets multiple computations run simultaneously, leaving the
+  language to coordinate their access to shared memory and their order
+  of execution.
+This Java program starts two threads that print concurrently,
+  so the order of the output is not determined in advance.
+
+\begin{ffcode}
+new Thread(() ->
+  System.out.print("A")
+).start();
+new Thread(() ->
+  System.out.print("B")
+).start();
+\end{ffcode}
+
+\eolang{} does not yet define a model for concurrent or parallel execution:
+  it has no notion of a thread, a lock, or a scheduler.
+Until such a model is designed, programs that rely on nondeterministic
+  concurrent execution cannot be represented as \eolang{} objects.
+
+\subsection{Traceability}
 
 A certain amount of semantic information may be lost during the translation
   from a more powerful programming language to \eolang{} objects, such as,
