@@ -550,11 +550,10 @@ class Utils {
 }
 \end{ffsave}
 \begin{ffsave}[static.eo]
-[a b] > utils-max
-  if. > @
-    a.gt b
-    a
-    b
+if. > [a b] > utils-max
+  a.gt b
+  a
+  b
 \end{ffsave}
 \twoffinputs{0.6}{static.cs}{static.eo}
 \begin{ffcode}
