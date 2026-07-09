@@ -395,7 +395,7 @@ int price(int book) {
 }
 void print(int b) {
   try {
-    std::cout << "The price: " << price(b);
+    std::cout << price(b);
   } catch (char const* e) {
     std::cout << "Error: " << e;
   }
@@ -407,7 +407,6 @@ if. > [book cant-return] > price
   cant-return "Nope!"
   7
 seq * > [b] > print
-  io.stdout "The price:"
   io.stdout
     price
       b
@@ -420,17 +419,17 @@ seq * > [b] > print
 A Java method may throw a number of either checked or unchecked exceptions:
 
 \begin{ffsave}[multiple-catch.java]
-void f(int x) throws IOException {
+void f(int x) throws Exception {
   if (x == 0)
     throw new IOException("foo");
-  throw new RuntimeException("bar");
+  throw new Exception("bar");
 }
 void bar() {
   try {
     f(42);
   } catch (IOException e) {
-    System.out.println(e.getMessage());
-  } catch (RuntimeExceptin e) {
+    echo(e.getMessage());
+  } catch (Exception e) {
     System.out.exit(1);
   }
 }
