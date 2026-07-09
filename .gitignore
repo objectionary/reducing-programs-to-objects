@@ -13,6 +13,7 @@
 *.out
 *.php
 *.pyg
+*.rb
 *.run.xml
 *.synctex.gz
 *.zip

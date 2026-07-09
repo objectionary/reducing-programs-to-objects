@@ -290,15 +290,18 @@ In PHP, and many other languages, the heap is available in global state,
 \section{Classes}
 \label{sec:classes}
 
-\broken
+A class is an extensible program code template for creating objects,
+  providing initial values for state (member variables)
+  and implementations of behavior (member functions or methods).
+The following program contains a Ruby class with a single constructor,
+  two methods, and one mutable member variable.
+It can be mapped to the following \eolang{} code,
+  where a class becomes an object factory.
 
-A class is an extensible program code template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods).
-The following program contains a Ruby class with a single constructor, two methods, and one mutable member variable:
-
-\begin{ffcode}
+\begin{ffsave}[class.rb]
 class Book
   def initialize(i)
-    @id = id
+    @id = i
     puts "New book!"
   end
   def path
@@ -308,32 +311,34 @@ class Book
     @id = i
   end
 end
-\end{ffcode}
-
-It can be mapped to the following \eolang{} code, where a class becomes an object factory:
-
-\begin{ffcode}
-[i] > book
-  cage i > id
-  [] > ruby-init
-    tt.sprintf > @
-      "New book!"
-  [] > path
-    tt.sprintf > @
+\end{ffsave}
+\begin{ffsave}[class.eo]
+[id i] > rbBook
+  seq * > [] > initialize!
+    id.put i
+    io.stdout "New book!"
+  seq * > [] > path
+    initialize
+    tt.sprintf *1
       "/tmp/%s.txt"
       id
-  [i] > move
-    id.write i > @
-\end{ffcode}
+  seq * > [i] > move
+    initialize
+    id.put i
+\end{ffsave}
+\twoffinputs{0.5}{class.rb}{class.eo}
 
-Here, the constructor is represented by the object \ff{ruby-init}, which finishes the initialization of the object.
+Here, the constructor is represented by the constant object \ff{initialize},
+  which finishes the initialization of the object.
 Making an ``instance'' of a book would look like this:
 
 \begin{ffcode}
-book 42 > b
-b.ruby-init
-b.move 7
-b.path
+malloc.empty
+  [id]
+    book id 42 > b
+    seq * > @
+      b.move 7
+      b.path
 \end{ffcode}
 
 \section{Destructors}
