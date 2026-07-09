@@ -16,6 +16,7 @@ hard comment
 hard currfile
 hard cyrillic
 hard datetime
+hard doi
 hard enumitem
 hard environ
 hard eolang

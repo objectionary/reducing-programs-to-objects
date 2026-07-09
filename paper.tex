@@ -50,9 +50,14 @@
 \email{yegor256@gmail.com}
 
 \begin{abstract}
-C++, Java, C\#, Python, Ruby, and JavaScript are the most powerful object-oriented programming languages if language power is defined as the number of \emph{features} available to a programmer.
-\eolang{}, on the other hand, is an object-oriented programming language with a reduced set of features: it has nothing but objects and mechanisms of their composition and decoration.
-This paper asks the following research question: ``Which known features are possible to implement using only objects?''
+C++, Java, C\#, Python, Ruby, and JavaScript are the most
+  powerful object-oriented programming languages if language power
+  is defined as the number of \emph{features} available to a programmer.
+\eolang{}, on the other hand, is an object-oriented programming language
+  with a reduced set of features: it has nothing but objects
+  and mechanisms of their composition and decoration.
+This paper asks the following research question: ``Which known features
+  are possible to implement using only objects?''
 \end{abstract}
 
 \begin{document}
@@ -62,10 +67,14 @@ This paper asks the following research question: ``Which known features are poss
 
 \section{Features}
 
-We selected the most complex features and demonstrated how each of them may be represented in \eolang{}~\citep{bugayenko2021eolang} objects\footnote{%
-\LaTeX{} sources of this paper are maintained in
-\href{https://github.com/REPOSITORY}{REPOSITORY} GitHub repository,
-the rendered version is \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{\ff{0.0.0}}.}:
+We selected the most complex features and demonstrated how each
+  of them may be represented in \eolang{}~\citep{bugayenko2021eolang}
+  objects%
+    \footnote{%
+    \LaTeX{} sources of this paper are maintained in
+    \href{https://github.com/REPOSITORY}{REPOSITORY} GitHub repository,
+  the rendered version is
+    \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{\ff{0.0.0}}.}:
 
 \begin{itemize}
     \item Non-conditional jumps
@@ -102,7 +111,12 @@ the rendered version is \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{
         (\cref{sec:annotations}).
 \end{itemize}
 
-Other features are more trivial, which is why they are not presented in this paper, such as operators, loops, variables, code blocks, constants, branching, and so on.
+Other features are more trivial, which is why they are not presented
+  in this paper, such as operators, loops, variables, code blocks,
+  constants, and selection.
+
+The work of \citet{bugayenko2022origins} explains the design of \eolang{}
+  standard library of objects, which are used below.
 
 \section{Goto}
 \label{sec:goto}
