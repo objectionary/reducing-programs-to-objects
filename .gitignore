@@ -6,13 +6,14 @@
 *.bcf
 *.blg
 *.c
-*.cs
 *.cpp
+*.cs
 *.eo
 *.fdb_latexmk
 *.fls
 *.java
 *.js
+*.kt
 *.log
 *.out
 *.php

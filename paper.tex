@@ -647,58 +647,54 @@ The \eolang{} object \ff{jack} just makes it explicit.
 \section{Method Overloading}
 \label{sec:overloading}
 
-\broken
+Method overloading is the ability to create multiple functions with
+  the same name but different implementations.
+Calls to an overloaded function will run a specific implementation
+  of that function appropriate to the context of the call,
+  allowing one function call to perform different tasks depending on context.
+In this Kotlin program two functions are defined with the same name,
+  while only one of them is called with an integer argument.
 
-Method overloading is the ability to create multiple functions with the same name but different implementations. Calls to an overloaded function will run a specific implementation of that function appropriate to the context of the call, allowing one function call to perform different tasks depending on context. In this Kotlin program two functions are defined with the same name, while only one of them is called with an integer argument:
-
-\begin{ffcode}
+\begin{ffsave}[overloading.kt]
 fun foo(a: Int) {}
 fun foo(a: Double) {}
 foo(42)
-\end{ffcode}
-
-It may be represented in \eolang{} like this:
-
-\begin{ffcode}
-[args...] > foo
-  (args.at 0) > a0
-  if.
-    a0.subtype-of "Int"
-    first-foo a0
-    second-foo a0
-foo 42
-\end{ffcode}
-
-This code expects arguments of \ff{foo} to be equipped with the type system suggested in \cref{sec:types}. The attribute \ff{subtype-of} will help dispatch the call to the right objects.
+\end{ffsave}
+\begin{ffsave}[overloading.eo]
+[a] > foo-with-int
+[b] > foo-with-double
+foo-with-int 42
+\end{ffsave}
+\twoffinputs{0.5}{overloading.kt}{overloading.eo}
 
 \section{Java Generics}
 \label{sec:generics}
 
 \broken
 
-Generics extend Java's type system to allow a type or method to operate on objects of various types while providing compile-time type safety.
-For example, this Java class expects another class to be specified as \ff{T} before use:
+Generics extend Java's type system to allow a type or method
+  to operate on objects of various types while providing
+  compile-time type safety.
+For example, this Java class expects another class
+  to be specified as \ff{T} before use:
 
-\begin{ffcode}
+\begin{ffsave}[generics.java]
 class Cart<T extends Item> {
   private int total;
   void add(T i) {
     total += i.price();
   }
 }
-\end{ffcode}
-
-It may be represented in \eolang{} like this:
-
+\end{ffsave}
+\begin{ffsave}[generics.eo]
+[total] > cart
+  number total.get > t
+  total.put > [i] > add
+    t.plus i.price
+\end{ffsave}
+\twoffinputs{0.5}{generics.java}{generics.eo}
 \begin{ffcode}
-[] > cart
-  memory 0 > total
-  [i] > add
-    total.write > @
-      total.plus (i.price)
 \end{ffcode}
-
-As the example demonstrates, the presence of generics in class declarations may be ignored, since \eolang{} is a language without types and type checking.
 
 \section{C++ Templates}
 \label{sec:templates}
