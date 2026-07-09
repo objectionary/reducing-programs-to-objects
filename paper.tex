@@ -102,11 +102,6 @@ The work of \citet{bugayenko2022origins} explains the design of \eolang{}
 \section{Goto}
 \label{sec:goto}
 
-Goto is a one-way imperative transfer of control to another line of code.
-There are only two possible cases of goto jumps: forward and backward.
-
-\subsection{Backward Jump}
-
 A ``backward'' jump in C language can be mapped to \eolang{} recursion:
 
 \begin{ffsave}[goto-backward.c]
@@ -134,8 +129,6 @@ malloc.empty > [] > f
       true
 \end{ffsave}
 \twoffinputs{0.4}{goto-backward.c}{goto-backward.eo}
-
-\subsection{Forward Jump}
 
 A ``forward'' jump in C language can be mapped to \eolang{}:
 
@@ -170,36 +163,6 @@ According to the B\"{o}hm–Jacopini theorem~\citep{bohm1966flow},
   iteration (the \deff{while} object).
 Relying on this fact, we may conclude that any C code that uses \ff{GOTO}
   may be represented in \eolang{}.
-
-\subsection{Multiple Returns}
-
-Some structured programming languages allow a function to exit at an arbitrary place, not only at the end, using \ff{return} statements, for example:
-
-\begin{ffcode}
-void abs(int x) {
-  if (x > 0) {
-    return x;
-  }
-  return -1 * x;
-}
-\end{ffcode}
-
-This can be mapped to the following \eolang{} code using \ff{go.to} object:
-
-\begin{ffcode}
-[x] > abs
-  go.to > @
-    [g] >>
-      seq * > @
-        if.
-          x.gt 0
-          g.forward x
-          true
-        g.forward
-          -1.times x
-\end{ffcode}
-
-The dataization of \ff{forward} will exit the \ff{go.to} object wrapping the entire code in the ``function'' \ff{abs}.
 
 \section{Pointers}
 \label{sec:pointers}
