@@ -211,35 +211,28 @@ int f(struct book* p) {
 
 \subsection{Pointers to Code}
 
-A pointer may not only refer to data in the heap but also to executable code in memory (there is no difference between ``program'' and ``data'' memory in both x86 and ARM architectures).
-This is an example of a C program that calls a function referenced by a function pointer, providing two integer arguments to it:
+A pointer may not only refer to data in the heap but also
+  to executable code in memory (there is no difference between
+  ``program'' and ``data'' memory in both x86 and ARM architectures).
+This is an example of a C program that calls a function referenced
+  by a function pointer, providing two integer arguments to it.
+It can easily be mapped to \eolang{}, via its partial application:
 
-\begin{ffcode}
-int foo(int x, int y) {
-  return x + y;
+\begin{ffsave}[pointer-fn.c]
+typedef int foo(int, int);
+int f(foo *p) {
+  return (*p)(7, 42);
 }
-int f() {
-  int (*p)(int, int);
-  p = &foo;
-  return (*p) (7, 42);
-}
-\end{ffcode}
-
-This code can be mapped to the following \eolang{} code:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[pointer-fn.eo]
 [x y] > foo
-  x.plus y > @
-[] > f
-  cage 0 > p
-  seq * > @
-    p.write
-      [x y]
-        foo x y > @
-    p.@ 7 42
-\end{ffcode}
+[foo] > f
+  foo 7 42
+\end{ffsave}
+\twoffinputs{0.4}{pointer-fn.c}{pointer-fn.eo}
 
-It is important to note that the following code cannot be represented in \eolang{}:
+It is important to note that the following code
+  cannot be represented in \eolang{}:
 
 \begin{ffcode}
 int f() {
@@ -249,7 +242,8 @@ int f() {
 }
 \end{ffcode}
 
-Here, the pointer refers to an arbitrary address in program memory, where some executable code is supposed to be located.
+Here, the pointer refers to an arbitrary address in program memory,
+  where some executable code is supposed to be located.
 
 \subsection{Variables in Stack}
 
