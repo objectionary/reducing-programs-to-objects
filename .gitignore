@@ -11,6 +11,7 @@
 *.fls
 *.log
 *.out
+*.php
 *.pyg
 *.run.xml
 *.synctex.gz

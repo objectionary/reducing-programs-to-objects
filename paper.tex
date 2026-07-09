@@ -260,31 +260,27 @@ malloc.empty > [] > f
 
 \section{Impure Functions}
 
-\broken
+A function is pure when, among other qualities,
+  it does not have side effects: no mutation of local static variables,
+  non-local variables, mutable reference arguments, or input/output streams.
+This impure PHP function can be mapped to \eolang{}:
 
-A function is pure when, among other qualities, it does not have side effects: no mutation of local static variables, non-local variables, mutable reference arguments, or input/output streams.
-This PHP function is impure:
-
-\begin{ffcode}
+\begin{ffsave}[impure.php]
 $a = 42;
-function inc($a) {
+function inc() {
   $a = $a + 1;
   return $a;
 }
 inc(inc($a)); // $a == 44
-\end{ffcode}
-
-It may be mapped to a constant \eolang{} object:
-
-\begin{ffcode}
-memory 42 > a
-[x] > inc!
+\end{ffsave}
+\begin{ffsave}[impure.eo]
+[a] > inc
+  number a.get > ia
   seq * > @
-    x.write
-      x.plus 1
-inc
-  inc a
-\end{ffcode}
+    a.put (ia.plus 1)
+    ia
+\end{ffsave}
+\twoffinputs{0.5}{impure.php}{impure.eo}
 
 \section{Classes}
 \label{sec:classes}
