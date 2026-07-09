@@ -10,6 +10,7 @@
 *.eo
 *.fdb_latexmk
 *.fls
+*.java
 *.log
 *.out
 *.php
