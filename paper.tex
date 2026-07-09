@@ -282,6 +282,11 @@ inc(inc($a)); // $a == 44
 \end{ffsave}
 \twoffinputs{0.5}{impure.php}{impure.eo}
 
+Here, \ff{a} is an abstract of a memory block.
+It must be passed as an argument to the \ff{inc} object.
+In PHP, and many other languages, the heap is available in global state,
+  while in \eolang{} it must be passed explicitly as an argument.
+
 \section{Classes}
 \label{sec:classes}
 
