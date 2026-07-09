@@ -46,7 +46,7 @@
   \sbox\ffboxb{\parbox[t]{\linewidth - #1\linewidth - 1em}{\vspace{0pt}\ffinput{#3}}}%
   \ffmaxd=\dp\ffboxa
   \ifdim\dp\ffboxb>\ffmaxd \ffmaxd=\dp\ffboxb \fi
-  \usebox\ffboxa\ffsep\usebox\ffboxb}
+  \noindent\usebox\ffboxa\ffsep\usebox\ffboxb}
 
 \newcommand\broken{\tbd{This section is not valid, must be rewritten!}}
 
