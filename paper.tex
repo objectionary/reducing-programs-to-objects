@@ -174,53 +174,40 @@ Pointers may point to data memory or program memory.
 
 \subsection{Pointers to Data}
 
-This is an example of C code, where the pointer \ff{p} is first incremented by seven times \ff{sizeof(book)} (which is equal to 108) and then de-referenced to become a struct \ff{book} mapped to memory.
-Then, the \ff{title} part of the struct is filled with a string and the \ff{price} part is returned as a result of the function \ff{f}:
+This is an example of C code, where the pointer \ff{p} is first incremented
+  by seven times \ff{sizeof(book)} (which is equal to 108)
+  and then de-referenced to become a struct \ff{book} mapped to memory.
+Then, the \ff{title} part of the struct is filled with a string
+  and the \ff{price} part is returned as a result of the function \ff{f}.
+The algorithm can be represented in \eolang{} on top of the \adeff{malloc}.
 
-\begin{ffcode}
+\begin{ffsave}[pointer-book.c]
 #include "string.h"
 struct book {
   char title[100];
-  long long price;
+  unsigned int price;
 };
-int f(struct book* p) {
+unsigned int f(struct book* p) {
   struct book b = *(p + 7);
   strcpy(b.title, "Object Thinking");
   return b.price;
 }
-\end{ffcode}
-
-This code can be mapped to the following \eolang{} code:
-
-\begin{ffcode}
-[ptr] > book
-  ptr > @
-  ptr.block > title
-    100
-    [b] (b.as-string > @)
-  ptr.block > price
-    8
-    [b] (b.as-int > @)
-pointer. > p1
-  heap 1024
-  0
-  108
+\end{ffsave}
+\begin{ffsave}[pointer-book.eo]
+[mem offset] > book
+  book > [i] > plus
+    mem
+    offset.plus (i.times 108)
+  as-i32. > get-price
+    mem.read (offset.plus 100) 4
+  mem.write offset s > [s] > set-title
 [p] > f
+  (book p).plus 7 > b
   seq * > @
-    book (p.add 7) > b
-    b.title.write
-      ("Object Thinking").as-bytes
+    b.set-title "Object Thinking"
     b.price
-\end{ffcode}
-
-Here, \ff{p1} is an object that can be used as an argument of \ff{f}.
-It is a copy of an abstract object \ff{heap.pointer}, which expects two parameters:
-  1)~an absolute address in memory
-  and
-  2)~the size of the memory block it points to, in bytes.
-Its attribute \ff{block} expects two attributes: 1)~the number of bytes in the heap and 2)~an abstract object that can encapsulate \ff{bytes} that were just read from memory.
-
-The object \ff{heap} is an abstraction of a random access memory.
+\end{ffsave}
+\twoffinputs{0.4}{pointer-book.c}{pointer-book.eo}
 
 \subsection{Pointers to Code}
 
