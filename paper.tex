@@ -474,10 +474,12 @@ The restrictions enforced by the Java type system at compile time
 \section{Reflection}
 \label{sec:reflection}
 
-\broken
-
-Reflection is the ability of a process to examine, introspect, and modify its own structure and behavior.
-In the following Python example, the method \ff{hello} of an instance of class \ff{Foo} is not called directly on the object but is first retrieved through reflection functions \ff{globals} and \ff{getattr}, and then executed:
+Reflection is the ability of a process to examine, introspect,
+  and modify its own structure and behavior.
+In the following Python example, the method \ff{hello} of an instance
+  of class \ff{Foo} is not called directly on the object but is first
+  retrieved through reflection functions \ff{globals} and \ff{getattr},
+  and then executed:
 
 \begin{ffcode}
 def Foo():
@@ -487,7 +489,10 @@ obj = globals()["Foo"]()
 getattr(obj, "hello")("Jeff")
 \end{ffcode}
 
-It may be implemented in \eolang{} by encapsulating additional meta information in classes explained in \cref{sec:classes}.
+It may be implemented in \eolang{} by creating a global dictionary of
+  classes and their methods and filling it up in compile time.
+Also, all objects may be equipped with a mechanism of registration in
+  the dictionary, which will make them discoverable by reflection.
 
 \subsection{Monkey Patching}
 
@@ -550,7 +555,7 @@ class Utils {
 }
 \end{ffsave}
 \begin{ffsave}[static.eo]
-if. > [a b] > utils-max
+if. > [a b] > max
   a.gt b
   a
   b
