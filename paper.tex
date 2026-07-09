@@ -670,8 +670,6 @@ foo-with-int 42
 \section{Java Generics}
 \label{sec:generics}
 
-\broken
-
 Generics extend Java's type system to allow a type or method
   to operate on objects of various types while providing
   compile-time type safety.
@@ -699,29 +697,28 @@ class Cart<T extends Item> {
 \section{C++ Templates}
 \label{sec:templates}
 
-\broken
+Templates are a feature of the C++ programming language
+  that allows functions and classes to operate with generic types,
+  allowing a function or class to work with many different data types
+  without being rewritten for each one.
 
-Templates are a feature of the C++ programming language that allows functions and classes to operate with generic types, allowing a function or class to work with many different data types without being rewritten for each one.
-
-\begin{ffcode}
+\begin{ffsave}[templates.cpp]
 template<typename T> T max(T a, T b) {
   return a > b ? a : b;
 }
 int x = max(7, 42);
-\end{ffcode}
-
-It may be represented in \eolang{} like this:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[templates.eo]
 [a b] > max
   if. > @
     a.gt b
     a
     b
 max 7 42 > x
+\end{ffsave}
+\twoffinputs{0.5}{templates.cpp}{templates.eo}
+\begin{ffcode}
 \end{ffcode}
-
-As the example demonstrates, the presence of templates may be ignored since \eolang{} is a language without types and type checking.
 
 \section{Mixins}
 \label{sec:mixins}
