@@ -181,7 +181,7 @@ Then, the \ff{title} part of the struct is filled with a string
   and the \ff{price} part is returned as a result of the function \ff{f}.
 The algorithm can be represented in \eolang{} on top of the \adeff{malloc}.
 
-\begin{ffsave}[pointer-book.c]
+\begin{ffsave}[pointer-data.c]
 #include "string.h"
 struct book {
   char title[100];
@@ -193,7 +193,7 @@ int f(struct book* p) {
   return b.price;
 }
 \end{ffsave}
-\begin{ffsave}[pointer-book.eo]
+\begin{ffsave}[pointer-data.eo]
 [mem offset] > book
   book > [i] > plus
     mem
@@ -207,7 +207,7 @@ int f(struct book* p) {
     b.set-title "1984"
     b.price
 \end{ffsave}
-\twoffinputs{0.4}{pointer-book.c}{pointer-book.eo}
+\twoffinputs{0.4}{pointer-data.c}{pointer-data.eo}
 
 \subsection{Pointers to Code}
 
