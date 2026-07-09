@@ -93,8 +93,8 @@ We selected the most complex features and demonstrated how each
     \href{https://github.com/REPOSITORY/releases/tag/0.0.0}{\ff{0.0.0}}.}.
 
 Other features are more trivial, which is why they are not presented
-  in this paper, such as operators, loops, variables, code blocks,
-  constants, and selection.
+  in this paper, such as operators, loops, generators, procedures,
+  variables, code blocks, constants, and selection.
 
 The work of \citet{bugayenko2022origins} explains the design of \eolang{}
   standard library of objects, which are used below.
@@ -379,179 +379,71 @@ int main() {
 \section{Exceptions}
 \label{sec:exceptions}
 
-Exception handling is the process of responding to the occurrence of exceptions—anomalous or exceptional conditions requiring special processing—during the execution of a program.
-This C++ program utilizes exception handling to avoid segmentation fault due to null pointer de-referencing:
+\broken
 
-\begin{ffcode}
+Exception handling is the process of responding to the occurrence
+  of exceptions—anomalous or exceptional conditions requiring special
+  processing—during the execution of a program.
+This C++ program utilizes exception handling
+  to avoid segmentation fault due to null pointer de-referencing.
+
+\begin{ffsave}[try-catch.cpp]
 #include <iostream>
-class Book { public: int price(); };
-int price(Book* b) {
-  if (b == NULL) throw "NPE!";
-  return (*b).price() * 1.1;
+int price(int book) {
+  if (book == 42) throw "Nope!";
+  return 7;
 }
-void print(Book* b) {
+void print(int b) {
   try {
     std::cout << "The price: " << price(b);
   } catch (char const* e) {
     std::cout << "Error: " << e;
   }
 }
+\end{ffsave}
+\begin{ffsave}[try-catch.eo]
+if. > [book cant-return] > price
+  book.eq 42
+  cant-return "Nope!"
+  7
+seq * > [b] > print
+  io.stdout "The price:"
+  io.stdout
+    price
+      b
+      [m]:cant-return
+\end{ffsave}
+\twoffinputs{0.5}{try-catch.cpp}{try-catch.eo}
+\begin{ffcode}
 \end{ffcode}
 
-This mechanism may be implemented in \eolang{}:
+A Java method may throw a number of either checked or unchecked exceptions:
 
-\begin{ffcode}
-[] > book
-  [] > price ?
-[b] > price
-  if. > @
-    b.eq 0
-    error "NPE!"
-    b.price.times 1.1
-[b] > print
-  try > @
-    [] >>
-      io.stdout > @
-        tt.sprintf *1
-          "The price: %d"
-          price b
-    [e] >>
-      io.stdout > @
-        tt.sprintf *1
-          "Error: %s"
-          e
-    true
-\end{ffcode}
-
-Here, the object \ff{try} expects three arguments: 1)~an abstract object to be dataized, 2)~an abstract object to be copied with one argument, in case dataization returns an encapsulated object, and 3)~an object to be dataized anyway (similar to Java \ff{finally} block).
-
-In the object \ff{price}, we get the object \ff{error}, which, if dataized, causes the termination of dataization and a non-conditional jump to the ``catch'' object of the \ff{try}.
-The mechanism is similar to ``checked'' exceptions in Java, where a method's signature must declare all types of exceptions the method may throw.
-
-\subsection{Many Exception Types}
-
-\broken
-
-A Java method may throw a number of either checked or unchecked exceptions, for example:
-
-\begin{ffcode}
+\begin{ffsave}[multiple-catch.java]
 void f(int x) throws IOException {
-  if (x == 0) {
-    throw new IOException();
-  }
-  throw new RuntimeException();
+  if (x == 0)
+    throw new IOException("foo");
+  throw new RuntimeException("bar");
 }
-\end{ffcode}
-
-This would be represented in \eolang{} as such:
-
-\begin{ffcode}
-[x] > f
-  if. > @
-    x.eq 0
-    error "IOException"
-    error "RuntimeException"
-\end{ffcode}
-
-To catch both exceptions the object \ff{f} would be used like this:
-
-\begin{ffcode}
-try
-  []
-    try > @
-      []
-        f 5 > @
-      [e1]
-        io.stdout e1 > @
-      []
-        nop > @
-  [e2]
-    io.stdout e2 > @
-  []
-    nop > @
-\end{ffcode}
-
-\section{Anonymous Functions}
-\label{sec:blocks}
-
-Anonymous functions can be passed into methods as arguments. For example, in this Ruby code a ``block'' (a name Ruby uses for anonymous functions) is passed:
-
-\begin{ffcode}
-def scan(lines)
-  lines.each do |t|
-    if t.starts_with? '#' yield t
-  end
-end
-scan(array) { |x| puts x }
-\end{ffcode}
-
-This mechanism may be implemented in \eolang{}:
-
-\begin{ffcode}
-[lines b] > scan
-  lines.each > @
-    [t] >>
-      if. > @
-        t.starts-with "#"
-        b t
-        true
-scan
-  array
-  [x] >>
-    io.stdout x > @
-\end{ffcode}
-
-Here, the anonymous function is passed to the object \ff{scan} as an argument \ff{b}. The ``call'' of this function is the dataization of its copy, performed by the \ff{if} atom.
-
-\section{Generators}
-\label{sec:generators}
-
-\broken
-
-A generator is a routine that can be used to control the iteration behavior of a loop.
-For example, this PHP program will print the first ten Fibonacci numbers:
-
-\begin{ffcode}
-function fibonacci(int $limit):generator {
-  yield $a = $b = $i = 1;
-  while (++$i < $limit) {
-    $b = $a + $b;
-    yield $b - $a;
-    $a = $b;
+void bar() {
+  try {
+    f(42);
+  } catch (IOException e) {
+    System.out.println(e.getMessage());
+  } catch (RuntimeExceptin e) {
+    System.out.exit(1);
   }
 }
-foreach (fibonacci(10) as $n) {
-  echo "$n\n";
-}
-\end{ffcode}
-
-This mechanism may be implemented in \eolang{}:
-
+\end{ffsave}
+\begin{ffsave}[multiple-catch.eo]
+if. > [x] > f
+  x.eq 0
+  T "foo"
+  T "bar"
+\end{ffsave}
+\twoffinputs{0.5}{multiple-catch.java}{multiple-catch.eo}
 \begin{ffcode}
-[limit f] > fibonacci
-  memory 0 > a
-  memory 0 > b
-  memory 0 > i
-  seq * > @
-    a.write 1
-    b.write 1
-    f 0
-    while.
-      seq (i.write (i.plus 1)) (i.lt limit)
-      [idx]
-        seq * > @
-          b.write (a.plus b)
-          a.write (b.minus a)
-          f (b.minus a)
-    true
-fibonacci > @
-  10
-  [n]
-    io.stdout > @
-      tt.sprintf "%d\n" n
 \end{ffcode}
-
-Here, the generator is turned into an abstract object \ff{fibonacci} with an extra parameter \ff{f}, which is specified with an abstract object argument that prints what is given as \ff{n}.
 
 \section{Types and Type Casting}
 \label{sec:types}
