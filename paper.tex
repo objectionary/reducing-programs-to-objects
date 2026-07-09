@@ -534,25 +534,30 @@ Here, the modification to the object \ff{book} happens by making a copy of it, c
 \section{Static Methods}
 \label{sec:static}
 
-A static method (or static function) is a method defined as a member of an object but accessible directly from an API object's constructor, rather than from an object instance created via the constructor. For example, this C\# class consists of a single static method:
+A static method (or static function) is a method defined as a member
+  of an object but accessible directly from an API object's constructor,
+  rather than from an object instance created via the constructor.
+For example, this C\# class consists of a single static method.
+It may be converted to the following \eolang{} code,
+  since a static method is nothing more than a ``global'' function.
 
-\begin{ffcode}
+\begin{ffsave}[static.cs]
 class Utils {
   public static int max(int a, int b) {
     if (a > b) return a;
     return b;
   }
 }
-\end{ffcode}
-
-It may be converted to the following \eolang{} code, since a static method is nothing more than a ``global'' function:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[static.eo]
 [a b] > utils-max
   if. > @
     a.gt b
     a
     b
+\end{ffsave}
+\twoffinputs{0.5}{static.cs}{static.eo}
+\begin{ffcode}
 \end{ffcode}
 
 \section{Inheritance}
