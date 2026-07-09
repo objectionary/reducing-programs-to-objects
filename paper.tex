@@ -601,14 +601,13 @@ io.stdout (as-fixed t)
 \end{ffsave}
 \twoffinputs{0.5}{prototype.js}{prototype.eo}
 
-\subsection{Multiple Inheritance}
+Multiple inheritance is a feature of some object-oriented
+  programming languages in which an object or class can inherit
+  features from more than one parent object or parent class.
+In this C++ example, the class \ff{Jack} has both \ff{bark} and
+  \ff{listen} methods, inherited from \ff{Dog} and \ff{Friend} respectively.
 
-\broken
-
-Multiple inheritance is a feature of some object-oriented computer programming languages in which an object or class can inherit features from more than one parent object or parent class. In this C++ example,
-the class \ff{Jack} has both \ff{bark} and \ff{listen} methods, inherited from \ff{Dog} and \ff{Friend} respectively:
-
-\begin{ffcode}
+\begin{ffsave}[multiple.cpp]
 #include <iostream>
 class Dog {
   virtual void bark() {
@@ -624,26 +623,26 @@ class Jack: Dog, Friend {
     std::cout << "Listen!";
   }
 };
-\end{ffcode}
-
-It may be represented in \eolang{} like this:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[multiple.eo]
 [] > dog
-  [] > bark
-    io.stdout "Bark!" > @
+  io.stdout "Bark!" > [] > bark
 [] > friend
   [] > listen
 [] > jack
   dog > d
   friend > f
-  [] > listen
-    seq * > @
-      d.bark
-      io.stdout "listen!"
-\end{ffcode}
+  seq * > [] > listen
+    d.bark
+    io.stdout "listen!"
+\end{ffsave}
+\twoffinputs{0.5}{multiple.cpp}{multiple.eo}
 
-Here, inherited methods are explicitly listed as attributes in the object \ff{jack}. This is very close to what would happen in the virtual table of a class \ff{Jack} in C++. The \eolang{} object \ff{jack} just makes it explicit.
+Here, inherited methods are explicitly listed as attributes
+  in the object \ff{jack}.
+This is very close to what would happen in the virtual table of
+  a class \ff{Jack} in C++.
+The \eolang{} object \ff{jack} just makes it explicit.
 
 \section{Method Overloading}
 \label{sec:overloading}
