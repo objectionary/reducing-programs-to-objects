@@ -185,11 +185,11 @@ The algorithm can be represented in \eolang{} on top of the \adeff{malloc}.
 #include "string.h"
 struct book {
   char title[100];
-  unsigned int price;
+  int price;
 };
-unsigned int f(struct book* p) {
+int f(struct book* p) {
   struct book b = *(p + 7);
-  strcpy(b.title, "Object Thinking");
+  strcpy(b.title, "1984");
   return b.price;
 }
 \end{ffsave}
@@ -204,7 +204,7 @@ unsigned int f(struct book* p) {
 [p] > f
   (book p).plus 7 > b
   seq * > @
-    b.set-title "Object Thinking"
+    b.set-title "1984"
     b.price
 \end{ffsave}
 \twoffinputs{0.4}{pointer-book.c}{pointer-book.eo}
