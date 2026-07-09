@@ -46,7 +46,7 @@
   \sbox\ffboxb{\parbox[t]{\linewidth - #1\linewidth - 1em}{\vspace{0pt}\ffinput{#3}}}%
   \ffmaxd=\dp\ffboxa
   \ifdim\dp\ffboxb>\ffmaxd \ffmaxd=\dp\ffboxb \fi
-  \noindent\usebox\ffboxa\ffsep\usebox\ffboxb}
+  \noindent\usebox\ffboxa\ffsep\usebox\ffboxb\par\nobreak\vskip\bigskipamount}
 
 \newcommand\deff[1]{\ff{#1}}
 \newcommand\adeff[1]{\ff{#1}}
@@ -313,7 +313,7 @@ class Book
 end
 \end{ffsave}
 \begin{ffsave}[class.eo]
-[id i] > rbBook
+[id i] > book
   seq * > [] > initialize!
     id.put i
     io.stdout "New book!"
@@ -344,12 +344,14 @@ malloc.empty
 \section{Destructors}
 \label{sec:destructors}
 
-\broken
+In C++ and some other languages, a destructor is a method
+  that is called for a class object when that object passes
+  out of scope or is explicitly deleted.
+The following code prints both \ff{Alive} and \ff{Dead} texts.
+In \eolang{}, the destructor must be called explicitly
+  by the owner of the object.
 
-In C++ and some other languages, a destructor is a method that is called for a class object when that object passes out of scope or is explicitly deleted.
-The following code will print both \ff{Alive} and \ff{Dead} texts:
-
-\begin{ffcode}
+\begin{ffsave}[destructor.cpp]
 #include <iostream>
 class Foo {
 public:
@@ -359,24 +361,20 @@ public:
 int main() {
   Foo f = Foo();
 }
-\end{ffcode}
-
-It may be translated to \eolang{} as such:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[destructor.eo]
 [] > foo
-  [] > constructor
-    io.stdout "Alive" > @
-  [] > destructor
-    io.stdout "Dead" > @
+  io.stdout "Alive" > [] > ctor
+  io.stdout "Dead" > [] > dtor
 [] > main
   foo > f
   seq * > @
-    f.constructor
-    f.destructor
+    f.ctor
+    f.dtor
+\end{ffsave}
+\twoffinputs{0.5}{destructor.cpp}{destructor.eo}
+\begin{ffcode}
 \end{ffcode}
-
-There is no garbage collection in \eolang{}, so a destructor must be explicitly ``called'' when an object passes out of scope or is deleted.
 
 \section{Exceptions}
 \label{sec:exceptions}
