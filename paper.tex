@@ -41,12 +41,16 @@
 \newdimen\ffmaxd
 \newcommand\ffsep{%
   \hspace{0.4em}\textcolor{gray}{\vrule width 0.3pt depth \ffmaxd}\hspace{0.4em}}
+% \@vspace@orig is acmart's pre-patch \vspace, used here for the
+% parbox top-strut so the top-alignment trick fires no class warning
+\makeatletter
 \newcommand\twoffinputs[3]{%
-  \sbox\ffboxa{\parbox[t]{#1\linewidth}{\vspace{0pt}\ffinput{#2}}}%
-  \sbox\ffboxb{\parbox[t]{\linewidth - #1\linewidth - 1em}{\vspace{0pt}\ffinput{#3}}}%
+  \sbox\ffboxa{\parbox[t]{#1\linewidth}{\@vspace@orig{0pt}\ffinput{#2}}}%
+  \sbox\ffboxb{\parbox[t]{\linewidth - #1\linewidth - 1em}{\@vspace@orig{0pt}\ffinput{#3}}}%
   \ffmaxd=\dp\ffboxa
   \ifdim\dp\ffboxb>\ffmaxd \ffmaxd=\dp\ffboxb \fi
   \noindent\usebox\ffboxa\ffsep\usebox\ffboxb\par\nobreak\vskip\bigskipamount}
+\makeatother
 
 \newcommand\deff[1]{\ff{#1}}
 \newcommand\adeff[1]{\ff{#1}}
