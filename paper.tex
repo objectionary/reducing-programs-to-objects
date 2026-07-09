@@ -258,36 +258,6 @@ malloc.empty > [] > f
 \end{ffsave}
 \twoffinputs{0.4}{pointer-stack.c}{pointer-stack.eo}
 
-\section{Procedures}
-\label{sec:procedures}
-
-A subroutine is a sequence of program instructions that performs a specific task, packaged as a unit.
-In different programming languages, a subroutine may be called a routine, subprogram, function, method, or procedure.
-In this PHP example, a function \ff{max} is defined:
-
-\begin{ffcode}
-function max($a, $b) {
-  if ($a > $b) return $a;
-  return $b;
-}
-\end{ffcode}
-
-It can be mapped to the following \eolang{} code:
-
-\begin{ffcode}
-[a b] > max
-  go.to > @
-    [g] >>
-      seq * > @
-        if.
-          a.gt b
-          g.forward a
-          true
-        b
-\end{ffcode}
-
-This example also demonstrates how \ff{go.to} object can be used to simulate the behavior of the \ff{return} statement from within the body of a method.
-
 \section{Impure Functions}
 
 \broken
