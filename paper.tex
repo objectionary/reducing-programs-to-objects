@@ -544,43 +544,43 @@ This program may be translated to \eolang{} by introducing
 \section{Inheritance}
 \label{sec:inheritance}
 
-\broken
+Inheritance is the mechanism of basing a class upon another class
+  while retaining similar implementation.
+In this Java code class \ff{Book} inherits all methods
+  and non-private attributes from class \ff{Item}.
+In \eolang{}, composition may be used instead of inheritance.
 
-Inheritance is the mechanism of basing a class upon another class while retaining similar implementation. In this Java code class \ff{Book} inherits all methods and non-private attributes from class \ff{Item}:
-
-\begin{ffcode}
+\begin{ffsave}[inheritance.java]
 class Item {
   private int p;
   int price() { return p; }
 }
 class Book extends Item {
-  int tax() { return price() * 0.1; }
+  int tax() {
+    return price() * 0.1;
+  }
 }
+\end{ffsave}
+\begin{ffsave}[inheritance.eo]
+[p] > item
+  p > [] > price
+[item] > book
+  item.price.times 0.1 > [] > tax
+\end{ffsave}
+\twoffinputs{0.5}{inheritance.java}{inheritance.eo}
+\begin{ffcode}
 \end{ffcode}
 
-It may be represented in \eolang{} like this:
+So-called prototype-based programming uses generalized objects,
+  which can then be cloned and extended.
+For example, this JavaScript program defines two objects,
+  where \ff{Item} is the parent object and \ff{Book} is the child
+  that inherits the parent through its prototype.
 
-\begin{ffcode}
-[] > item
-  memory 0 > p
-  [] > price
-    p > @
-[] > book
-  item > i
-  [] > tax
-    (ms.number (i.price)).as-float.times 0.1 > @
-\end{ffcode}
-
-Here, composition is used instead of inheritance.
-
-\subsection{Prototype-Based Inheritance}
-
-\broken
-
-So-called prototype-based programming uses generalized objects, which can then be cloned and extended. For example, this JavaScript program defines two objects, where \ff{Item} is the parent object and \ff{Book} is the child that inherits the parent through its prototype:
-
-\begin{ffcode}
-function Item(p) { this.price = p; }
+\begin{ffsave}[prototype.js]
+function Item(p) {
+  this.price = p;
+}
 function Book(p) {
   Item.call(this, p);
   this.tax = function () {
@@ -589,29 +589,17 @@ function Book(p) {
 }
 var t = new Book(42).tax();
 console.log(t); // prints "4.2"
-\end{ffcode}
-
-This mechanism of prototype-based inheritance may be translated to the following \eolang{} code, using the mechanism of decoration:
-
-\begin{ffcode}
+\end{ffsave}
+\begin{ffsave}[prototype.eo]
 [p] > item
-  memory 0 > price
-  [] > new
-    price.write p > @
-[] > book
-  [p] > new
-    item p > @
-    [] > tax
-      times. > @
-        as-float.
-          ms.number (^.price)
-        0.1
-io.stdout
-  tt.sprintf
-    "%f"
-    tax.
-      book.new 42
-\end{ffcode}
+  p > price
+[item] > book
+  item > @
+  ^.price.times 0.1 > [] > tax
+(book 42).tax > t
+io.stdout (as-fixed t)
+\end{ffsave}
+\twoffinputs{0.5}{prototype.js}{prototype.eo}
 
 \subsection{Multiple Inheritance}
 

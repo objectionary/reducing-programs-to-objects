@@ -12,6 +12,7 @@
 *.fdb_latexmk
 *.fls
 *.java
+*.js
 *.log
 *.out
 *.php
