@@ -29,28 +29,26 @@ For example, this C\# class consists of a single static method.
 It may be converted to the following \eolang{} code,
   since a static method is nothing more than a ``global'' function.
 
-\begin{ffsave}[static.cs]
+\begin{ffcode}
 class Utils {
   public static int max(int a, int b) {
     if (a > b) return a;
     return b;
   }
 }
-\end{ffsave}
-\begin{ffsave}[static.eo]
+(*@ \ffcolumnbreak @*)
 if. > [a b] > max
   a.gt b
   a
   b
-\end{ffsave}
-\twoffinputs{0.6}{static.cs}{static.eo}
+\end{ffcode}
 
 \subsection{Goto}
 \label{sec:goto}
 
 A ``backward'' jump in the C language can be mapped to \eolang{} recursion:
 
-\begin{ffsave}[goto-backward.c]
+\begin{ffcode}
 #include "stdio.h"
 void f() {
   int i = 1;
@@ -60,8 +58,7 @@ void f() {
     goto again;
   printf("Finished!");
 }
-\end{ffsave}
-\begin{ffsave}[goto-backward.eo]
+(*@ \ffcolumnbreak @*)
 malloc.empty > [] > f
   seq * > [i]
     i.put 1
@@ -73,12 +70,11 @@ malloc.empty > [] > f
       ii.as-number.lt 10
       again ii
       true
-\end{ffsave}
-\twoffinputs{0.4}{goto-backward.c}{goto-backward.eo}
+\end{ffcode}
 
 A ``forward'' jump in the C language can be mapped to \eolang{}:
 
-\begin{ffsave}[goto-forward.c]
+\begin{ffcode}
 int f(int x) {
   int r = 0;
   if (x == 0)
@@ -87,8 +83,7 @@ int f(int x) {
   exit:
   return r;
 }
-\end{ffsave}
-\begin{ffsave}[goto-forward.eo]
+(*@ \ffcolumnbreak @*)
 malloc.empty > [x] > f
   seq * > [r] >>
     r.put 0
@@ -97,8 +92,7 @@ malloc.empty > [x] > f
       true
       r.put (42.div x)
     number r.get
-\end{ffsave}
-\twoffinputs{0.4}{goto-forward.c}{goto-forward.eo}
+\end{ffcode}
 
 Here, the jump to the \ff{exit} label becomes a conditional that skips
   the division when \ff{x} is zero, so \ff{r} keeps its initial value.
@@ -123,7 +117,7 @@ Then, the \ff{title} part of the struct is filled with a string
   and the \ff{price} part is returned as a result of the function \ff{f}.
 The algorithm can be represented in \eolang{} on top of the \adeff{malloc} object.
 
-\begin{ffsave}[pointer-data.c]
+\begin{ffcode}
 #include "string.h"
 struct book {
   char title[100];
@@ -134,8 +128,7 @@ int f(struct book* p) {
   strcpy(b.title, "1984");
   return b.price;
 }
-\end{ffsave}
-\begin{ffsave}[pointer-data.eo]
+(*@ \ffcolumnbreak @*)
 [mem offset] > book
   book > [i] > plus
     mem
@@ -148,8 +141,7 @@ int f(struct book* p) {
   seq * > @
     b.set-title "1984"
     b.price
-\end{ffsave}
-\twoffinputs{0.4}{pointer-data.c}{pointer-data.eo}
+\end{ffcode}
 
 A pointer may not only refer to data in the heap but also
   to executable code in memory (there is no difference between
@@ -158,19 +150,17 @@ This is an example of a C program that calls a function referenced
   by a function pointer, providing two integer arguments to it.
 It can easily be mapped to \eolang{} via its partial application:
 
-\begin{ffsave}[pointer-fn.c]
+\begin{ffcode}
 typedef int foo(int, int);
 int f(foo *p) {
   return (*p)(7, 42);
 }
-\end{ffsave}
-\begin{ffsave}[pointer-fn.eo]
+(*@ \ffcolumnbreak @*)
 [x y] > foo
 
 [foo] > f
   foo 7 42
-\end{ffsave}
-\twoffinputs{0.5}{pointer-fn.c}{pointer-fn.eo}
+\end{ffcode}
 
 It is important to note that the following code
   cannot be represented in \eolang{}:
@@ -190,22 +180,20 @@ This C function, which returns seven (tested with GCC),
   assumes that variables are placed in the stack sequentially
   and uses pointer de-referencing to access them.
 
-\begin{ffsave}[pointer-stack.c]
+\begin{ffcode}
 long f() {
   long a = 42;
   long b = 7;
   return *(&a - 1);
 }
-\end{ffsave}
-\begin{ffsave}[pointer-stack.eo]
+(*@ \ffcolumnbreak @*)
 malloc.empty > [] > f
   seq * > [m]
     m.write 0 7
     m.write 8 42
     number
       m.read (8.minus 8) 8
-\end{ffsave}
-\twoffinputs{0.5}{pointer-stack.c}{pointer-stack.eo}
+\end{ffcode}
 
 \subsection{Impure Functions}
 
@@ -214,22 +202,20 @@ A function is pure when, among other qualities,
   non-local variables, mutable reference arguments, or input/output streams.
 This impure PHP function can be mapped to \eolang{}:
 
-\begin{ffsave}[impure.php]
+\begin{ffcode}
 $a = 42;
 function inc() {
   $a = $a + 1;
   return $a;
 }
 inc(inc($a)); // $a == 44
-\end{ffsave}
-\begin{ffsave}[impure.eo]
+(*@ \ffcolumnbreak @*)
 [a] > inc
   number a.get > ia
   seq * > @
     a.put (ia.plus 1)
     ia
-\end{ffsave}
-\twoffinputs{0.5}{impure.php}{impure.eo}
+\end{ffcode}
 
 Here, \ff{a} is an abstraction of a memory block.
 It must be passed as an argument to the \ff{inc} object.
@@ -244,7 +230,7 @@ A closure is a function bundled with the variables it captured
 This JavaScript function returns a counter that increments
   a captured variable on each call.
 
-\begin{ffsave}[closure.js]
+\begin{ffcode}
 function counter() {
   let c = 0;
   return () => ++c;
@@ -252,8 +238,7 @@ function counter() {
 var next = counter();
 next(); // 1
 next(); // 2
-\end{ffsave}
-\begin{ffsave}[closure.eo]
+(*@ \ffcolumnbreak @*)
 [c] > counter
   seq * > [] > next
     c.put (c.as-number.plus 1)
@@ -265,8 +250,7 @@ malloc.empty > [] > app
       c.put 0
       cnt.next
       cnt.next
-\end{ffsave}
-\twoffinputs{0.4}{closure.js}{closure.eo}
+\end{ffcode}
 
 In \eolang{}, a closure is just an object, and the captured variable,
   being mutable, is a \adeff{malloc} block.
@@ -290,7 +274,7 @@ The following program contains a Ruby class with a single constructor,
 It can be mapped to the following \eolang{} code,
   where a class becomes an object factory.
 
-\begin{ffsave}[class.rb]
+\begin{ffcode}
 class Book
   def initialize(i)
     @id = i
@@ -303,8 +287,7 @@ class Book
     @id = i
   end
 end
-\end{ffsave}
-\begin{ffsave}[class.eo]
+(*@ \ffcolumnbreak @*)
 [id i] > book
   seq * > [] > initialize!
     id.put i
@@ -317,8 +300,7 @@ end
   seq * > [i] > move
     initialize
     id.put i
-\end{ffsave}
-\twoffinputs{0.5}{class.rb}{class.eo}
+\end{ffcode}
 
 Here, the constructor is represented by the object \ff{initialize},
   whose \ff{!} suffix makes it a constant, so it runs only once
@@ -342,20 +324,18 @@ Encapsulation hides the internal state and helper behavior of an object
 In this Java class, the field \ff{rate} and the method \ff{tax} are private,
   while only \ff{total} is exposed to callers.
 
-\begin{ffsave}[encapsulation.java]
+\begin{ffcode}
 class Cart {
   private int rate = 10;
   private int tax(int p) {
     return p / rate; }
   int total(int p) {
     return p + tax(p); } }
-\end{ffsave}
-\begin{ffsave}[encapsulation.eo]
+(*@ \ffcolumnbreak @*)
 [] > cart
   p.plus > [p] > total
     p.div 10
-\end{ffsave}
-\twoffinputs{0.45}{encapsulation.java}{encapsulation.eo}
+\end{ffcode}
 
 \eolang{} has no \ff{private} or \ff{protected} modifiers: an object either
   names an attribute or it does not.
@@ -375,15 +355,14 @@ A static field is mutable state shared by every instance of a class.
 In this Java class, the counter \ff{count} is incremented by the constructor,
   so it holds the number of books ever created.
 
-\begin{ffsave}[static-field.java]
+\begin{ffcode}
 class Book {
   static int count = 0;
   Book() {
     count += 1;
   }
 }
-\end{ffsave}
-\begin{ffsave}[static-field.eo]
+(*@ \ffcolumnbreak @*)
 [count] > book
   count.put > [] > make
     count.as-number.plus 1
@@ -394,8 +373,7 @@ malloc.empty > [] > app
       (book count).make
       (book count).make
       count.as-number
-\end{ffsave}
-\twoffinputs{0.5}{static-field.java}{static-field.eo}
+\end{ffcode}
 
 \eolang{} has no class to hold shared state, so the \ff{count} block must be
   owned by an object that outlives every instance: the application object
@@ -415,7 +393,7 @@ The following code prints both \ff{Alive} and \ff{Dead} texts.
 In \eolang{}, the destructor must be called explicitly
   by the owner of the object.
 
-\begin{ffsave}[destructor.cpp]
+\begin{ffcode}
 #include <iostream>
 class Foo {
 public:
@@ -425,8 +403,7 @@ public:
 int main() {
   Foo f = Foo();
 }
-\end{ffsave}
-\begin{ffsave}[destructor.eo]
+(*@ \ffcolumnbreak @*)
 [] > foo
   io.stdout "Alive" > [] > ctor
   io.stdout "Dead" > [] > dtor
@@ -435,8 +412,7 @@ int main() {
   seq * > @
     f.ctor
     f.dtor
-\end{ffsave}
-\twoffinputs{0.5}{destructor.cpp}{destructor.eo}
+\end{ffcode}
 
 \subsection{Exceptions}
 \label{sec:exceptions}
@@ -449,7 +425,7 @@ Exception handling is the process of responding to the occurrence
 This C++ program utilizes exception handling
   to avoid segmentation fault due to null pointer de-referencing.
 
-\begin{ffsave}[try-catch.cpp]
+\begin{ffcode}
 #include <iostream>
 int price(int book) {
   if (book == 42) throw "Nope!";
@@ -462,8 +438,7 @@ void print(int b) {
     std::cout << "Error: " << e;
   }
 }
-\end{ffsave}
-\begin{ffsave}[try-catch.eo]
+(*@ \ffcolumnbreak @*)
 if. > [book cant-return] > price
   book.eq 42
   cant-return "Nope!"
@@ -473,14 +448,13 @@ seq * > [b] > print
     price
       b
       [m]:cant-return
-\end{ffsave}
-\twoffinputs{0.5}{try-catch.cpp}{try-catch.eo}
+\end{ffcode}
 \begin{ffcode}
 \end{ffcode}
 
 A Java method may throw a number of either checked or unchecked exceptions:
 
-\begin{ffsave}[multiple-catch.java]
+\begin{ffcode}
 void f(int x) throws Exception {
   if (x == 0)
     throw new IOException("foo");
@@ -495,14 +469,12 @@ void bar() {
     System.out.exit(1);
   }
 }
-\end{ffsave}
-\begin{ffsave}[multiple-catch.eo]
+(*@ \ffcolumnbreak @*)
 if. > [x] > f
   x.eq 0
   T "foo"
   T "bar"
-\end{ffsave}
-\twoffinputs{0.6}{multiple-catch.java}{multiple-catch.eo}
+\end{ffcode}
 \begin{ffcode}
 \end{ffcode}
 
@@ -580,7 +552,7 @@ In this Java code class \ff{Book} inherits all methods
   and non-private attributes from class \ff{Item}.
 In \eolang{}, composition may be used instead of inheritance.
 
-\begin{ffsave}[inheritance.java]
+\begin{ffcode}
 class Item {
   private int p;
   int price() { return p; }
@@ -590,14 +562,12 @@ class Book extends Item {
     return price() * 0.1;
   }
 }
-\end{ffsave}
-\begin{ffsave}[inheritance.eo]
+(*@ \ffcolumnbreak @*)
 [p] > item
   p > [] > price
 [item] > book
   item.price.times 0.1 > [] > tax
-\end{ffsave}
-\twoffinputs{0.5}{inheritance.java}{inheritance.eo}
+\end{ffcode}
 
 So-called prototype-based programming uses generalized objects,
   which can then be cloned and extended.
@@ -605,7 +575,7 @@ For example, this JavaScript program defines two objects,
   where \ff{Item} is the parent object and \ff{Book} is the child
   that inherits the parent through its prototype.
 
-\begin{ffsave}[prototype.js]
+\begin{ffcode}
 function Item(p) {
   this.price = p;
 }
@@ -617,8 +587,7 @@ function Book(p) {
 }
 var t = new Book(42).tax();
 console.log(t); // prints "4.2"
-\end{ffsave}
-\begin{ffsave}[prototype.eo]
+(*@ \ffcolumnbreak @*)
 [p] > item
   p > price
 [item] > book
@@ -626,8 +595,7 @@ console.log(t); // prints "4.2"
   ^.price.times 0.1 > [] > tax
 (book 42).tax > t
 io.stdout (as-fixed t)
-\end{ffsave}
-\twoffinputs{0.5}{prototype.js}{prototype.eo}
+\end{ffcode}
 
 Multiple inheritance is a feature of some object-oriented
   programming languages in which an object or class can inherit
@@ -635,7 +603,7 @@ Multiple inheritance is a feature of some object-oriented
 In this C++ example, the class \ff{Jack} has both \ff{bark} and
   \ff{listen} methods, inherited from \ff{Dog} and \ff{Friend} respectively.
 
-\begin{ffsave}[multiple.cpp]
+\begin{ffcode}
 #include <iostream>
 class Dog {
   virtual void bark() {
@@ -651,8 +619,7 @@ class Jack: Dog, Friend {
     std::cout << "Listen!";
   }
 };
-\end{ffsave}
-\begin{ffsave}[multiple.eo]
+(*@ \ffcolumnbreak @*)
 [] > dog
   io.stdout "Bark!" > [] > bark
 [] > friend
@@ -663,8 +630,7 @@ class Jack: Dog, Friend {
   seq * > [] > listen
     d.bark
     io.stdout "Listen!"
-\end{ffsave}
-\twoffinputs{0.5}{multiple.cpp}{multiple.eo}
+\end{ffcode}
 
 Here, inherited methods are explicitly listed as attributes
   in the object \ff{jack}.
@@ -681,7 +647,7 @@ Subtype polymorphism lets a single call site invoke different
 In this Java program, \ff{speak} accepts any \ff{Animal}, yet the sound
   it prints is chosen by the concrete object passed to it.
 
-\begin{ffsave}[polymorphism.java]
+\begin{ffcode}
 class Animal {
   String sound() {
     return "?";
@@ -696,8 +662,7 @@ void speak(Animal a) {
   print(a.sound());
 }
 speak(new Dog());
-\end{ffsave}
-\begin{ffsave}[polymorphism.eo]
+(*@ \ffcolumnbreak @*)
 [] > animal
   "?" > [] > sound
 [] > dog
@@ -706,8 +671,7 @@ speak(new Dog());
 [a] > speak
   io.stdout a.sound
 speak dog
-\end{ffsave}
-\twoffinputs{0.5}{polymorphism.java}{polymorphism.eo}
+\end{ffcode}
 
 In \eolang{}, a method call is nothing but attribute resolution on the
   receiver, so dispatch needs no special mechanism: \ff{a.sound} always
@@ -724,7 +688,7 @@ An interface, or an abstract class, declares methods without implementing
 In this Java example, \ff{Shape} declares \ff{area} and \ff{Square}
   implements it.
 
-\begin{ffsave}[interface.java]
+\begin{ffcode}
 interface Shape {
   int area();
 }
@@ -734,14 +698,12 @@ class Square implements Shape {
     return side * side;
   }
 }
-\end{ffsave}
-\begin{ffsave}[interface.eo]
+(*@ \ffcolumnbreak @*)
 [] > shape
   [] > area
 [side] > square
   side.times side > [] > area
-\end{ffsave}
-\twoffinputs{0.5}{interface.java}{interface.eo}
+\end{ffcode}
 
 In \eolang{}, the interface \ff{shape} is an abstract object whose \ff{area}
   attribute has no body; such an object is incomplete and serves purely
@@ -764,17 +726,15 @@ Calls to an overloaded function will run a specific implementation
 In this Kotlin program, two functions share the same name,
   and the call \ff{foo(42)} resolves to the one that takes an integer.
 
-\begin{ffsave}[overloading.kt]
+\begin{ffcode}
 fun foo(a: Int) {}
 fun foo(a: Double) {}
 foo(42)
-\end{ffsave}
-\begin{ffsave}[overloading.eo]
+(*@ \ffcolumnbreak @*)
 [a] > foo-with-int
 [b] > foo-with-double
 foo-with-int 42
-\end{ffsave}
-\twoffinputs{0.5}{overloading.kt}{overloading.eo}
+\end{ffcode}
 
 \eolang{} has no overloading, so each variant becomes a distinct object
   with a unique name, and the call selects the one whose name matches
@@ -789,21 +749,19 @@ Generics extend Java's type system to allow a type or method
 For example, this Java class expects another class
   to be specified as \ff{T} before use:
 
-\begin{ffsave}[generics.java]
+\begin{ffcode}
 class Cart<T extends Item> {
   private int total;
   void add(T i) {
     total += i.price();
   }
 }
-\end{ffsave}
-\begin{ffsave}[generics.eo]
+(*@ \ffcolumnbreak @*)
 [total] > cart
   number total.get > t
   total.put > [i] > add
     t.plus i.price
-\end{ffsave}
-\twoffinputs{0.5}{generics.java}{generics.eo}
+\end{ffcode}
 
 The type parameter \ff{T} disappears: \ff{cart} accepts any object that
   understands \ff{price}, while type inference recovers the compile-time
@@ -819,21 +777,19 @@ Templates are a feature of the C++ programming language
 For example, this function returns the larger of two arguments
   of any comparable type \ff{T}:
 
-\begin{ffsave}[templates.cpp]
+\begin{ffcode}
 template<typename T> T max(T a, T b) {
   return a > b ? a : b;
 }
 int x = max(7, 42);
-\end{ffsave}
-\begin{ffsave}[templates.eo]
+(*@ \ffcolumnbreak @*)
 [a b] > max
   if. > @
     a.gt b
     a
     b
 max 7 42 > x
-\end{ffsave}
-\twoffinputs{0.6}{templates.cpp}{templates.eo}
+\end{ffcode}
 
 The \eolang{} \ff{max} needs no type parameter: the same object works
   for any argument that understands \ff{gt}.
@@ -875,7 +831,7 @@ For example, this program analyzes the annotation attached to the class
   of the provided object and changes its behavior depending
   on one of the annotation's attributes.
 
-\begin{ffsave}[annotations.java]
+\begin{ffcode}
 interface Item {}
 @Ship(true)
 class Book implements Item {}
@@ -891,8 +847,7 @@ class Cart {
     }
   }
 }
-\end{ffsave}
-\begin{ffsave}[annotations.eo]
+(*@ \ffcolumnbreak @*)
 [] > book
   ship true > a1
 [] > song
@@ -902,8 +857,7 @@ class Cart {
     i.a1.value
       true
       false
-\end{ffsave}
-\twoffinputs{0.6}{annotations.java}{annotations.eo}
+\end{ffcode}
 
 Here, each annotation becomes an attribute of the object: \ff{a1} holds
   the \ff{ship} object, and \ff{cart} reads \ff{i.a1.value} to choose
@@ -944,19 +898,17 @@ Moreover, it may be useful to have the ability to trace \eolang{} objects
 For example, a simple C function can be mapped
   to the following \eolang{} object.
 
-\begin{ffsave}[traces.c]
+\begin{ffcode}
 int f(int x) {
   return 42 / x;
 }
-\end{ffsave}
-\begin{ffsave}[traces.eo]
+(*@ \ffcolumnbreak @*)
 [x] > f
   [] > @
     "src/main.c:1-1" > source
     42.div x > @
   "src/main.c:0-2" > source
-\end{ffsave}
-\twoffinputs{0.4}{traces.c}{traces.eo}
+\end{ffcode}
 
 Here, the synthetic \ff{source} attribute represents the location
   in the source code file with the original C code.

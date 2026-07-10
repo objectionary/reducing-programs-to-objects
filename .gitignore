@@ -10,6 +10,7 @@
 *.cs
 *.eo
 *.fdb_latexmk
+*.ffcode
 *.fls
 *.java
 *.js

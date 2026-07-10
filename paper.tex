@@ -4,7 +4,7 @@
 \documentclass[acmsmall,nonacm,11pt]{acmart}
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
 \makeatletter\let\@authorsaddresses\@empty\makeatother
-\usepackage[noframes,nonumbers,nobars,samepage]{ffcode}
+\usepackage[noframes,nonumbers,nobars,samepage]{/code/ctan/ffcode/ffcode}
 % listings emits \vspace around each display, which acmart warns about;
 % restore the original \vspace while a listing is typeset
 \makeatletter
@@ -35,22 +35,6 @@
 \usepackage{url}
   \def\UrlBreaks{\do\/\do-}
 \setlength{\footskip}{13.0pt}
-
-\newsavebox\ffboxa
-\newsavebox\ffboxb
-\newdimen\ffmaxd
-\newcommand\ffsep{%
-  \hspace{0.4em}\textcolor{gray}{\vrule width 0.3pt depth \ffmaxd}\hspace{0.4em}}
-% \@vspace@orig is acmart's pre-patch \vspace, used here for the
-% parbox top-strut so the top-alignment trick fires no class warning
-\makeatletter
-\newcommand\twoffinputs[3]{%
-  \sbox\ffboxa{\parbox[t]{#1\linewidth}{\@vspace@orig{0pt}\ffinput{#2}}}%
-  \sbox\ffboxb{\parbox[t]{\linewidth - #1\linewidth - 1em}{\@vspace@orig{0pt}\ffinput{#3}}}%
-  \ffmaxd=\dp\ffboxa
-  \ifdim\dp\ffboxb>\ffmaxd \ffmaxd=\dp\ffboxb \fi
-  \noindent\usebox\ffboxa\ffsep\usebox\ffboxb\par\nobreak\vskip\bigskipamount}
-\makeatother
 
 \newcommand\deff[1]{\ff{#1}}
 \newcommand\adeff[1]{\ff{#1}}
