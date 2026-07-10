@@ -1,0 +1,26 @@
+% SPDX-FileCopyrightText: Copyright (c) 2020-2026 Yegor Bugayenko
+% SPDX-License-Identifier: MIT
+
+\section{Introduction}
+
+Modern object-oriented languages are large and still growing.
+C++, Java, C\#, Python, Ruby, and JavaScript each offer hundreds of
+  features, and every new release adds more.
+The more features a language has, the harder its programs are to reason
+  about, to optimize, and to search for bugs, because every feature may
+  interact with every other one~\citep{dunsmore1978programming,
+  mccabe1976complexity, basili1984software, chambers1989customization}.
+Functional programming rests on a small and well-understood foundation,
+  the \(\lambda\)-calculus, into which its many features can be lowered
+  and then analyzed uniformly.
+Object-oriented programming has no such foundation in common use: we know
+  of no minimal object model to which an arbitrary object-oriented program
+  can be lowered.
+\eolang{} was earlier proposed as exactly such a
+  foundation~\citep{bugayenko2021eolang}, yet it was never demonstrated
+  how programs written in Java, C++, or other mainstream languages map
+  onto it.
+This paper fills that gap.
+
+The work of \citet{bugayenko2022origins} explains the design of the \eolang{}
+  standard library of objects, which are used below.

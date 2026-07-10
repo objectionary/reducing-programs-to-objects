@@ -1,0 +1,62 @@
+% SPDX-FileCopyrightText: Copyright (c) 2020-2026 Yegor Bugayenko
+% SPDX-License-Identifier: MIT
+
+\section{Related Work}
+
+The conviction that a small, primitive foundation can express any computation
+  is older than programming itself.
+The Turing machine~\citep{turing1936computable} was perhaps the first such
+  idea: a device with a handful of fixed operations---read, write, move, and
+  change state---that is nonetheless able to compute anything computable.
+Church's \(\lambda\)-calculus~\citep{church1936some,barendregt2012} reached
+  the same conclusion from another direction, reducing all computation to the
+  formation and application of functions, while combinatory
+  logic~\citep{curry1958combinatory} went further and dispensed with variables
+  altogether, leaving only a fixed basis of combinators.
+Each showed that vast expressive power can rest on very few primitives.
+Our work is driven by the same conviction, narrowed to object-oriented
+  programming: that the many features of a mainstream language rest,
+  ultimately, on the single primitive of the object.
+
+The same instinct reappears in the design of languages and machines.
+\citet{bohm1966flow} proved that any control flow reduces to sequence,
+  selection, and iteration, the argument we reuse in \cref{sec:goto}
+  to eliminate \ff{goto}.
+\citet{landin1966next} framed the surface syntax of a language as
+  ``syntactic sugar'' over a small applicative kernel, and
+  \citet{steele1976imperative} re-expressed imperative constructs---assignment,
+  loops, and jumps---as local transformations into the \(\lambda\)-calculus,
+  feature by feature, much as we do here for objects.
+At the level of hardware, the one-instruction computer%
+  ~\citep{mavaddat1988urisc} reduces an entire processor to a single operation.
+
+A closely related line of work defines a full, real-world language by
+  translating it into a small core.
+\citet{guha2010essence} desugar JavaScript into \(\lambda_{JS}\), and
+  \citet{politz2013python} do the same for Python, each reducing a sprawling
+  language to a compact calculus with a tested operational semantics.
+\citet{vanroy2004concepts} organize an entire textbook around a ``kernel
+  language'' into which every paradigm is translated one concept at a time.
+These efforts reduce a language to a \(\lambda\)-based or imperative core and
+  aim at a precise, tested semantics, whereas we reduce to objects alone and
+  give an informal, feature-by-feature mapping intended for practitioners.
+
+The reduction of objects themselves to a minimal core has been studied
+  formally.
+\citet{igarashi2001featherweight} distill Java to Featherweight Java, a
+  calculus small enough to fit a soundness proof on a single page, yet one
+  that keeps classes, inheritance, and types as primitives.
+\citet{abadi1996theory} build objects directly, with no \(\lambda\)-calculus
+  underneath, as the primitives of their object calculus, while others instead
+  encode objects as records of functions and inheritance as self-referential
+  modification~\citep{kamin1988inheritance,cook1989denotational}, an approach
+  rooted in the older duality between objects and abstract data
+  types~\citep{reynolds1978user}.
+The prototype-based language Self~\citep{ungar1987self} pursued the same
+  minimalist instinct at the level of language design, discarding classes in
+  favor of objects and cloning.
+Our work rests on \(\varphi\)-calculus~\citep{bugayenko2021eolang,
+  kudasov2022formalizing}, the formalism behind \eolang{}, but differs from
+  all of the above in direction: rather than encoding objects inside a smaller
+  calculus, we take objects as given and show that the features of mainstream
+  languages fold into them.
