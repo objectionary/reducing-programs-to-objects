@@ -62,13 +62,13 @@ void f() {
 malloc.empty > [] > f
   seq * > [i]
     i.put 1
-    again i
+    (*@\stroke{again i}@*)
     io.stdout "Finished!"
   seq * > [ii] > again
     ii.put (ii.as-number.plus 1)
     if.
       ii.as-number.lt 10
-      again ii
+      (*@\stroke{again ii}@*)
       true
 \end{ffcode}
 
@@ -129,7 +129,7 @@ int f(struct book* p) {
   return b.price;
 }
 (*@ \ffcolumnbreak @*)
-[mem offset] > book
+[(*@\stroke{mem}@*) offset] > book
   book > [i] > plus
     mem
     offset.plus (i.times 104)
@@ -188,7 +188,7 @@ long f() {
 }
 (*@ \ffcolumnbreak @*)
 malloc.empty > [] > f
-  seq * > [m]
+  seq * > (*@\stroke{[m]}@*)
     m.write 0 7
     m.write 8 42
     number
