@@ -5,11 +5,6 @@
 \settopmatter{printfolios=false,printccs=false,printacmref=false}
 \makeatletter\let\@authorsaddresses\@empty\makeatother
 \usepackage[noframes,nonumbers,nobars,samepage]{/code/ctan/ffcode/ffcode}
-% listings emits \vspace around each display, which acmart warns about;
-% restore the original \vspace while a listing is typeset
-\makeatletter
-\lst@AddToHook{DisplayStyle}{\let\@vspace\@vspace@orig\let\@vspacer\@vspacer@orig}
-\makeatother
 \usepackage{natbib}
 \usepackage{doi}
 \usepackage{multicol}
