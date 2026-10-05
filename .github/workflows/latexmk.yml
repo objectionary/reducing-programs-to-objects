@@ -6,6 +6,9 @@ name: latexmk
 'on':
   push:
   pull_request:
+concurrency:
+  group: latexmk-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     timeout-minutes: 15
