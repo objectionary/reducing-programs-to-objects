@@ -52,5 +52,6 @@ hard totpages
 hard transparent
 hard trimspaces
 hard upquote
+hard was
 hard wrapfig
 hard xstring
