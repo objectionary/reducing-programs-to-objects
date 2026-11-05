@@ -27,6 +27,7 @@ hard float
 hard fmtcount
 hard footmisc
 hard framed
+hard handstroke
 hard fvextra
 hard href-ul
 hard hyperxmp
@@ -51,5 +52,6 @@ hard totpages
 hard transparent
 hard trimspaces
 hard upquote
+hard was
 hard wrapfig
 hard xstring
