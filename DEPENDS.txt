@@ -34,6 +34,7 @@ hard hyperxmp
 hard hyphen-russian
 hard iexec
 hard ifmtarg
+hard inconsolata
 hard lastpage
 hard lh
 hard libertine
@@ -41,6 +42,7 @@ hard makecell
 hard mathtools
 hard microtype
 hard ncctools
+hard newtx
 hard paralist
 hard preprint
 hard stmaryrd
